@@ -387,11 +387,6 @@ header {
 <body>
 
 <!-- ══════════ KEY SETUP ══════════ -->
-<div id="key-setup" style="display:none; position:fixed; inset:0; z-index:500; background:#fafaf8; flex-direction:column; align-items:center; justify-content:center; padding:30px; max-width:480px; margin:0 auto;">
-  <div style="font-size:3rem; margin-bottom:16px;">🔑</div>
-  <div style="font-family:'Plus Jakarta Sans',sans-serif; font-weight:800; font-size:1.4rem; letter-spacing:-.03em; margin-bottom:8px; text-align:center;">Connectez votre clé API</div>
-  <div style="font-size:.82rem; color:#888; text-align:center; line-height:1.6; margin-bottom:24px;">Collez votre clé Anthropic pour que Nexo utilise vos propres crédits. Elle reste stockée uniquement sur votre appareil.</div>
-
   <div style="width:100%; margin-bottom:10px;">
     <div style="font-size:.7rem; font-weight:700; letter-spacing:.15em; text-transform:uppercase; color:#888; margin-bottom:6px; font-family:'JetBrains Mono',monospace;">Votre clé API (sk-ant-...)</div>
     <textarea id="keyInput" rows="3" placeholder="sk-ant-api03-..." style="width:100%; border:1.5px solid #e0e0e0; border-radius:12px; padding:12px; font-family:'JetBrains Mono',monospace; font-size:.78rem; outline:none; resize:none; background:#f5f5f5; color:#333;"></textarea>
@@ -429,8 +424,7 @@ header {
   <div class="hdr-row">
     <div class="logo">Nex<span>o</span></div>
     <div class="hdr-right">
-      <div onclick="showKeySetup()" title="Gérer la clé API" style="cursor:pointer; font-size:1.1rem;" id="keyIcon">🔑</div>
-      <div class="plan-pill free" id="planPill">GRATUIT</div>
+<div class="plan-pill free" id="planPill">GRATUIT</div>
       <div class="avatar-hdr">N</div>
     </div>
   </div>
@@ -719,35 +713,7 @@ header {
 </div>
 
 <script>
-// ── API KEY MANAGEMENT ───────────────────────────────────────────────────────
-let API_KEY = localStorage.getItem('nexo_api_key') || '';
-
-function showKeySetup() {
-  document.getElementById('key-setup').style.display='flex';
-  document.getElementById('home').style.display='none';
-}
-function hideKeySetup() {
-  document.getElementById('key-setup').style.display='none';
-  document.getElementById('home').style.display='block';
-}
-function saveKey() {
-  const val = document.getElementById('keyInput').value.trim();
-  if(!val.startsWith('sk-ant-')) {
-    document.getElementById('keyError').textContent = '❌ Clé invalide — elle doit commencer par sk-ant-';
-    return;
-  }
-  API_KEY = val;
-  localStorage.setItem('nexo_api_key', val);
-  document.getElementById('keyError').textContent = '';
-  hideKeySetup();
-  alert('✅ Clé API enregistrée ! Nexo utilise maintenant vos crédits Anthropic.');
-}
-function deleteKey() {
-  if(confirm('Supprimer la clé API ?')) {
-    API_KEY=''; localStorage.removeItem('nexo_api_key');
-    showKeySetup();
-  }
-}
+// ── API via serveur Vercel (clé cachée côté serveur) ─────────────────────────
 
 // ── EXPERT CONFIG ────────────────────────────────────────────────────────────
 const EXPERTS = {
@@ -952,7 +918,6 @@ async function sendText(txt){
   const id=current; const ex=EXPERTS[id];
   document.getElementById('suggArea').innerHTML='';
 
-  if(!API_KEY){ showKeySetup(); return; }
   if(!isPremium && getUsage(id)>=ex.freeLimit){ showLocked(id); return; }
 
   appendUser(txt);
@@ -970,12 +935,10 @@ async function sendText(txt){
   const msgs=convos[id].slice(-12).map(m=>({role:m.role,content:m.content}));
 
   try {
-    const r=await fetch('https://api.anthropic.com/v1/messages',{
+    const r=await fetch('/api/chat',{
       method:'POST',
-      headers:{'Content-Type':'application/json','x-api-key': API_KEY,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
+      headers:{'Content-Type':'application/json'},
       body:JSON.stringify({
-        model:'claude-sonnet-4-20250514',
-        max_tokens:1000,
         system:ex.system,
         messages:msgs
       })
@@ -1005,12 +968,6 @@ function showLocked(id){
   area.style.position='relative';
   area.appendChild(ov);
 }
-
-// Auto-show key setup if no key
-window.addEventListener('load', () => {
-  if(!API_KEY) showKeySetup();
-  document.getElementById('keyIcon').title = API_KEY ? '✅ Clé API active' : '⚠️ Clé API manquante';
-});
 
 
 function autoGrow(el){
