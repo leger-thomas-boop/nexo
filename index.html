@@ -11,400 +11,207 @@
 <meta name="apple-mobile-web-app-title" content="Nexo">
 <link rel="apple-touch-icon" href="/icon-192.png">
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Clash+Display:wght@400;500;600;700&family=Satoshi:wght@300;400;500;700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
-
 :root {
-  --bg: #fafaf8;
-  --card: #ffffff;
-  --border: #ebebeb;
-  --text: #0f0f0f;
-  --muted: #888;
-  --sofia-c: #2d6a4f;
-  --sofia-bg: #d8f3dc;
-  --sofia-light: #f0faf2;
-  --marcus-c: #1d3557;
-  --marcus-bg: #dde8f5;
-  --marcus-light: #eef4fb;
-  --luna-c: #c77dff;
-  --luna-c2: #7b2d8b;
-  --luna-bg: #f3e8ff;
-  --luna-light: #faf3ff;
-  --alex-c: #e76f51;
-  --alex-bg: #fde8e0;
-  --alex-light: #fff5f2;
-  --gold: #f4a261;
-  --gold2: #e76f51;
+  --bg:#fafaf8;--card:#fff;--border:#ebebeb;--text:#0f0f0f;--muted:#888;
+  --sofia-c:#2d6a4f;--sofia-bg:#d8f3dc;--sofia-light:#f0faf2;
+  --marcus-c:#1d3557;--marcus-bg:#dde8f5;--marcus-light:#eef4fb;
+  --luna-c:#c77dff;--luna-c2:#7b2d8b;--luna-bg:#f3e8ff;--luna-light:#faf3ff;
+  --alex-c:#e76f51;--alex-bg:#fde8e0;--alex-light:#fff5f2;
+  --gold:#f4a261;--gold2:#e76f51;
 }
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+body{background:var(--bg);color:var(--text);font-family:'Plus Jakarta Sans',sans-serif;min-height:100vh;max-width:480px;margin:0 auto;overflow-x:hidden;}
 
-* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+/* AUTH */
+#auth-screen{position:fixed;inset:0;z-index:500;background:#0f0f0f;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:30px 24px;max-width:480px;margin:0 auto;}
+.auth-logo{font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;font-size:2.8rem;color:#fff;letter-spacing:-.05em;margin-bottom:6px;}
+.auth-logo span{color:var(--gold);}
+.auth-tagline{font-size:.8rem;color:#555;margin-bottom:40px;letter-spacing:.05em;}
+.auth-box{width:100%;background:#1a1a1a;border:1px solid #2a2a2a;border-radius:24px;padding:28px 24px;}
+.auth-tabs{display:flex;gap:4px;margin-bottom:24px;background:#111;border-radius:12px;padding:4px;}
+.auth-tab{flex:1;padding:9px;text-align:center;font-weight:700;font-size:.8rem;border-radius:9px;cursor:pointer;transition:.2s;color:#555;}
+.auth-tab.active{background:#2a2a2a;color:#fff;}
+.auth-field{margin-bottom:14px;}
+.auth-field label{display:block;font-size:.72rem;font-weight:600;color:#666;margin-bottom:6px;letter-spacing:.05em;text-transform:uppercase;}
+.auth-field input{width:100%;padding:12px 14px;background:#111;border:1.5px solid #2a2a2a;border-radius:12px;color:#fff;font-family:'Plus Jakarta Sans',sans-serif;font-size:.88rem;outline:none;transition:.2s;}
+.auth-field input:focus{border-color:var(--gold);}
+.auth-field input::placeholder{color:#444;}
+.btn-auth{width:100%;padding:14px;background:linear-gradient(135deg,var(--gold),var(--gold2));border:none;border-radius:12px;font-weight:800;font-size:.95rem;color:#000;cursor:pointer;transition:.2s;margin-top:6px;}
+.btn-auth:hover{opacity:.9;}
+.btn-auth:disabled{opacity:.5;cursor:not-allowed;}
+.auth-error{background:#2d0a0a;border:1px solid #5a1a1a;border-radius:10px;padding:10px 14px;font-size:.78rem;color:#ff6b6b;margin-top:12px;display:none;}
+.auth-success{background:#0a2d1a;border:1px solid #1a5a2a;border-radius:10px;padding:10px 14px;font-size:.78rem;color:#4ade80;margin-top:12px;display:none;}
 
-body {
-  background: var(--bg);
-  color: var(--text);
-  font-family: 'Plus Jakarta Sans', sans-serif;
-  min-height: 100vh;
-  max-width: 480px;
-  margin: 0 auto;
-  overflow-x: hidden;
-}
+/* HEADER */
+header{background:var(--text);padding:16px 20px 14px;position:sticky;top:0;z-index:200;}
+.hdr-row{display:flex;align-items:center;justify-content:space-between;}
+.logo{font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;font-size:1.6rem;color:#fff;letter-spacing:-.04em;}
+.logo span{color:var(--gold);}
+.hdr-right{display:flex;align-items:center;gap:10px;}
+.plan-pill{font-size:.65rem;font-weight:700;letter-spacing:.1em;padding:4px 10px;border-radius:20px;font-family:'JetBrains Mono',monospace;text-transform:uppercase;}
+.plan-pill.free{background:rgba(255,255,255,.1);color:#aaa;}
+.plan-pill.premium{background:var(--gold);color:#000;}
+.avatar-hdr{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--gold2));display:flex;align-items:center;justify-content:center;font-weight:800;font-size:.85rem;color:#000;cursor:pointer;}
+.credits-row{margin-top:10px;display:flex;align-items:center;gap:10px;}
+.cred-track{flex:1;height:3px;background:rgba(255,255,255,.1);border-radius:2px;overflow:hidden;}
+.cred-fill{height:100%;border-radius:2px;background:linear-gradient(90deg,var(--gold),var(--gold2));transition:width .6s ease;}
+.cred-txt{font-size:.7rem;color:#666;font-family:'JetBrains Mono',monospace;white-space:nowrap;}
 
-/* ── HEADER ── */
-header {
-  background: var(--text);
-  padding: 16px 20px 14px;
-  position: sticky; top:0; z-index:200;
-}
-.hdr-row { display:flex; align-items:center; justify-content:space-between; }
-.logo {
-  font-family: 'Plus Jakarta Sans', sans-serif;
-  font-weight: 800; font-size: 1.6rem;
-  color: #fff; letter-spacing:-.04em;
-}
-.logo span { color: var(--gold); }
-.hdr-right { display:flex; align-items:center; gap:10px; }
-.plan-pill {
-  font-size:.65rem; font-weight:700; letter-spacing:.1em;
-  padding:4px 10px; border-radius:20px; font-family:'JetBrains Mono',monospace;
-  text-transform:uppercase;
-}
-.plan-pill.free { background:rgba(255,255,255,.1); color:#aaa; }
-.plan-pill.premium { background:var(--gold); color:#000; }
-.avatar-hdr {
-  width:32px; height:32px; border-radius:50%;
-  background:linear-gradient(135deg,var(--gold),var(--gold2));
-  display:flex;align-items:center;justify-content:center;
-  font-weight:800;font-size:.85rem;color:#000;
-}
-.credits-row {
-  margin-top:10px; display:flex; align-items:center; gap:10px;
-}
-.cred-track {
-  flex:1; height:3px; background:rgba(255,255,255,.1);
-  border-radius:2px; overflow:hidden;
-}
-.cred-fill {
-  height:100%; border-radius:2px;
-  background:linear-gradient(90deg,var(--gold),var(--gold2));
-  transition:width .6s ease;
-}
-.cred-txt { font-size:.7rem; color:#666; font-family:'JetBrains Mono',monospace; white-space:nowrap; }
+/* TABS */
+.tabs{display:flex;background:#fff;border-bottom:1px solid var(--border);}
+.tab{flex:1;padding:11px 8px;text-align:center;font-weight:700;font-size:.73rem;letter-spacing:.03em;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;transition:.18s;}
+.tab.active{color:var(--text);border-bottom-color:var(--text);}
 
-/* ── TABS ── */
-.tabs {
-  display:flex; background:#fff;
-  border-bottom:1px solid var(--border);
-}
-.tab {
-  flex:1; padding:11px 8px; text-align:center;
-  font-weight:700; font-size:.73rem; letter-spacing:.03em;
-  color:var(--muted); cursor:pointer;
-  border-bottom:2px solid transparent; transition:.18s;
-}
-.tab.active { color:var(--text); border-bottom-color:var(--text); }
+/* HOME */
+.hero{padding:28px 20px 8px;background:linear-gradient(180deg,#fff 0%,var(--bg) 100%);}
+.hero-eyebrow{font-size:.68rem;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);font-family:'JetBrains Mono',monospace;margin-bottom:8px;}
+.hero h2{font-weight:800;font-size:1.8rem;line-height:1.15;letter-spacing:-.04em;margin-bottom:8px;}
+.hero h2 em{font-style:normal;color:var(--gold2);}
+.hero p{font-size:.85rem;color:var(--muted);line-height:1.6;}
+.sec-label{padding:20px 20px 8px;font-size:.65rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);font-family:'JetBrains Mono',monospace;}
 
-/* ── HOME ── */
-.hero {
-  padding:28px 20px 8px;
-  background: linear-gradient(180deg,#fff 0%,var(--bg) 100%);
-}
-.hero-eyebrow {
-  font-size:.68rem; letter-spacing:.2em; text-transform:uppercase;
-  color:var(--muted); font-family:'JetBrains Mono',monospace;
-  margin-bottom:8px;
-}
-.hero h2 {
-  font-weight:800; font-size:1.8rem; line-height:1.15;
-  letter-spacing:-.04em; margin-bottom:8px;
-}
-.hero h2 em { font-style:normal; color:var(--gold2); }
-.hero p { font-size:.85rem; color:var(--muted); line-height:1.6; }
+/* CARDS */
+.experts{padding:0 20px;display:flex;flex-direction:column;gap:14px;margin-bottom:24px;}
+.expert-card{background:var(--card);border:1.5px solid var(--border);border-radius:20px;overflow:hidden;cursor:pointer;transition:.22s;box-shadow:0 2px 8px rgba(0,0,0,.04);}
+.expert-card:hover{transform:translateY(-3px);box-shadow:0 12px 32px rgba(0,0,0,.1);}
+.expert-card:active{transform:translateY(0);}
+.ec-top{padding:18px 18px 14px;display:flex;align-items:center;gap:16px;}
+.ec-avatar{width:72px;height:72px;border-radius:16px;flex-shrink:0;position:relative;overflow:hidden;}
+.ec-info{flex:1;min-width:0;}
+.ec-name{font-weight:800;font-size:1.05rem;letter-spacing:-.02em;margin-bottom:2px;}
+.ec-role{font-size:.72rem;font-weight:600;letter-spacing:.04em;text-transform:uppercase;margin-bottom:5px;}
+.ec-desc{font-size:.78rem;color:var(--muted);line-height:1.5;}
+.ec-bottom{padding:10px 18px 14px;display:flex;align-items:center;justify-content:space-between;}
+.ec-tags{display:flex;gap:5px;flex-wrap:wrap;}
+.ec-tag{font-size:.62rem;padding:3px 8px;border-radius:20px;font-weight:600;font-family:'JetBrains Mono',monospace;}
+.ec-cta{font-size:.75rem;font-weight:700;display:flex;align-items:center;gap:4px;flex-shrink:0;}
+.card-sofia{border-color:#c8ecd1;}.card-sofia .ec-name{color:var(--sofia-c);}.card-sofia .ec-role{color:#52b788;}.card-sofia .ec-avatar{background:var(--sofia-bg);}.card-sofia .ec-bottom{background:var(--sofia-light);border-top:1px solid #d8f3dc;}.card-sofia .ec-tag{background:var(--sofia-bg);color:var(--sofia-c);}.card-sofia .ec-cta{color:var(--sofia-c);}
+.card-marcus{border-color:#c2d6ed;}.card-marcus .ec-name{color:var(--marcus-c);}.card-marcus .ec-role{color:#4a7dbf;}.card-marcus .ec-avatar{background:var(--marcus-bg);}.card-marcus .ec-bottom{background:var(--marcus-light);border-top:1px solid #dde8f5;}.card-marcus .ec-tag{background:var(--marcus-bg);color:var(--marcus-c);}.card-marcus .ec-cta{color:var(--marcus-c);}
+.card-luna{border-color:#e2c8f5;}.card-luna .ec-name{color:var(--luna-c2);}.card-luna .ec-role{color:#9d4edd;}.card-luna .ec-avatar{background:var(--luna-bg);}.card-luna .ec-bottom{background:var(--luna-light);border-top:1px solid #f3e8ff;}.card-luna .ec-tag{background:var(--luna-bg);color:var(--luna-c2);}.card-luna .ec-cta{color:var(--luna-c2);}
+.card-alex{border-color:#f5cfc4;}.card-alex .ec-name{color:var(--alex-c);}.card-alex .ec-role{color:#e76f51;}.card-alex .ec-avatar{background:var(--alex-bg);}.card-alex .ec-bottom{background:var(--alex-light);border-top:1px solid #fde8e0;}.card-alex .ec-tag{background:var(--alex-bg);color:var(--alex-c);}.card-alex .ec-cta{color:var(--alex-c);}
+.avatar-svg{width:72px;height:72px;}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
+.float{animation:float 3s ease-in-out infinite;}
+.float2{animation:float 3.4s ease-in-out infinite;animation-delay:.5s;}
+.float3{animation:float 2.8s ease-in-out infinite;animation-delay:.2s;}
+.float4{animation:float 3.2s ease-in-out infinite;animation-delay:.8s;}
 
-.sec-label {
-  padding:20px 20px 8px;
-  font-size:.65rem; font-weight:700; letter-spacing:.2em;
-  text-transform:uppercase; color:var(--muted);
-  font-family:'JetBrains Mono',monospace;
-}
+/* PRICING */
+.pricing-card{background:var(--text);border-radius:24px;padding:24px;position:relative;overflow:hidden;}
+.pricing-card::before{content:'';position:absolute;width:200px;height:200px;border-radius:50%;background:radial-gradient(circle,rgba(244,162,97,.15),transparent);top:-60px;right:-40px;}
+.pr-eyebrow{font-size:.65rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);font-family:'JetBrains Mono',monospace;margin-bottom:10px;}
+.pr-title{font-weight:800;font-size:1.4rem;color:#fff;letter-spacing:-.03em;margin-bottom:4px;}
+.pr-price{font-weight:800;font-size:2.2rem;color:var(--gold);letter-spacing:-.04em;margin-bottom:16px;}
+.pr-price span{font-size:1rem;font-weight:400;color:#666;}
+.pr-feats{display:flex;flex-direction:column;gap:7px;margin-bottom:20px;}
+.pr-feat{display:flex;gap:9px;align-items:flex-start;font-size:.82rem;color:#ccc;line-height:1.4;}
+.pr-feat-icon{color:var(--gold);flex-shrink:0;font-size:.9rem;}
+.btn-gold{width:100%;padding:14px;background:linear-gradient(135deg,var(--gold),var(--gold2));border:none;border-radius:12px;font-weight:800;font-size:.95rem;letter-spacing:-.01em;color:#000;cursor:pointer;transition:.2s;}
+.btn-gold:hover{opacity:.9;}
+.pr-note{text-align:center;font-size:.7rem;color:#555;margin-top:10px;}
+.testi-wrap{padding:0 20px 30px;display:flex;flex-direction:column;gap:10px;}
+.testi{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:14px;}
+.testi-text{font-size:.8rem;line-height:1.6;margin-bottom:8px;}
+.testi-author{font-size:.68rem;color:var(--muted);display:flex;gap:4px;align-items:center;}
 
-/* ── EXPERT CARDS ── */
-.experts { padding:0 20px; display:flex; flex-direction:column; gap:14px; margin-bottom:24px; }
-
-.expert-card {
-  background:var(--card); border:1.5px solid var(--border);
-  border-radius:20px; overflow:hidden;
-  cursor:pointer; transition:.22s;
-  box-shadow: 0 2px 8px rgba(0,0,0,.04);
-}
-.expert-card:hover { transform:translateY(-3px); box-shadow:0 12px 32px rgba(0,0,0,.1); }
-.expert-card:active { transform:translateY(0); }
-
-.ec-top {
-  padding:18px 18px 14px;
-  display:flex; align-items:center; gap:16px;
-}
-.ec-avatar {
-  width:72px; height:72px; border-radius:16px;
-  flex-shrink:0; position:relative; overflow:hidden;
-}
-.ec-info { flex:1; min-width:0; }
-.ec-name {
-  font-weight:800; font-size:1.05rem;
-  letter-spacing:-.02em; margin-bottom:2px;
-}
-.ec-role {
-  font-size:.72rem; font-weight:600;
-  letter-spacing:.04em; text-transform:uppercase;
-  margin-bottom:5px;
-}
-.ec-desc { font-size:.78rem; color:var(--muted); line-height:1.5; }
-
-.ec-bottom {
-  padding:10px 18px 14px;
-  display:flex; align-items:center; justify-content:space-between;
-}
-.ec-tags { display:flex; gap:5px; flex-wrap:wrap; }
-.ec-tag {
-  font-size:.62rem; padding:3px 8px; border-radius:20px;
-  font-weight:600; font-family:'JetBrains Mono',monospace;
-}
-.ec-cta {
-  font-size:.75rem; font-weight:700;
-  display:flex; align-items:center; gap:4px; flex-shrink:0;
-}
-
-/* Sofia */
-.card-sofia { border-color: #c8ecd1; }
-.card-sofia .ec-name { color: var(--sofia-c); }
-.card-sofia .ec-role { color: #52b788; }
-.card-sofia .ec-avatar { background: var(--sofia-bg); }
-.card-sofia .ec-bottom { background: var(--sofia-light); border-top:1px solid #d8f3dc; }
-.card-sofia .ec-tag { background:var(--sofia-bg); color:var(--sofia-c); }
-.card-sofia .ec-cta { color:var(--sofia-c); }
-
-/* Marcus */
-.card-marcus { border-color: #c2d6ed; }
-.card-marcus .ec-name { color: var(--marcus-c); }
-.card-marcus .ec-role { color: #4a7dbf; }
-.card-marcus .ec-avatar { background: var(--marcus-bg); }
-.card-marcus .ec-bottom { background: var(--marcus-light); border-top:1px solid #dde8f5; }
-.card-marcus .ec-tag { background:var(--marcus-bg); color:var(--marcus-c); }
-.card-marcus .ec-cta { color:var(--marcus-c); }
-
-/* Luna */
-.card-luna { border-color: #e2c8f5; }
-.card-luna .ec-name { color: var(--luna-c2); }
-.card-luna .ec-role { color: #9d4edd; }
-.card-luna .ec-avatar { background: var(--luna-bg); }
-.card-luna .ec-bottom { background: var(--luna-light); border-top:1px solid #f3e8ff; }
-.card-luna .ec-tag { background:var(--luna-bg); color:var(--luna-c2); }
-.card-luna .ec-cta { color:var(--luna-c2); }
-
-/* Alex */
-.card-alex { border-color: #f5cfc4; }
-.card-alex .ec-name { color: var(--alex-c); }
-.card-alex .ec-role { color: #e76f51; }
-.card-alex .ec-avatar { background: var(--alex-bg); }
-.card-alex .ec-bottom { background: var(--alex-light); border-top:1px solid #fde8e0; }
-.card-alex .ec-tag { background:var(--alex-bg); color:var(--alex-c); }
-.card-alex .ec-cta { color:var(--alex-c); }
-
-/* ── SVG Avatars ── */
-.avatar-svg { width:72px; height:72px; }
-
-/* Float animation */
-@keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-4px)} }
-.float { animation: float 3s ease-in-out infinite; }
-.float2 { animation: float 3.4s ease-in-out infinite; animation-delay:.5s; }
-.float3 { animation: float 2.8s ease-in-out infinite; animation-delay:.2s; }
-.float4 { animation: float 3.2s ease-in-out infinite; animation-delay:.8s; }
-
-/* ── PRICING ── */
-.pricing-wrap { padding:0 20px 30px; }
-.pricing-card {
-  background: var(--text);
-  border-radius:24px; padding:24px;
-  position:relative; overflow:hidden;
-}
-.pricing-card::before {
-  content:''; position:absolute;
-  width:200px; height:200px; border-radius:50%;
-  background: radial-gradient(circle, rgba(244,162,97,.15), transparent);
-  top:-60px; right:-40px;
-}
-.pr-eyebrow { font-size:.65rem; letter-spacing:.2em; text-transform:uppercase; color:var(--gold); font-family:'JetBrains Mono',monospace; margin-bottom:10px; }
-.pr-title { font-weight:800; font-size:1.4rem; color:#fff; letter-spacing:-.03em; margin-bottom:4px; }
-.pr-price { font-weight:800; font-size:2.2rem; color:var(--gold); letter-spacing:-.04em; margin-bottom:16px; }
-.pr-price span { font-size:1rem; font-weight:400; color:#666; }
-.pr-feats { display:flex; flex-direction:column; gap:7px; margin-bottom:20px; }
-.pr-feat { display:flex; gap:9px; align-items:flex-start; font-size:.82rem; color:#ccc; line-height:1.4; }
-.pr-feat-icon { color:var(--gold); flex-shrink:0; font-size:.9rem; }
-.btn-gold {
-  width:100%; padding:14px;
-  background:linear-gradient(135deg,var(--gold),var(--gold2));
-  border:none; border-radius:12px;
-  font-weight:800; font-size:.95rem;
-  letter-spacing:-.01em; color:#000; cursor:pointer;
-  transition:.2s;
-}
-.btn-gold:hover { opacity:.9; }
-.pr-note { text-align:center; font-size:.7rem; color:#555; margin-top:10px; }
-
-/* Testimonials */
-.testi-wrap { padding:0 20px 30px; display:flex; flex-direction:column; gap:10px; }
-.testi {
-  background:var(--card); border:1px solid var(--border);
-  border-radius:14px; padding:14px;
-}
-.testi-text { font-size:.8rem; line-height:1.6; margin-bottom:8px; }
-.testi-author { font-size:.68rem; color:var(--muted); display:flex; gap:4px; align-items:center; }
-
-/* ── CHAT VIEW ── */
-#chat-view {
-  display:none; flex-direction:column;
-  position:fixed; inset:0; z-index:300;
-  max-width:480px; margin:0 auto;
-  background:var(--bg);
-}
-
-.chat-hdr {
-  padding:12px 16px;
-  display:flex; align-items:center; gap:12px;
-  border-bottom:1px solid var(--border);
-  flex-shrink:0; background:#fff;
-}
-.back-btn {
-  width:34px; height:34px; border-radius:50%;
-  background:var(--bg); border:1px solid var(--border);
-  display:flex;align-items:center;justify-content:center;
-  cursor:pointer; font-size:1rem; flex-shrink:0;
-}
-.chat-avatar-mini {
-  width:40px; height:40px; border-radius:12px;
-  flex-shrink:0; overflow:hidden;
-}
-.chat-hdr-info { flex:1; }
-.chat-hdr-name { font-weight:800; font-size:.95rem; letter-spacing:-.02em; }
-.chat-hdr-status { font-size:.68rem; color:#22c55e; display:flex; gap:4px; align-items:center; }
-.chat-hdr-status::before { content:'●'; font-size:.5rem; }
-
-.msgs { flex:1; overflow-y:auto; padding:16px; display:flex; flex-direction:column; gap:10px; }
-
-.msg { max-width:82%; animation:msgIn .22s ease; }
-@keyframes msgIn { from{opacity:0;transform:translateY(5px)} to{opacity:1;transform:none} }
-.msg.user { align-self:flex-end; }
-.msg.bot { align-self:flex-start; display:flex; gap:8px; align-items:flex-end; }
-
-.msg-mini-avatar {
-  width:28px; height:28px; border-radius:8px;
-  flex-shrink:0; overflow:hidden;
-}
-
-.bubble {
-  padding:11px 14px; border-radius:18px;
-  font-size:.84rem; line-height:1.65;
-}
-.msg.user .bubble {
-  background:var(--text); color:#fff;
-  border-bottom-right-radius:4px;
-}
-.msg.bot .bubble {
-  background:#fff; color:var(--text);
-  border:1px solid var(--border);
-  border-bottom-left-radius:4px;
-}
-.msg-time { font-size:.6rem; color:var(--muted); margin-top:3px; padding:0 3px; }
-.msg.user .msg-time { text-align:right; }
-
-.typing .bubble { display:flex; gap:4px; align-items:center; padding:14px 16px; }
-.dot { width:6px;height:6px;border-radius:50%;background:#ccc; animation:bounce .9s infinite; }
+/* CHAT */
+#chat-view{display:none;flex-direction:column;position:fixed;inset:0;z-index:300;max-width:480px;margin:0 auto;background:var(--bg);}
+.chat-hdr{padding:12px 16px;display:flex;align-items:center;gap:12px;border-bottom:1px solid var(--border);flex-shrink:0;background:#fff;}
+.back-btn{width:34px;height:34px;border-radius:50%;background:var(--bg);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:1rem;flex-shrink:0;}
+.chat-avatar-mini{width:40px;height:40px;border-radius:12px;flex-shrink:0;overflow:hidden;}
+.chat-hdr-info{flex:1;}
+.chat-hdr-name{font-weight:800;font-size:.95rem;letter-spacing:-.02em;}
+.chat-hdr-status{font-size:.68rem;color:#22c55e;display:flex;gap:4px;align-items:center;}
+.chat-hdr-status::before{content:'●';font-size:.5rem;}
+.msgs{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:10px;}
+.msg{max-width:82%;animation:msgIn .22s ease;}
+@keyframes msgIn{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:none}}
+.msg.user{align-self:flex-end;}
+.msg.bot{align-self:flex-start;display:flex;gap:8px;align-items:flex-end;}
+.msg-mini-avatar{width:28px;height:28px;border-radius:8px;flex-shrink:0;overflow:hidden;}
+.bubble{padding:11px 14px;border-radius:18px;font-size:.84rem;line-height:1.65;}
+.msg.user .bubble{background:var(--text);color:#fff;border-bottom-right-radius:4px;}
+.msg.bot .bubble{background:#fff;color:var(--text);border:1px solid var(--border);border-bottom-left-radius:4px;}
+.msg-time{font-size:.6rem;color:var(--muted);margin-top:3px;padding:0 3px;}
+.msg.user .msg-time{text-align:right;}
+.typing .bubble{display:flex;gap:4px;align-items:center;padding:14px 16px;}
+.dot{width:6px;height:6px;border-radius:50%;background:#ccc;animation:bounce .9s infinite;}
 .dot:nth-child(2){animation-delay:.15s}
 .dot:nth-child(3){animation-delay:.3s}
 @keyframes bounce{0%,60%,100%{transform:translateY(0)}30%{transform:translateY(-5px)}}
+.sugg-area{padding:6px 14px 10px;display:flex;flex-direction:column;gap:5px;}
+.sugg-chip{background:#fff;border:1px solid var(--border);border-radius:20px;padding:8px 14px;font-size:.78rem;cursor:pointer;transition:.15s;text-align:left;}
+.sugg-chip:hover{border-color:#aaa;}
+.input-wrap{padding:10px 14px;background:#fff;border-top:1px solid var(--border);display:flex;gap:8px;align-items:flex-end;flex-shrink:0;}
+.msg-inp{flex:1;border:1.5px solid var(--border);border-radius:18px;padding:9px 14px;font-family:'Plus Jakarta Sans',sans-serif;font-size:.84rem;resize:none;outline:none;max-height:100px;background:var(--bg);color:var(--text);line-height:1.45;}
+.msg-inp:focus{border-color:#bbb;}
+.send-btn{width:38px;height:38px;border-radius:50%;border:none;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:.95rem;flex-shrink:0;transition:.18s;color:#fff;}
+.send-btn:hover{opacity:.85;}
+.limit-bar{padding:8px 16px;display:flex;justify-content:space-between;align-items:center;border-top:1px solid;flex-shrink:0;font-size:.72rem;}
+.limit-bar.sofia-bar{background:var(--sofia-light);border-color:#c8ecd1;color:var(--sofia-c);}
+.limit-bar.marcus-bar{background:var(--marcus-light);border-color:#c2d6ed;color:var(--marcus-c);}
+.limit-bar.luna-bar{background:var(--luna-light);border-color:#e2c8f5;color:var(--luna-c2);}
+.limit-bar.alex-bar{background:var(--alex-light);border-color:#f5cfc4;color:var(--alex-c);}
+.limit-upgrade{font-weight:700;cursor:pointer;text-decoration:underline;}
+.locked-ov{position:absolute;inset:0;background:rgba(250,250,248,.96);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:30px;z-index:10;}
+.locked-av{width:80px;height:80px;border-radius:20px;overflow:hidden;margin-bottom:14px;}
+.locked-title{font-weight:800;font-size:1.2rem;letter-spacing:-.03em;margin-bottom:6px;}
+.locked-txt{font-size:.8rem;color:var(--muted);margin-bottom:20px;line-height:1.6;}
+.btn-unlock{padding:13px 28px;background:linear-gradient(135deg,var(--gold),var(--gold2));border:none;border-radius:12px;font-weight:800;font-size:.9rem;color:#000;cursor:pointer;}
+.later-btn{margin-top:10px;font-size:.72rem;color:var(--muted);cursor:pointer;}
 
-/* Suggestions */
-.sugg-area { padding:6px 14px 10px; display:flex; flex-direction:column; gap:5px; }
-.sugg-chip {
-  background:#fff; border:1px solid var(--border);
-  border-radius:20px; padding:8px 14px;
-  font-size:.78rem; cursor:pointer; transition:.15s; text-align:left;
-}
-.sugg-chip:hover { border-color:#aaa; }
-
-/* Input */
-.input-wrap {
-  padding:10px 14px;
-  background:#fff; border-top:1px solid var(--border);
-  display:flex; gap:8px; align-items:flex-end; flex-shrink:0;
-}
-.msg-inp {
-  flex:1; border:1.5px solid var(--border); border-radius:18px;
-  padding:9px 14px; font-family:'Plus Jakarta Sans',sans-serif;
-  font-size:.84rem; resize:none; outline:none;
-  max-height:100px; background:var(--bg); color:var(--text);
-  line-height:1.45;
-}
-.msg-inp:focus { border-color:#bbb; }
-.send-btn {
-  width:38px;height:38px;border-radius:50%;
-  border:none; display:flex;align-items:center;justify-content:center;
-  cursor:pointer; font-size:.95rem; flex-shrink:0; transition:.18s;
-  color:#fff;
-}
-.send-btn:hover { opacity:.85; }
-
-.limit-bar {
-  padding:8px 16px; display:flex; justify-content:space-between; align-items:center;
-  border-top:1px solid; flex-shrink:0; font-size:.72rem;
-}
-.limit-bar.sofia-bar { background:var(--sofia-light); border-color:#c8ecd1; color:var(--sofia-c); }
-.limit-bar.marcus-bar { background:var(--marcus-light); border-color:#c2d6ed; color:var(--marcus-c); }
-.limit-bar.luna-bar { background:var(--luna-light); border-color:#e2c8f5; color:var(--luna-c2); }
-.limit-bar.alex-bar { background:var(--alex-light); border-color:#f5cfc4; color:var(--alex-c); }
-.limit-upgrade { font-weight:700; cursor:pointer; text-decoration:underline; }
-
-/* Locked */
-.locked-ov {
-  position:absolute; inset:0;
-  background:rgba(250,250,248,.96);
-  display:flex;flex-direction:column;
-  align-items:center;justify-content:center;
-  text-align:center; padding:30px; z-index:10;
-}
-.locked-av { width:80px;height:80px;border-radius:20px;overflow:hidden;margin-bottom:14px; }
-.locked-title { font-weight:800;font-size:1.2rem;letter-spacing:-.03em;margin-bottom:6px; }
-.locked-txt { font-size:.8rem;color:var(--muted);margin-bottom:20px;line-height:1.6; }
-.btn-unlock {
-  padding:13px 28px;
-  background:linear-gradient(135deg,var(--gold),var(--gold2));
-  border:none;border-radius:12px;
-  font-weight:800;font-size:.9rem;color:#000;cursor:pointer;
-}
-.later-btn { margin-top:10px;font-size:.72rem;color:var(--muted);cursor:pointer; }
-
+/* USER MENU */
+.user-menu{position:fixed;top:60px;right:10px;z-index:400;background:#fff;border:1px solid var(--border);border-radius:14px;padding:8px;box-shadow:0 8px 32px rgba(0,0,0,.12);display:none;min-width:180px;max-width:calc(480px - 20px);}
+.user-menu.open{display:block;}
+.user-email{font-size:.72rem;color:var(--muted);padding:6px 10px 10px;border-bottom:1px solid var(--border);margin-bottom:6px;word-break:break-all;}
+.menu-item{padding:9px 12px;border-radius:8px;font-size:.82rem;font-weight:600;cursor:pointer;transition:.15s;}
+.menu-item:hover{background:var(--bg);}
+.menu-item.danger{color:#e74c3c;}
 </style>
 </head>
 <body>
-<!-- ══ INSTALL BANNER ══ -->
-<div id="installBanner" style="display:none; position:fixed; bottom:0; left:0; right:0; z-index:999; max-width:480px; margin:0 auto; background:#1a1814; border-top:1px solid #333; padding:12px 16px; align-items:center; gap:12px;">
-  <div style="font-size:1.8rem;">📱</div>
-  <div style="flex:1;">
-    <div style="font-family:'Plus Jakarta Sans',sans-serif; font-weight:700; font-size:.85rem; color:#fff;">Installer Nexo</div>
-    <div style="font-size:.72rem; color:#888;">Ajoutez l'app sur votre écran d'accueil</div>
+
+<!-- AUTH -->
+<div id="auth-screen">
+  <div class="auth-logo">Nex<span>o</span></div>
+  <div class="auth-tagline">VOS EXPERTS IA · 24H/24</div>
+  <div class="auth-box">
+    <div class="auth-tabs">
+      <div class="auth-tab active" onclick="switchAuth('login')">Connexion</div>
+      <div class="auth-tab" onclick="switchAuth('signup')">Inscription</div>
+    </div>
+    <div id="auth-login">
+      <div class="auth-field"><label>Email</label><input type="email" id="login-email" placeholder="votre@email.com"></div>
+      <div class="auth-field"><label>Mot de passe</label><input type="password" id="login-password" placeholder="••••••••"></div>
+      <button class="btn-auth" onclick="doLogin()" id="btn-login">Se connecter</button>
+      <div class="auth-error" id="login-error"></div>
+    </div>
+    <div id="auth-signup" style="display:none">
+      <div class="auth-field"><label>Email</label><input type="email" id="signup-email" placeholder="votre@email.com"></div>
+      <div class="auth-field"><label>Mot de passe</label><input type="password" id="signup-password" placeholder="Minimum 6 caractères"></div>
+      <button class="btn-auth" onclick="doSignup()" id="btn-signup">Créer mon compte</button>
+      <div class="auth-error" id="signup-error"></div>
+      <div class="auth-success" id="signup-success"></div>
+    </div>
   </div>
-  <button onclick="installApp()" style="background:linear-gradient(135deg,#f4a261,#e76f51); border:none; border-radius:8px; padding:8px 16px; font-family:'Plus Jakarta Sans',sans-serif; font-weight:700; font-size:.8rem; color:#000; cursor:pointer;">Installer</button>
-  <button onclick="document.getElementById('installBanner').style.display='none'" style="background:none; border:none; color:#666; font-size:1.2rem; cursor:pointer;">✕</button>
 </div>
 
-<!-- ══════════ HOME ══════════ -->
-<div id="home">
+<!-- USER MENU -->
+<div class="user-menu" id="userMenu">
+  <div class="user-email" id="userEmailDisplay"></div>
+  <div class="menu-item" onclick="showPremium()">⭐ Passer Premium</div>
+  <div class="menu-item danger" onclick="doLogout()">Se déconnecter</div>
+</div>
 
+<!-- HOME -->
+<div id="home" style="display:none">
 <header>
   <div class="hdr-row">
     <div class="logo">Nex<span>o</span></div>
     <div class="hdr-right">
-<div class="plan-pill free" id="planPill">GRATUIT</div>
-      <div class="avatar-hdr">N</div>
+      <div class="plan-pill free" id="planPill">GRATUIT</div>
+      <div class="avatar-hdr" id="avatarHdr" onclick="toggleUserMenu()">N</div>
     </div>
   </div>
   <div class="credits-row">
@@ -412,222 +219,48 @@ header {
     <div class="cred-txt" id="credTxt">3 messages / jour</div>
   </div>
 </header>
-
 <div class="tabs">
   <div class="tab active" onclick="goSection('home',this)">Accueil</div>
   <div class="tab" onclick="goSection('premium',this)">⭐ Premium</div>
 </div>
-
 <div id="sec-home">
   <div class="hero">
     <div class="hero-eyebrow">Vos experts IA · 24h/24</div>
     <h2>Rencontrez vos<br><em>4 experts</em> Nexo</h2>
     <p>Des conseillers spécialisés, illustrés et toujours disponibles pour vous guider.</p>
   </div>
-
   <div class="sec-label">Choisissez votre expert</div>
-
   <div class="experts">
-
-    <!-- SOFIA -->
     <div class="expert-card card-sofia" onclick="openChat('sofia')">
       <div class="ec-top">
-        <div class="ec-avatar">
-          <svg class="avatar-svg float" viewBox="0 0 72 72" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <!-- Background -->
-            <rect width="72" height="72" rx="16" fill="#d8f3dc"/>
-            <!-- Body / blazer -->
-            <rect x="16" y="44" width="40" height="28" rx="10" fill="#2d6a4f"/>
-            <!-- Shirt -->
-            <rect x="26" y="46" width="20" height="26" rx="4" fill="#52b788"/>
-            <!-- Neck -->
-            <rect x="30" y="38" width="12" height="10" rx="4" fill="#f5cba7"/>
-            <!-- Head -->
-            <ellipse cx="36" cy="30" rx="14" ry="15" fill="#f5cba7"/>
-            <!-- Hair -->
-            <ellipse cx="36" cy="16" rx="14" ry="8" fill="#5a3e28"/>
-            <rect x="22" y="16" width="4" height="12" rx="2" fill="#5a3e28"/>
-            <rect x="46" y="16" width="4" height="12" rx="2" fill="#5a3e28"/>
-            <!-- Eyes -->
-            <ellipse cx="30" cy="30" rx="2.5" ry="2.5" fill="#2d6a4f"/>
-            <ellipse cx="42" cy="30" rx="2.5" ry="2.5" fill="#2d6a4f"/>
-            <!-- Smile -->
-            <path d="M30 36 Q36 40 42 36" stroke="#c0704a" stroke-width="1.5" stroke-linecap="round" fill="none"/>
-            <!-- Earring -->
-            <circle cx="22" cy="32" r="2" fill="#f4a261"/>
-            <circle cx="22" cy="35" r="1.5" fill="#f4a261"/>
-            <!-- Collar detail -->
-            <path d="M30 46 L36 52 L42 46" stroke="#2d6a4f" stroke-width="1.5" fill="none"/>
-          </svg>
-        </div>
-        <div class="ec-info">
-          <div class="ec-name">Sofia</div>
-          <div class="ec-role">Conseillère Financière</div>
-          <div class="ec-desc">Budget, épargne, dettes et placements — Sofia vous guide vers la liberté financière.</div>
-        </div>
+        <div class="ec-avatar"><svg class="avatar-svg float" viewBox="0 0 72 72" fill="none"><rect width="72" height="72" rx="16" fill="#d8f3dc"/><rect x="16" y="44" width="40" height="28" rx="10" fill="#2d6a4f"/><rect x="26" y="46" width="20" height="26" rx="4" fill="#52b788"/><rect x="30" y="38" width="12" height="10" rx="4" fill="#f5cba7"/><ellipse cx="36" cy="30" rx="14" ry="15" fill="#f5cba7"/><ellipse cx="36" cy="16" rx="14" ry="8" fill="#5a3e28"/><rect x="22" y="16" width="4" height="12" rx="2" fill="#5a3e28"/><rect x="46" y="16" width="4" height="12" rx="2" fill="#5a3e28"/><ellipse cx="30" cy="30" rx="2.5" ry="2.5" fill="#2d6a4f"/><ellipse cx="42" cy="30" rx="2.5" ry="2.5" fill="#2d6a4f"/><path d="M30 36 Q36 40 42 36" stroke="#c0704a" stroke-width="1.5" stroke-linecap="round" fill="none"/><circle cx="22" cy="32" r="2" fill="#f4a261"/></svg></div>
+        <div class="ec-info"><div class="ec-name">Sofia</div><div class="ec-role">Conseillère Financière</div><div class="ec-desc">Budget, épargne, dettes et placements — Sofia vous guide vers la liberté financière.</div></div>
       </div>
-      <div class="ec-bottom">
-        <div class="ec-tags">
-          <span class="ec-tag">Budget</span>
-          <span class="ec-tag">Épargne</span>
-          <span class="ec-tag">Investissement</span>
-        </div>
-        <div class="ec-cta">Consulter →</div>
-      </div>
+      <div class="ec-bottom"><div class="ec-tags"><span class="ec-tag">Budget</span><span class="ec-tag">Épargne</span><span class="ec-tag">Investissement</span></div><div class="ec-cta">Consulter →</div></div>
     </div>
-
-    <!-- MARCUS -->
     <div class="expert-card card-marcus" onclick="openChat('marcus')">
       <div class="ec-top">
-        <div class="ec-avatar">
-          <svg class="avatar-svg float2" viewBox="0 0 72 72" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <rect width="72" height="72" rx="16" fill="#dde8f5"/>
-            <!-- Body suit -->
-            <rect x="14" y="44" width="44" height="28" rx="10" fill="#1d3557"/>
-            <!-- Shirt white -->
-            <rect x="28" y="46" width="16" height="26" rx="3" fill="#fff"/>
-            <!-- Tie -->
-            <path d="M34 46 L36 50 L38 46 L37 56 L36 58 L35 56 Z" fill="#e63946"/>
-            <!-- Neck -->
-            <rect x="30" y="38" width="12" height="10" rx="4" fill="#d4a373"/>
-            <!-- Head -->
-            <ellipse cx="36" cy="30" rx="14" ry="15" fill="#d4a373"/>
-            <!-- Hair short -->
-            <ellipse cx="36" cy="17" rx="13" ry="6" fill="#1a1a2e"/>
-            <!-- Beard subtle -->
-            <path d="M26 34 Q36 40 46 34" fill="#b8860b" opacity=".3"/>
-            <!-- Eyes -->
-            <ellipse cx="30" cy="30" rx="2.5" ry="2.5" fill="#1d3557"/>
-            <ellipse cx="42" cy="30" rx="2.5" ry="2.5" fill="#1d3557"/>
-            <!-- Glasses -->
-            <rect x="26" y="27" width="10" height="7" rx="3.5" stroke="#333" stroke-width="1.5" fill="none"/>
-            <rect x="36" y="27" width="10" height="7" rx="3.5" stroke="#333" stroke-width="1.5" fill="none"/>
-            <line x1="36" y1="30.5" x2="36" y2="30.5" stroke="#333" stroke-width="1.5"/>
-            <!-- Smile -->
-            <path d="M31 35.5 Q36 38.5 41 35.5" stroke="#a0522d" stroke-width="1.5" stroke-linecap="round" fill="none"/>
-          </svg>
-        </div>
-        <div class="ec-info">
-          <div class="ec-name">Marcus</div>
-          <div class="ec-role">Expert Droit du Travail</div>
-          <div class="ec-desc">Vos droits, vos devoirs, conflits avec l'employeur — Marcus est votre avocat du quotidien.</div>
-        </div>
+        <div class="ec-avatar"><svg class="avatar-svg float2" viewBox="0 0 72 72" fill="none"><rect width="72" height="72" rx="16" fill="#dde8f5"/><rect x="14" y="44" width="44" height="28" rx="10" fill="#1d3557"/><rect x="28" y="46" width="16" height="26" rx="3" fill="#fff"/><path d="M34 46 L36 50 L38 46 L37 56 L36 58 L35 56 Z" fill="#e63946"/><rect x="30" y="38" width="12" height="10" rx="4" fill="#d4a373"/><ellipse cx="36" cy="30" rx="14" ry="15" fill="#d4a373"/><ellipse cx="36" cy="17" rx="13" ry="6" fill="#1a1a2e"/><ellipse cx="30" cy="30" rx="2.5" ry="2.5" fill="#1d3557"/><ellipse cx="42" cy="30" rx="2.5" ry="2.5" fill="#1d3557"/><rect x="26" y="27" width="10" height="7" rx="3.5" stroke="#333" stroke-width="1.5" fill="none"/><rect x="36" y="27" width="10" height="7" rx="3.5" stroke="#333" stroke-width="1.5" fill="none"/><path d="M31 35.5 Q36 38.5 41 35.5" stroke="#a0522d" stroke-width="1.5" stroke-linecap="round" fill="none"/></svg></div>
+        <div class="ec-info"><div class="ec-name">Marcus</div><div class="ec-role">Expert Droit du Travail</div><div class="ec-desc">Vos droits, vos devoirs, conflits avec l'employeur — Marcus est votre avocat du quotidien.</div></div>
       </div>
-      <div class="ec-bottom">
-        <div class="ec-tags">
-          <span class="ec-tag">Contrats</span>
-          <span class="ec-tag">Licenciement</span>
-          <span class="ec-tag">Conflits</span>
-        </div>
-        <div class="ec-cta">Consulter →</div>
-      </div>
+      <div class="ec-bottom"><div class="ec-tags"><span class="ec-tag">Contrats</span><span class="ec-tag">Licenciement</span><span class="ec-tag">Conflits</span></div><div class="ec-cta">Consulter →</div></div>
     </div>
-
-    <!-- LUNA -->
     <div class="expert-card card-luna" onclick="openChat('luna')">
       <div class="ec-top">
-        <div class="ec-avatar">
-          <svg class="avatar-svg float3" viewBox="0 0 72 72" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <rect width="72" height="72" rx="16" fill="#f3e8ff"/>
-            <!-- Body casual -->
-            <rect x="16" y="44" width="40" height="28" rx="10" fill="#9d4edd"/>
-            <!-- T-shirt detail -->
-            <rect x="26" y="46" width="20" height="26" rx="4" fill="#c77dff"/>
-            <!-- Star on shirt -->
-            <text x="36" y="60" text-anchor="middle" font-size="10" fill="#fff">✦</text>
-            <!-- Neck -->
-            <rect x="30" y="38" width="12" height="10" rx="4" fill="#fec89a"/>
-            <!-- Head -->
-            <ellipse cx="36" cy="30" rx="14" ry="15" fill="#fec89a"/>
-            <!-- Long hair -->
-            <ellipse cx="36" cy="16" rx="15" ry="9" fill="#ff6b6b"/>
-            <rect x="20" y="16" width="5" height="20" rx="2.5" fill="#ff6b6b"/>
-            <rect x="47" y="16" width="5" height="20" rx="2.5" fill="#ff6b6b"/>
-            <!-- Hair highlight -->
-            <ellipse cx="32" cy="15" rx="5" ry="3" fill="#ff8e8e" opacity=".5"/>
-            <!-- Eyes big -->
-            <ellipse cx="30" cy="30" rx="3" ry="3" fill="#7b2d8b"/>
-            <ellipse cx="42" cy="30" rx="3" ry="3" fill="#7b2d8b"/>
-            <!-- Lashes -->
-            <path d="M28 27.5 L27 26" stroke="#7b2d8b" stroke-width="1.2" stroke-linecap="round"/>
-            <path d="M30 27 L30 25.5" stroke="#7b2d8b" stroke-width="1.2" stroke-linecap="round"/>
-            <path d="M40 27 L40 25.5" stroke="#7b2d8b" stroke-width="1.2" stroke-linecap="round"/>
-            <path d="M42 27.5 L43 26" stroke="#7b2d8b" stroke-width="1.2" stroke-linecap="round"/>
-            <!-- Big smile -->
-            <path d="M29 35 Q36 41 43 35" stroke="#e07070" stroke-width="1.8" stroke-linecap="round" fill="none"/>
-            <!-- Cheeks -->
-            <ellipse cx="26" cy="34" rx="4" ry="2.5" fill="#ffb3b3" opacity=".5"/>
-            <ellipse cx="46" cy="34" rx="4" ry="2.5" fill="#ffb3b3" opacity=".5"/>
-          </svg>
-        </div>
-        <div class="ec-info">
-          <div class="ec-name">Luna</div>
-          <div class="ec-role">Assistante Quotidien</div>
-          <div class="ec-desc">Conseils pratiques, rédaction, aide à la décision — Luna est là pour tout le reste.</div>
-        </div>
+        <div class="ec-avatar"><svg class="avatar-svg float3" viewBox="0 0 72 72" fill="none"><rect width="72" height="72" rx="16" fill="#f3e8ff"/><rect x="16" y="44" width="40" height="28" rx="10" fill="#9d4edd"/><rect x="26" y="46" width="20" height="26" rx="4" fill="#c77dff"/><rect x="30" y="38" width="12" height="10" rx="4" fill="#fec89a"/><ellipse cx="36" cy="30" rx="14" ry="15" fill="#fec89a"/><ellipse cx="36" cy="16" rx="15" ry="9" fill="#ff6b6b"/><rect x="20" y="16" width="5" height="20" rx="2.5" fill="#ff6b6b"/><rect x="47" y="16" width="5" height="20" rx="2.5" fill="#ff6b6b"/><ellipse cx="30" cy="30" rx="3" ry="3" fill="#7b2d8b"/><ellipse cx="42" cy="30" rx="3" ry="3" fill="#7b2d8b"/><path d="M29 35 Q36 41 43 35" stroke="#e07070" stroke-width="1.8" stroke-linecap="round" fill="none"/><ellipse cx="26" cy="34" rx="4" ry="2.5" fill="#ffb3b3" opacity=".5"/><ellipse cx="46" cy="34" rx="4" ry="2.5" fill="#ffb3b3" opacity=".5"/></svg></div>
+        <div class="ec-info"><div class="ec-name">Luna</div><div class="ec-role">Assistante Quotidien</div><div class="ec-desc">Conseils pratiques, rédaction, aide à la décision — Luna est là pour tout le reste.</div></div>
       </div>
-      <div class="ec-bottom">
-        <div class="ec-tags">
-          <span class="ec-tag">Conseils</span>
-          <span class="ec-tag">Rédaction</span>
-          <span class="ec-tag">Décisions</span>
-        </div>
-        <div class="ec-cta">Consulter →</div>
-      </div>
+      <div class="ec-bottom"><div class="ec-tags"><span class="ec-tag">Conseils</span><span class="ec-tag">Rédaction</span><span class="ec-tag">Décisions</span></div><div class="ec-cta">Consulter →</div></div>
     </div>
-
-    <!-- ALEX -->
     <div class="expert-card card-alex" onclick="openChat('alex')">
       <div class="ec-top">
-        <div class="ec-avatar">
-          <svg class="avatar-svg float4" viewBox="0 0 72 72" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <rect width="72" height="72" rx="16" fill="#fde8e0"/>
-            <!-- Hoodie body -->
-            <rect x="14" y="44" width="44" height="28" rx="10" fill="#e76f51"/>
-            <!-- Hoodie pocket -->
-            <rect x="24" y="56" width="24" height="16" rx="5" fill="#cf5537"/>
-            <!-- Hood strings -->
-            <line x1="32" y1="46" x2="30" y2="52" stroke="#cf5537" stroke-width="2" stroke-linecap="round"/>
-            <line x1="40" y1="46" x2="42" y2="52" stroke="#cf5537" stroke-width="2" stroke-linecap="round"/>
-            <!-- Neck -->
-            <rect x="30" y="38" width="12" height="10" rx="4" fill="#c68642"/>
-            <!-- Head -->
-            <ellipse cx="36" cy="30" rx="14" ry="15" fill="#c68642"/>
-            <!-- Hair fade -->
-            <ellipse cx="36" cy="17" rx="13" ry="7" fill="#1a0a00"/>
-            <rect x="22" y="17" width="6" height="8" rx="3" fill="#1a0a00"/>
-            <rect x="44" y="17" width="6" height="8" rx="3" fill="#1a0a00"/>
-            <!-- Eyes -->
-            <ellipse cx="30" cy="30" rx="2.5" ry="2.5" fill="#1a0a00"/>
-            <ellipse cx="42" cy="30" rx="2.5" ry="2.5" fill="#1a0a00"/>
-            <!-- Eyebrows bold -->
-            <path d="M27 26.5 Q30 25 33 26.5" stroke="#1a0a00" stroke-width="2" stroke-linecap="round" fill="none"/>
-            <path d="M39 26.5 Q42 25 45 26.5" stroke="#1a0a00" stroke-width="2" stroke-linecap="round" fill="none"/>
-            <!-- Smile confident -->
-            <path d="M30 35.5 Q36 39 42 35.5" stroke="#8b4513" stroke-width="1.8" stroke-linecap="round" fill="none"/>
-            <!-- Small beard -->
-            <path d="M28 37 Q36 42 44 37" fill="#1a0a00" opacity=".25"/>
-          </svg>
-        </div>
-        <div class="ec-info">
-          <div class="ec-name">Alex</div>
-          <div class="ec-role">Expert Entreprise & AE</div>
-          <div class="ec-desc">Création, comptabilité, TVA, URSSAF — Alex gère toute votre paperasse d'entrepreneur.</div>
-        </div>
+        <div class="ec-avatar"><svg class="avatar-svg float4" viewBox="0 0 72 72" fill="none"><rect width="72" height="72" rx="16" fill="#fde8e0"/><rect x="14" y="44" width="44" height="28" rx="10" fill="#e76f51"/><rect x="24" y="56" width="24" height="16" rx="5" fill="#cf5537"/><rect x="30" y="38" width="12" height="10" rx="4" fill="#c68642"/><ellipse cx="36" cy="30" rx="14" ry="15" fill="#c68642"/><ellipse cx="36" cy="17" rx="13" ry="7" fill="#1a0a00"/><rect x="22" y="17" width="6" height="8" rx="3" fill="#1a0a00"/><rect x="44" y="17" width="6" height="8" rx="3" fill="#1a0a00"/><ellipse cx="30" cy="30" rx="2.5" ry="2.5" fill="#1a0a00"/><ellipse cx="42" cy="30" rx="2.5" ry="2.5" fill="#1a0a00"/><path d="M27 26.5 Q30 25 33 26.5" stroke="#1a0a00" stroke-width="2" stroke-linecap="round" fill="none"/><path d="M39 26.5 Q42 25 45 26.5" stroke="#1a0a00" stroke-width="2" stroke-linecap="round" fill="none"/><path d="M30 35.5 Q36 39 42 35.5" stroke="#8b4513" stroke-width="1.8" stroke-linecap="round" fill="none"/></svg></div>
+        <div class="ec-info"><div class="ec-name">Alex</div><div class="ec-role">Expert Entreprise & AE</div><div class="ec-desc">Création, comptabilité, TVA, URSSAF — Alex gère toute votre paperasse d'entrepreneur.</div></div>
       </div>
-      <div class="ec-bottom">
-        <div class="ec-tags">
-          <span class="ec-tag">Auto-Entrepreneur</span>
-          <span class="ec-tag">SASU</span>
-          <span class="ec-tag">Compta</span>
-        </div>
-        <div class="ec-cta">Consulter →</div>
-      </div>
+      <div class="ec-bottom"><div class="ec-tags"><span class="ec-tag">Auto-Entrepreneur</span><span class="ec-tag">SASU</span><span class="ec-tag">Compta</span></div><div class="ec-cta">Consulter →</div></div>
     </div>
-
   </div>
-</div><!-- /sec-home -->
-
+</div>
 <div id="sec-premium" style="display:none">
   <div style="padding:20px 20px 0">
     <div class="pricing-card">
@@ -645,27 +278,16 @@ header {
       <div class="pr-note">Résiliable à tout moment · Paiement sécurisé</div>
     </div>
   </div>
-
   <div class="sec-label" style="margin-top:10px">Ce qu'ils en disent</div>
   <div class="testi-wrap">
-    <div class="testi">
-      <div class="testi-text">"Marcus m'a aidé à comprendre que mon licenciement était abusif. Grâce à ses conseils, j'ai récupéré mes indemnités."</div>
-      <div class="testi-author">⭐⭐⭐⭐⭐ · Thomas M., ouvrier en usine</div>
-    </div>
-    <div class="testi">
-      <div class="testi-text">"Alex m'a guidé pas à pas pour créer mon auto-entreprise et faire ma première déclaration URSSAF. Simple et clair."</div>
-      <div class="testi-author">⭐⭐⭐⭐⭐ · Sarah L., graphiste freelance</div>
-    </div>
-    <div class="testi">
-      <div class="testi-text">"Sofia m'a fait économiser 180€ par mois en analysant mes dépenses. Je recommande à tous."</div>
-      <div class="testi-author">⭐⭐⭐⭐⭐ · Marc D., employé</div>
-    </div>
+    <div class="testi"><div class="testi-text">"Marcus m'a aidé à comprendre que mon licenciement était abusif. Grâce à ses conseils, j'ai récupéré mes indemnités."</div><div class="testi-author">⭐⭐⭐⭐⭐ · Thomas M., ouvrier en usine</div></div>
+    <div class="testi"><div class="testi-text">"Alex m'a guidé pas à pas pour créer mon auto-entreprise et faire ma première déclaration URSSAF. Simple et clair."</div><div class="testi-author">⭐⭐⭐⭐⭐ · Sarah L., graphiste freelance</div></div>
+    <div class="testi"><div class="testi-text">"Sofia m'a fait économiser 180€ par mois en analysant mes dépenses. Je recommande à tous."</div><div class="testi-author">⭐⭐⭐⭐⭐ · Marc D., employé</div></div>
   </div>
 </div>
+</div>
 
-</div><!-- /home -->
-
-<!-- ══════════ CHAT VIEW ══════════ -->
+<!-- CHAT -->
 <div id="chat-view">
   <div class="chat-hdr" id="chatHdr">
     <button class="back-btn" onclick="closeChat()">←</button>
@@ -675,307 +297,213 @@ header {
       <div class="chat-hdr-status" id="chatHdrStatus">En ligne</div>
     </div>
   </div>
-
   <div class="msgs" id="msgsArea"></div>
   <div class="sugg-area" id="suggArea"></div>
-
   <div class="limit-bar" id="limitBar">
     <span id="limitTxt"></span>
     <span class="limit-upgrade" onclick="showPremium()">Passer Premium →</span>
   </div>
-
   <div class="input-wrap">
-    <textarea class="msg-inp" id="msgInp" placeholder="Écrivez votre question..." rows="1"
-      oninput="autoGrow(this)" onkeydown="onKey(event)"></textarea>
+    <textarea class="msg-inp" id="msgInp" placeholder="Écrivez votre question..." rows="1" oninput="autoGrow(this)" onkeydown="onKey(event)"></textarea>
     <button class="send-btn" id="sendBtn" onclick="sendMsg()">➤</button>
   </div>
 </div>
 
 <script>
-// ── API via serveur Vercel (clé cachée côté serveur) ─────────────────────────
+const STRIPE_LINK='https://buy.stripe.com/aFa5kD9IvfUcgcpeCoc7u00';
+const SUPABASE_URL='https://zoycmayrynkisgiybqij.supabase.co';
+const SUPABASE_ANON='sb_publishable_MjyHgFrLGSz9qV5LkIqX0Q_AQ7fnd0P';
 
-// ── EXPERT CONFIG ────────────────────────────────────────────────────────────
-const EXPERTS = {
-  sofia: {
-    name:'Sofia', role:'Conseillère Financière',
-    color:'#2d6a4f', bg:'#d8f3dc', limitClass:'sofia-bar',
-    sendColor:'#2d6a4f', freeLimit:3,
+async function supabaseSignup(email,password){
+  const r=await fetch(`${SUPABASE_URL}/auth/v1/signup`,{method:'POST',headers:{'Content-Type':'application/json','apikey':SUPABASE_ANON},body:JSON.stringify({email,password})});
+  return r.json();
+}
+async function supabaseLogin(email,password){
+  const r=await fetch(`${SUPABASE_URL}/auth/v1/token?grant_type=password`,{method:'POST',headers:{'Content-Type':'application/json','apikey':SUPABASE_ANON},body:JSON.stringify({email,password})});
+  return r.json();
+}
+
+let currentUser=null,userSession=null;
+function loadSession(){const s=localStorage.getItem('nexo_session');if(s){try{const p=JSON.parse(s);currentUser=p.user;userSession=p.session;return true;}catch(e){}}return false;}
+function saveSession(user,session){currentUser=user;userSession=session;localStorage.setItem('nexo_session',JSON.stringify({user,session}));}
+function clearSession(){currentUser=null;userSession=null;localStorage.removeItem('nexo_session');localStorage.removeItem('nexo_premium');}
+
+function switchAuth(mode){
+  document.querySelectorAll('.auth-tab').forEach((t,i)=>t.classList.toggle('active',(mode==='login'&&i===0)||(mode==='signup'&&i===1)));
+  document.getElementById('auth-login').style.display=mode==='login'?'block':'none';
+  document.getElementById('auth-signup').style.display=mode==='signup'?'block':'none';
+}
+
+async function doLogin(){
+  const email=document.getElementById('login-email').value.trim();
+  const password=document.getElementById('login-password').value;
+  const err=document.getElementById('login-error');
+  const btn=document.getElementById('btn-login');
+  err.style.display='none';
+  if(!email||!password){err.textContent='Remplissez tous les champs.';err.style.display='block';return;}
+  btn.disabled=true;btn.textContent='Connexion...';
+  const data=await supabaseLogin(email,password);
+  btn.disabled=false;btn.textContent='Se connecter';
+  if(data.error||!data.access_token){err.textContent=data.error_description||data.msg||'Email ou mot de passe incorrect.';err.style.display='block';return;}
+  saveSession(data.user,{access_token:data.access_token});
+  enterApp();
+}
+
+async function doSignup(){
+  const email=document.getElementById('signup-email').value.trim();
+  const password=document.getElementById('signup-password').value;
+  const err=document.getElementById('signup-error');
+  const suc=document.getElementById('signup-success');
+  const btn=document.getElementById('btn-signup');
+  err.style.display='none';suc.style.display='none';
+  if(!email||!password){err.textContent='Remplissez tous les champs.';err.style.display='block';return;}
+  if(password.length<6){err.textContent='Le mot de passe doit faire au moins 6 caractères.';err.style.display='block';return;}
+  btn.disabled=true;btn.textContent='Création...';
+  const data=await supabaseSignup(email,password);
+  btn.disabled=false;btn.textContent='Créer mon compte';
+  if(data.error){err.textContent=data.msg||'Une erreur est survenue.';err.style.display='block';return;}
+  if(data.access_token){saveSession(data.user,{access_token:data.access_token});enterApp();}
+  else{suc.textContent='✅ Compte créé ! Connectez-vous maintenant.';suc.style.display='block';setTimeout(()=>switchAuth('login'),1500);}
+}
+
+function doLogout(){clearSession();document.getElementById('userMenu').classList.remove('open');document.getElementById('home').style.display='none';document.getElementById('auth-screen').style.display='flex';convos={};isPremium=false;}
+
+function enterApp(){
+  document.getElementById('auth-screen').style.display='none';
+  document.getElementById('home').style.display='block';
+  const letter=(currentUser?.email||'U')[0].toUpperCase();
+  document.getElementById('avatarHdr').textContent=letter;
+  document.getElementById('userEmailDisplay').textContent=currentUser?.email||'';
+  if(localStorage.getItem('nexo_premium')==='true') setPremiumActive();
+}
+
+function toggleUserMenu(){document.getElementById('userMenu').classList.toggle('open');}
+document.addEventListener('click',e=>{
+  const menu=document.getElementById('userMenu');
+  const avatar=document.getElementById('avatarHdr');
+  if(!menu.contains(e.target)&&!avatar.contains(e.target)) menu.classList.remove('open');
+});
+
+window.addEventListener('load',()=>{
+  if(loadSession()) enterApp();
+  if('serviceWorker' in navigator) navigator.serviceWorker.register('/sw.js');
+});
+
+const EXPERTS={
+  sofia:{name:'Sofia',role:'Conseillère Financière',color:'#2d6a4f',bg:'#d8f3dc',limitClass:'sofia-bar',sendColor:'#2d6a4f',freeLimit:3,
     suggestions:['Comment établir un budget mensuel ?','Comment rembourser mes dettes rapidement ?','Où placer mon argent avec peu de risques ?','Comment économiser 200€/mois ?'],
-    welcome:"Bonjour ! Je suis **Sofia**, votre conseillère financière personnelle 💚\n\nJe vous aide à gérer votre budget, optimiser votre épargne et atteindre vos objectifs financiers. Tout en euros, sans jargon compliqué.\n\nQuelle est votre question du jour ?",
-    system:`Tu es Sofia, une conseillère financière personnelle experte, chaleureuse et bienveillante. Tu aides les particuliers français avec leur budget, épargne, dettes, investissements et finances du quotidien. Tu parles simplement, avec des exemples concrets en euros. Tu connais les produits français : Livret A, PEL, assurance-vie, PER, etc. Tu rappelles qu'une décision financière importante mérite un conseiller agréé.`
-  },
-  marcus: {
-    name:'Marcus', role:'Expert Droit du Travail',
-    color:'#1d3557', bg:'#dde8f5', limitClass:'marcus-bar',
-    sendColor:'#1d3557', freeLimit:3,
-    suggestions:["Mon employeur peut-il me licencier sans raison ?","Quels sont mes droits en arrêt maladie ?","Comment contester un avertissement injuste ?","Mon CDD peut-il être rompu avant terme ?","Que faire face au harcèlement au travail ?"],
-    welcome:"Bonjour, je suis **Marcus**, votre expert en droit du travail ⚖️\n\nJe vous conseille comme un syndicat bienveillant : vos droits, vos devoirs, comment gérer les conflits avec votre employeur. Je cite le Code du travail quand c'est utile.\n\nExposez-moi votre situation.",
-    system:`Tu es Marcus, un expert en droit du travail français. Tu conseilles les salariés sur leurs droits ET devoirs, analyses les situations conflictuelles avec l'employeur, cites le Code du travail et la jurisprudence quand utile. Tu aides à rédiger des courriers, comprendre les contrats, gérer les conflits. Tu restes objectif mais du côté du salarié. Tu couvres : licenciement, rupture conventionnelle, CDD/CDI, heures sup, harcèlement, discrimination, congés, arrêt maladie, etc.`
-  },
-  luna: {
-    name:'Luna', role:'Assistante Quotidien',
-    color:'#7b2d8b', bg:'#f3e8ff', limitClass:'luna-bar',
-    sendColor:'#9d4edd', freeLimit:5,
+    welcome:"Bonjour ! Je suis **Sofia**, votre conseillère financière personnelle 💚\n\nJe vous aide à gérer votre budget, optimiser votre épargne et atteindre vos objectifs financiers.\n\nQuelle est votre question du jour ?",
+    system:"Tu es Sofia, une conseillère financière personnelle experte, chaleureuse et bienveillante. Tu aides les particuliers français avec leur budget, épargne, dettes, investissements. Tu parles simplement avec des exemples concrets en euros. Tu connais les produits français : Livret A, PEL, assurance-vie, PER, etc."},
+  marcus:{name:'Marcus',role:'Expert Droit du Travail',color:'#1d3557',bg:'#dde8f5',limitClass:'marcus-bar',sendColor:'#1d3557',freeLimit:3,
+    suggestions:["Mon employeur peut-il me licencier sans raison ?","Quels sont mes droits en arrêt maladie ?","Comment contester un avertissement injuste ?","Que faire face au harcèlement au travail ?"],
+    welcome:"Bonjour, je suis **Marcus**, votre expert en droit du travail ⚖️\n\nVos droits, vos devoirs, comment gérer les conflits avec votre employeur.\n\nExposez-moi votre situation.",
+    system:"Tu es Marcus, un expert en droit du travail français. Tu conseilles les salariés sur leurs droits ET devoirs, analyses les situations conflictuelles avec l'employeur, cites le Code du travail quand utile."},
+  luna:{name:'Luna',role:'Assistante Quotidien',color:'#7b2d8b',bg:'#f3e8ff',limitClass:'luna-bar',sendColor:'#9d4edd',freeLimit:5,
     suggestions:["Aide-moi à rédiger un mail professionnel","Comment négocier une augmentation ?","Aide-moi à prendre une décision difficile","Rédige une lettre de réclamation"],
-    welcome:"Salut ! Moi c'est **Luna**, votre assistante du quotidien ✨\n\nRédaction, conseils pratiques, aide à la décision, organisation — je suis là pour toutes vos questions de tous les jours. Rien n'est trop petit ou trop grand !\n\nDe quoi avez-vous besoin ?",
-    system:`Tu es Luna, une assistante polyvalente chaleureuse et positive. Tu aides avec la rédaction (lettres, mails, CV, réclamations), les décisions pratiques, les conseils de vie, les recherches d'information générale. Tu es accessible, concrète et toujours positive. Tu adaptes ton ton : sérieux pour l'administratif, détendu pour le quotidien.`
-  },
-  alex: {
-    name:'Alex', role:'Expert Entreprise & AE',
-    color:'#c0392b', bg:'#fde8e0', limitClass:'alex-bar',
-    sendColor:'#e76f51', freeLimit:3,
-    suggestions:["Comment créer mon auto-entreprise ?","Différence entre AE, EURL et SASU ?","Comment faire ma déclaration URSSAF ?","Comment rédiger une facture conforme ?","Quel régime de TVA choisir ?"],
-    welcome:"Hey ! Je suis **Alex**, votre expert entreprise 🏢\n\nAuto-entrepreneur, SASU, EURL, comptabilité simplifiée, TVA, URSSAF, facturation — je gère toute votre paperasse administrative.\n\nQu'est-ce qu'on règle aujourd'hui ?",
-    system:`Tu es Alex, un expert en création et gestion d'entreprise en France. Tu aides les auto-entrepreneurs, micro-entrepreneurs, créateurs de SASU/EURL/SAS. Tu guides sur : création d'entreprise, statuts juridiques, comptabilité simplifiée, facturation, TVA, déclarations URSSAF/CFE, aides (ACRE, ARCE), charges sociales. Tu utilises un langage simple et des exemples chiffrés.`
-  }
+    welcome:"Salut ! Moi c'est **Luna**, votre assistante du quotidien ✨\n\nRédaction, conseils pratiques, aide à la décision — je suis là pour toutes vos questions !\n\nDe quoi avez-vous besoin ?",
+    system:"Tu es Luna, une assistante polyvalente chaleureuse et positive. Tu aides avec la rédaction, les décisions pratiques, les conseils de vie. Tu es accessible, concrète et toujours positive."},
+  alex:{name:'Alex',role:'Expert Entreprise & AE',color:'#c0392b',bg:'#fde8e0',limitClass:'alex-bar',sendColor:'#e76f51',freeLimit:3,
+    suggestions:["Comment créer mon auto-entreprise ?","Différence entre AE, EURL et SASU ?","Comment faire ma déclaration URSSAF ?","Quel régime de TVA choisir ?"],
+    welcome:"Hey ! Je suis **Alex**, votre expert entreprise 🏢\n\nAuto-entrepreneur, SASU, EURL, comptabilité, TVA, URSSAF — je gère toute votre paperasse.\n\nQu'est-ce qu'on règle aujourd'hui ?",
+    system:"Tu es Alex, un expert en création et gestion d'entreprise en France. Tu aides les auto-entrepreneurs, créateurs de SASU/EURL sur : création, statuts, comptabilité, TVA, URSSAF, charges sociales."}
 };
 
-// ── STATE ─────────────────────────────────────────────────────────────────────
-let isPremium = false;
-let current = null;
-let convos = {};
-let usage = JSON.parse(localStorage.getItem('nx_usage')||'{}');
-let todayKey = new Date().toDateString();
-if(!usage[todayKey]) usage[todayKey] = {};
+let isPremium=false,current=null,convos={};
+let usage=JSON.parse(localStorage.getItem('nx_usage')||'{}');
+let todayKey=new Date().toDateString();
+if(!usage[todayKey]) usage[todayKey]={};
+function getUsage(id){return usage[todayKey][id]||0;}
+function incUsage(id){usage[todayKey][id]=(getUsage(id)+1);localStorage.setItem('nx_usage',JSON.stringify(usage));}
 
-function getUsage(id){ return usage[todayKey][id]||0; }
-function incUsage(id){ usage[todayKey][id]=(getUsage(id)+1); localStorage.setItem('nx_usage',JSON.stringify(usage)); }
-
-// ── NAV ───────────────────────────────────────────────────────────────────────
-function goSection(name, el) {
-  document.getElementById('sec-home').style.display = name==='home'?'block':'none';
-  document.getElementById('sec-premium').style.display = name==='premium'?'block':'none';
+function goSection(name,el){
+  document.getElementById('sec-home').style.display=name==='home'?'block':'none';
+  document.getElementById('sec-premium').style.display=name==='premium'?'block':'none';
   document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
   el.classList.add('active');
 }
-function showPremium(){
-  goSection('premium', document.querySelectorAll('.tab')[1]);
-  document.getElementById('home').scrollTop=0;
-}
+function showPremium(){goSection('premium',document.querySelectorAll('.tab')[1]);document.getElementById('userMenu').classList.remove('open');}
 
-// ── AVATAR SVG helpers ────────────────────────────────────────────────────────
-function getAvatarSVG(id, size=40) {
-  const SVGs = {
+function getAvatarSVG(id,size=40){
+  const S={
     sofia:`<svg width="${size}" height="${size}" viewBox="0 0 72 72" fill="none"><rect width="72" height="72" rx="16" fill="#d8f3dc"/><rect x="16" y="44" width="40" height="28" rx="10" fill="#2d6a4f"/><rect x="26" y="46" width="20" height="26" rx="4" fill="#52b788"/><rect x="30" y="38" width="12" height="10" rx="4" fill="#f5cba7"/><ellipse cx="36" cy="30" rx="14" ry="15" fill="#f5cba7"/><ellipse cx="36" cy="16" rx="14" ry="8" fill="#5a3e28"/><rect x="22" y="16" width="4" height="12" rx="2" fill="#5a3e28"/><rect x="46" y="16" width="4" height="12" rx="2" fill="#5a3e28"/><ellipse cx="30" cy="30" rx="2.5" ry="2.5" fill="#2d6a4f"/><ellipse cx="42" cy="30" rx="2.5" ry="2.5" fill="#2d6a4f"/><path d="M30 36 Q36 40 42 36" stroke="#c0704a" stroke-width="1.5" stroke-linecap="round" fill="none"/><circle cx="22" cy="32" r="2" fill="#f4a261"/></svg>`,
     marcus:`<svg width="${size}" height="${size}" viewBox="0 0 72 72" fill="none"><rect width="72" height="72" rx="16" fill="#dde8f5"/><rect x="14" y="44" width="44" height="28" rx="10" fill="#1d3557"/><rect x="28" y="46" width="16" height="26" rx="3" fill="#fff"/><path d="M34 46 L36 50 L38 46 L37 56 L36 58 L35 56 Z" fill="#e63946"/><rect x="30" y="38" width="12" height="10" rx="4" fill="#d4a373"/><ellipse cx="36" cy="30" rx="14" ry="15" fill="#d4a373"/><ellipse cx="36" cy="17" rx="13" ry="6" fill="#1a1a2e"/><ellipse cx="30" cy="30" rx="2.5" ry="2.5" fill="#1d3557"/><ellipse cx="42" cy="30" rx="2.5" ry="2.5" fill="#1d3557"/><rect x="26" y="27" width="10" height="7" rx="3.5" stroke="#333" stroke-width="1.5" fill="none"/><rect x="36" y="27" width="10" height="7" rx="3.5" stroke="#333" stroke-width="1.5" fill="none"/><path d="M31 35.5 Q36 38.5 41 35.5" stroke="#a0522d" stroke-width="1.5" stroke-linecap="round" fill="none"/></svg>`,
     luna:`<svg width="${size}" height="${size}" viewBox="0 0 72 72" fill="none"><rect width="72" height="72" rx="16" fill="#f3e8ff"/><rect x="16" y="44" width="40" height="28" rx="10" fill="#9d4edd"/><rect x="26" y="46" width="20" height="26" rx="4" fill="#c77dff"/><rect x="30" y="38" width="12" height="10" rx="4" fill="#fec89a"/><ellipse cx="36" cy="30" rx="14" ry="15" fill="#fec89a"/><ellipse cx="36" cy="16" rx="15" ry="9" fill="#ff6b6b"/><rect x="20" y="16" width="5" height="20" rx="2.5" fill="#ff6b6b"/><rect x="47" y="16" width="5" height="20" rx="2.5" fill="#ff6b6b"/><ellipse cx="30" cy="30" rx="3" ry="3" fill="#7b2d8b"/><ellipse cx="42" cy="30" rx="3" ry="3" fill="#7b2d8b"/><path d="M29 35 Q36 41 43 35" stroke="#e07070" stroke-width="1.8" stroke-linecap="round" fill="none"/><ellipse cx="26" cy="34" rx="4" ry="2.5" fill="#ffb3b3" opacity=".5"/><ellipse cx="46" cy="34" rx="4" ry="2.5" fill="#ffb3b3" opacity=".5"/></svg>`,
     alex:`<svg width="${size}" height="${size}" viewBox="0 0 72 72" fill="none"><rect width="72" height="72" rx="16" fill="#fde8e0"/><rect x="14" y="44" width="44" height="28" rx="10" fill="#e76f51"/><rect x="24" y="56" width="24" height="16" rx="5" fill="#cf5537"/><rect x="30" y="38" width="12" height="10" rx="4" fill="#c68642"/><ellipse cx="36" cy="30" rx="14" ry="15" fill="#c68642"/><ellipse cx="36" cy="17" rx="13" ry="7" fill="#1a0a00"/><rect x="22" y="17" width="6" height="8" rx="3" fill="#1a0a00"/><rect x="44" y="17" width="6" height="8" rx="3" fill="#1a0a00"/><ellipse cx="30" cy="30" rx="2.5" ry="2.5" fill="#1a0a00"/><ellipse cx="42" cy="30" rx="2.5" ry="2.5" fill="#1a0a00"/><path d="M27 26.5 Q30 25 33 26.5" stroke="#1a0a00" stroke-width="2" stroke-linecap="round" fill="none"/><path d="M39 26.5 Q42 25 45 26.5" stroke="#1a0a00" stroke-width="2" stroke-linecap="round" fill="none"/><path d="M30 35.5 Q36 39 42 35.5" stroke="#8b4513" stroke-width="1.8" stroke-linecap="round" fill="none"/></svg>`
   };
-  return SVGs[id]||'';
+  return S[id]||'';
 }
 
-// ── PREMIUM ───────────────────────────────────────────────────────────────────
-const STRIPE_LINK = 'https://buy.stripe.com/aFa5kD9IvfUcgcpeCoc7u00';
+function activatePremium(){window.open(STRIPE_LINK,'_blank');}
+function setPremiumActive(){isPremium=true;document.getElementById('planPill').textContent='PREMIUM';document.getElementById('planPill').className='plan-pill premium';document.getElementById('credFill').style.width='100%';document.getElementById('credTxt').textContent='Illimité ∞';document.getElementById('limitBar').style.display='none';localStorage.setItem('nexo_premium','true');}
 
-function activatePremium(){
-  // Redirect to Stripe payment page
-  window.open(STRIPE_LINK, '_blank');
-}
-
-function setPremiumActive(){
-  isPremium=true;
-  document.getElementById('planPill').textContent='PREMIUM';
-  document.getElementById('planPill').className='plan-pill premium';
-  document.getElementById('credFill').style.width='100%';
-  document.getElementById('credTxt').textContent='Illimité ∞';
-  document.getElementById('limitBar').style.display='none';
-  localStorage.setItem('nexo_premium','true');
-  alert('🎉 Bienvenue en Premium Nexo !\n\nSofia, Marcus, Luna et Alex sont maintenant illimités pour vous.');
-  goSection('home',document.querySelectorAll('.tab')[0]);
-}
-
-// Check if already premium
-window.addEventListener('load', () => {
-  if(localStorage.getItem('nexo_premium')==='true') setPremiumActive();
-});
-
-// ── OPEN CHAT ─────────────────────────────────────────────────────────────────
 function openChat(id){
-  current=id;
-  const ex=EXPERTS[id];
+  current=id;const ex=EXPERTS[id];
   if(!convos[id]) convos[id]=[];
-
-  // Header
   document.getElementById('chatHdrName').textContent=ex.name;
   document.getElementById('chatHdrStatus').textContent=ex.role;
   document.getElementById('chatAvatarMini').innerHTML=getAvatarSVG(id,40);
   document.getElementById('sendBtn').style.background=ex.sendColor;
-
-  // Limit bar
   const lb=document.getElementById('limitBar');
-  if(isPremium){ lb.style.display='none'; }
-  else { lb.style.display='flex'; lb.className='limit-bar '+ex.limitClass; updateLimitBar(id); }
-
-  // Show chat
+  if(isPremium){lb.style.display='none';}else{lb.style.display='flex';lb.className='limit-bar '+ex.limitClass;updateLimitBar(id);}
   document.getElementById('home').style.display='none';
   document.getElementById('chat-view').style.display='flex';
-
-  // Messages
-  const area=document.getElementById('msgsArea');
-  area.innerHTML='';
-
-  if(convos[id].length===0){
-    addBotBubble(ex.welcome, id);
-    showSuggs(id);
-  } else {
-    convos[id].forEach(m=>{
-      if(m.role==='user') appendUser(m.content);
-      else appendBot(m.content,id);
-    });
-  }
+  const area=document.getElementById('msgsArea');area.innerHTML='';
+  if(convos[id].length===0){addBotBubble(ex.welcome,id);showSuggs(id);}
+  else{convos[id].forEach(m=>{if(m.role==='user')appendUser(m.content);else appendBot(m.content,id);});}
 }
-
-function closeChat(){
-  document.getElementById('chat-view').style.display='none';
-  document.getElementById('home').style.display='block';
-}
-
-// ── MESSAGES ──────────────────────────────────────────────────────────────────
-function addBotBubble(text,id){
-  convos[id].push({role:'assistant',content:text});
-  appendBot(text,id);
-}
-
+function closeChat(){document.getElementById('chat-view').style.display='none';document.getElementById('home').style.display='block';}
+function addBotBubble(text,id){convos[id].push({role:'assistant',content:text});appendBot(text,id);}
 function appendBot(text,id){
   const area=document.getElementById('msgsArea');
-  const div=document.createElement('div');
-  div.className='msg bot';
-  div.innerHTML=`
-    <div class="msg-mini-avatar">${getAvatarSVG(id,28)}</div>
-    <div>
-      <div class="bubble">${fmt(text)}</div>
-      <div class="msg-time">${now()}</div>
-    </div>`;
-  area.appendChild(div);
-  area.scrollTop=area.scrollHeight;
+  const div=document.createElement('div');div.className='msg bot';
+  div.innerHTML=`<div class="msg-mini-avatar">${getAvatarSVG(id,28)}</div><div><div class="bubble">${fmt(text)}</div><div class="msg-time">${now()}</div></div>`;
+  area.appendChild(div);area.scrollTop=area.scrollHeight;
 }
-
 function appendUser(text){
   const area=document.getElementById('msgsArea');
-  const div=document.createElement('div');
-  div.className='msg user';
+  const div=document.createElement('div');div.className='msg user';
   div.innerHTML=`<div><div class="bubble">${esc(text)}</div><div class="msg-time">${now()}</div></div>`;
-  area.appendChild(div);
-  area.scrollTop=area.scrollHeight;
+  area.appendChild(div);area.scrollTop=area.scrollHeight;
 }
-
-function fmt(t){ return t.replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>').replace(/\n/g,'<br>'); }
-function esc(t){ return t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
-function now(){ return new Date().toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'}); }
-
-// ── SUGGESTIONS ───────────────────────────────────────────────────────────────
+function fmt(t){return t.replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>').replace(/\n/g,'<br>');}
+function esc(t){return t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function now(){return new Date().toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'});}
 function showSuggs(id){
-  const area=document.getElementById('suggArea');
-  area.innerHTML='';
-  EXPERTS[id].suggestions.forEach(s=>{
-    const c=document.createElement('div');
-    c.className='sugg-chip';
-    c.textContent=s;
-    c.onclick=()=>{ sendText(s); area.innerHTML=''; };
-    area.appendChild(c);
-  });
+  const area=document.getElementById('suggArea');area.innerHTML='';
+  EXPERTS[id].suggestions.forEach(s=>{const c=document.createElement('div');c.className='sugg-chip';c.textContent=s;c.onclick=()=>{sendText(s);area.innerHTML='';};area.appendChild(c);});
 }
-
-// ── LIMIT BAR ─────────────────────────────────────────────────────────────────
 function updateLimitBar(id){
-  if(isPremium) return;
-  const ex=EXPERTS[id];
-  const rem=Math.max(0,ex.freeLimit-getUsage(id));
-  document.getElementById('limitTxt').textContent=
-    `${rem} message${rem>1?'s':''} gratuit${rem>1?'s':''} restant${rem>1?'s':''}`;
+  if(isPremium)return;
+  const ex=EXPERTS[id];const rem=Math.max(0,ex.freeLimit-getUsage(id));
+  document.getElementById('limitTxt').textContent=`${rem} message${rem>1?'s':''} gratuit${rem>1?'s':''} restant${rem>1?'s':''}`;
 }
-
-// ── SEND ──────────────────────────────────────────────────────────────────────
-function onKey(e){ if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendMsg();} }
-function sendMsg(){
-  const inp=document.getElementById('msgInp');
-  const txt=inp.value.trim(); if(!txt) return;
-  inp.value=''; autoGrow(inp); sendText(txt);
-}
-
+function onKey(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendMsg();}}
+function sendMsg(){const inp=document.getElementById('msgInp');const txt=inp.value.trim();if(!txt)return;inp.value='';autoGrow(inp);sendText(txt);}
 async function sendText(txt){
-  const id=current; const ex=EXPERTS[id];
+  const id=current;const ex=EXPERTS[id];
   document.getElementById('suggArea').innerHTML='';
-
-  if(!isPremium && getUsage(id)>=ex.freeLimit){ showLocked(id); return; }
-
-  appendUser(txt);
-  convos[id].push({role:'user',content:txt});
-  incUsage(id);
-  updateLimitBar(id);
-
-  // Typing
+  if(!isPremium&&getUsage(id)>=ex.freeLimit){showLocked(id);return;}
+  appendUser(txt);convos[id].push({role:'user',content:txt});incUsage(id);updateLimitBar(id);
   const area=document.getElementById('msgsArea');
-  const ty=document.createElement('div');
-  ty.className='msg bot typing'; ty.id='typing';
+  const ty=document.createElement('div');ty.className='msg bot typing';ty.id='typing';
   ty.innerHTML=`<div class="msg-mini-avatar">${getAvatarSVG(id,28)}</div><div class="bubble"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>`;
-  area.appendChild(ty); area.scrollTop=area.scrollHeight;
-
+  area.appendChild(ty);area.scrollTop=area.scrollHeight;
   const msgs=convos[id].slice(-12).map(m=>({role:m.role,content:m.content}));
-
-  try {
-    const r=await fetch('https://api.anthropic.com/v1/messages',{
-      method:'POST',
-      headers:{'Content-Type':'application/json','x-api-key':'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','anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
-      body:JSON.stringify({
-        system:ex.system,
-        messages:msgs
-      })
-    });
+  try{
+    const r=await fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({system:ex.system,messages:msgs})});
     const d=await r.json();
     const reply=d.content?.map(b=>b.text||'').join('')||"Je n'ai pas pu répondre, réessayez.";
     document.getElementById('typing')?.remove();
     addBotBubble(reply,id);
-  } catch(e){
-    document.getElementById('typing')?.remove();
-    addBotBubble("❌ Connexion impossible. Vérifiez votre connexion.",id);
-  }
+  }catch(e){document.getElementById('typing')?.remove();addBotBubble("❌ Connexion impossible. Vérifiez votre connexion.",id);}
 }
-
-// ── LOCKED ────────────────────────────────────────────────────────────────────
 function showLocked(id){
-  const ex=EXPERTS[id];
-  const area=document.getElementById('msgsArea');
-  const ov=document.createElement('div');
-  ov.className='locked-ov'; ov.id='lockedOv';
-  ov.innerHTML=`
-    <div class="locked-av">${getAvatarSVG(id,80)}</div>
-    <div class="locked-title">${ex.name} vous attend !</div>
-    <div class="locked-txt">Vous avez utilisé vos ${ex.freeLimit} messages gratuits avec ${ex.name} aujourd'hui.<br><br>Passez <strong>Premium</strong> pour des consultations illimitées avec tous vos experts.</div>
-    <button class="btn-unlock" onclick="window.open(STRIPE_LINK,'_blank')">Passer Premium — 9,99€/mois</button>
-    <div class="later-btn" onclick="this.parentElement.remove()">Revenir demain (gratuit)</div>`;
-  area.style.position='relative';
-  area.appendChild(ov);
+  const ex=EXPERTS[id];const area=document.getElementById('msgsArea');
+  const ov=document.createElement('div');ov.className='locked-ov';ov.id='lockedOv';
+  ov.innerHTML=`<div class="locked-av">${getAvatarSVG(id,80)}</div><div class="locked-title">${ex.name} vous attend !</div><div class="locked-txt">Vous avez utilisé vos ${ex.freeLimit} messages gratuits avec ${ex.name} aujourd'hui.<br><br>Passez <strong>Premium</strong> pour des consultations illimitées.</div><button class="btn-unlock" onclick="window.open('${STRIPE_LINK}','_blank')">Passer Premium — 9,99€/mois</button><div class="later-btn" onclick="this.parentElement.remove()">Revenir demain (gratuit)</div>`;
+  area.style.position='relative';area.appendChild(ov);
 }
-
-
-function autoGrow(el){
-  el.style.height='auto';
-  el.style.height=Math.min(el.scrollHeight,100)+'px';
-}
-
-// ── PWA Install ───────────────────────────────────────────────────────────────
-let deferredPrompt;
-window.addEventListener('beforeinstallprompt', e => {
-  e.preventDefault();
-  deferredPrompt = e;
-  document.getElementById('installBanner').style.display = 'flex';
-});
-
-function installApp() {
-  if(deferredPrompt) {
-    deferredPrompt.prompt();
-    deferredPrompt.userChoice.then(() => {
-      deferredPrompt = null;
-      document.getElementById('installBanner').style.display = 'none';
-    });
-  }
-}
-
-// Register service worker
-if('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js');
-}
+function autoGrow(el){el.style.height='auto';el.style.height=Math.min(el.scrollHeight,100)+'px';}
 </script>
 </body>
 </html>
