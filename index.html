@@ -803,16 +803,29 @@ function getAvatarSVG(id, size=40) {
 }
 
 // ── PREMIUM ───────────────────────────────────────────────────────────────────
+const STRIPE_LINK = 'https://buy.stripe.com/aFa5kD9IvfUcgcpeCoc7u00';
+
 function activatePremium(){
+  // Redirect to Stripe payment page
+  window.open(STRIPE_LINK, '_blank');
+}
+
+function setPremiumActive(){
   isPremium=true;
   document.getElementById('planPill').textContent='PREMIUM';
   document.getElementById('planPill').className='plan-pill premium';
   document.getElementById('credFill').style.width='100%';
   document.getElementById('credTxt').textContent='Illimité ∞';
   document.getElementById('limitBar').style.display='none';
+  localStorage.setItem('nexo_premium','true');
   alert('🎉 Bienvenue en Premium Nexo !\n\nSofia, Marcus, Luna et Alex sont maintenant illimités pour vous.');
   goSection('home',document.querySelectorAll('.tab')[0]);
 }
+
+// Check if already premium
+window.addEventListener('load', () => {
+  if(localStorage.getItem('nexo_premium')==='true') setPremiumActive();
+});
 
 // ── OPEN CHAT ─────────────────────────────────────────────────────────────────
 function openChat(id){
@@ -970,7 +983,7 @@ function showLocked(id){
     <div class="locked-av">${getAvatarSVG(id,80)}</div>
     <div class="locked-title">${ex.name} vous attend !</div>
     <div class="locked-txt">Vous avez utilisé vos ${ex.freeLimit} messages gratuits avec ${ex.name} aujourd'hui.<br><br>Passez <strong>Premium</strong> pour des consultations illimitées avec tous vos experts.</div>
-    <button class="btn-unlock" onclick="activatePremium();document.getElementById('lockedOv')?.remove()">Passer Premium — 9,99€/mois</button>
+    <button class="btn-unlock" onclick="window.open(STRIPE_LINK,'_blank')">Passer Premium — 9,99€/mois</button>
     <div class="later-btn" onclick="this.parentElement.remove()">Revenir demain (gratuit)</div>`;
   area.style.position='relative';
   area.appendChild(ov);
