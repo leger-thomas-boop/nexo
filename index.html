@@ -490,7 +490,7 @@ async function sendText(txt){
   area.appendChild(ty);area.scrollTop=area.scrollHeight;
   const msgs=convos[id].slice(-12).map(m=>({role:m.role,content:m.content}));
   try{
-    const r=await fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({system:ex.system,messages:msgs})});
+    const r=await fetch('/API/Chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({system:ex.system,messages:msgs})});
     const d=await r.json();
     const reply=d.content?.map(b=>b.text||'').join('')||"Je n'ai pas pu répondre, réessayez.";
     document.getElementById('typing')?.remove();
