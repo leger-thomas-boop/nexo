@@ -4,6 +4,12 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <title>Nexo — Vos experts IA</title>
+<link rel="manifest" href="/manifest.json">
+<meta name="theme-color" content="#f4a261">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Nexo">
+<link rel="apple-touch-icon" href="/icon-192.png">
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Clash+Display:wght@400;500;600;700&family=Satoshi:wght@300;400;500;700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
@@ -403,6 +409,17 @@ header {
       3. Copie ta clé et colle-la ici
     </div>
   </div>
+</div>
+
+<!-- ══ INSTALL BANNER ══ -->
+<div id="installBanner" style="display:none; position:fixed; bottom:0; left:0; right:0; z-index:999; max-width:480px; margin:0 auto; background:#1a1814; border-top:1px solid #333; padding:12px 16px; align-items:center; gap:12px;">
+  <div style="font-size:1.8rem;">📱</div>
+  <div style="flex:1;">
+    <div style="font-family:'Plus Jakarta Sans',sans-serif; font-weight:700; font-size:.85rem; color:#fff;">Installer Nexo</div>
+    <div style="font-size:.72rem; color:#888;">Ajoutez l'app sur votre écran d'accueil</div>
+  </div>
+  <button onclick="installApp()" style="background:linear-gradient(135deg,#f4a261,#e76f51); border:none; border-radius:8px; padding:8px 16px; font-family:'Plus Jakarta Sans',sans-serif; font-weight:700; font-size:.8rem; color:#000; cursor:pointer;">Installer</button>
+  <button onclick="document.getElementById('installBanner').style.display='none'" style="background:none; border:none; color:#666; font-size:1.2rem; cursor:pointer;">✕</button>
 </div>
 
 <!-- ══════════ HOME ══════════ -->
@@ -999,6 +1016,29 @@ window.addEventListener('load', () => {
 function autoGrow(el){
   el.style.height='auto';
   el.style.height=Math.min(el.scrollHeight,100)+'px';
+}
+
+// ── PWA Install ───────────────────────────────────────────────────────────────
+let deferredPrompt;
+window.addEventListener('beforeinstallprompt', e => {
+  e.preventDefault();
+  deferredPrompt = e;
+  document.getElementById('installBanner').style.display = 'flex';
+});
+
+function installApp() {
+  if(deferredPrompt) {
+    deferredPrompt.prompt();
+    deferredPrompt.userChoice.then(() => {
+      deferredPrompt = null;
+      document.getElementById('installBanner').style.display = 'none';
+    });
+  }
+}
+
+// Register service worker
+if('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/sw.js');
 }
 </script>
 </body>
