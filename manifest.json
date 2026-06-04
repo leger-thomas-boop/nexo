@@ -1,0 +1,24 @@
+{
+  "name": "Nexo — Vos experts IA",
+  "short_name": "Nexo",
+  "description": "Sofia, Marcus, Luna et Alex — vos 4 experts IA disponibles 24h/24",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0f0f0f",
+  "theme_color": "#f4a261",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
