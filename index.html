@@ -935,9 +935,9 @@ async function sendText(txt){
   const msgs=convos[id].slice(-12).map(m=>({role:m.role,content:m.content}));
 
   try {
-    const r=await fetch('/api/chat',{
+    const r=await fetch('https://api.anthropic.com/v1/messages',{
       method:'POST',
-      headers:{'Content-Type':'application/json'},
+      headers:{'Content-Type':'application/json','x-api-key':'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','anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
       body:JSON.stringify({
         system:ex.system,
         messages:msgs
