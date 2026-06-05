@@ -490,6 +490,58 @@ header{position:sticky;top:0;z-index:200;background:rgba(8,8,16,.88);backdrop-fi
 .auth-error{background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.2);border-radius:10px;padding:9px 12px;font-size:.75rem;color:#f87171;margin-top:10px;display:none;}
 .auth-success{background:rgba(52,211,153,.1);border:1px solid rgba(52,211,153,.2);border-radius:10px;padding:9px 12px;font-size:.75rem;color:#34d399;margin-top:10px;display:none;}
 
+
+/* HOME GLASSMORPHISM */
+body{background:var(--bg);}
+
+/* Animated bg for home */
+#home{position:relative;}
+
+/* Header glass */
+header{
+  background:rgba(8,8,16,.5) !important;
+  backdrop-filter:blur(24px) !important;
+  -webkit-backdrop-filter:blur(24px) !important;
+  border-bottom:1px solid rgba(255,255,255,.08) !important;
+  position:sticky;top:0;z-index:200;
+}
+
+/* Tabs glass */
+.tabs{
+  background:rgba(8,8,16,.4) !important;
+  backdrop-filter:blur(16px) !important;
+  border-bottom:1px solid rgba(255,255,255,.06) !important;
+}
+
+/* Hero transparent */
+.hero{
+  background:transparent !important;
+}
+
+/* Expert cards glassmorphism */
+.expert-card{
+  background:rgba(255,255,255,.05) !important;
+  backdrop-filter:blur(16px) !important;
+  -webkit-backdrop-filter:blur(16px) !important;
+  border:1px solid rgba(255,255,255,.1) !important;
+  box-shadow:0 8px 32px rgba(0,0,0,.2) !important;
+}
+
+/* sec-home transparent */
+#sec-home, #sec-premium{background:transparent !important;}
+
+/* Pricing card glass */
+.pricing-card{
+  background:rgba(255,255,255,.06) !important;
+  backdrop-filter:blur(20px) !important;
+}
+
+/* Testimonials glass */
+.testi{
+  background:rgba(255,255,255,.04) !important;
+  backdrop-filter:blur(10px) !important;
+}
+
 </style>
 </head>
 <body>
@@ -557,6 +609,7 @@ header{position:sticky;top:0;z-index:200;background:rgba(8,8,16,.88);backdrop-fi
 
 <!-- HOME -->
 <div id="home" style="display:none">
+<canvas id="homeBgCanvas" style="position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none;max-width:480px;margin:0 auto;left:50%;transform:translateX(-50%);"></canvas>
 <header>
   <div class="hdr-row">
     <div class="logo"><span class="nex">Nex</span><span class="o">o</span></div>
@@ -1046,6 +1099,62 @@ function showLocked(id){
   area.style.position='relative';area.appendChild(ov);
 }
 function autoGrow(el){el.style.height='auto';el.style.height=Math.min(el.scrollHeight,100)+'px';}
+
+// HOME BACKGROUND STARS
+function initHomeBg(){
+  var bg=document.getElementById('homeBgCanvas');
+  if(!bg||bg._init)return;
+  bg._init=true;
+  var ctx=bg.getContext('2d');
+  var stars=[];
+  for(var i=0;i<100;i++){
+    stars.push({
+      x:Math.random(),y:Math.random(),
+      r:0.3+Math.random()*1.4,
+      a:Math.random()*Math.PI*2,
+      spd:0.004+Math.random()*0.01,
+      color:['#a78bfa','#60a5fa','#f4a261','#34d399','#ffffff','#e879f9'][Math.floor(Math.random()*6)]
+    });
+  }
+  // Floating orbs
+  var orbs=[
+    {x:.2,y:.3,r:120,color:'rgba(168,85,247,.06)',spd:.0008},
+    {x:.8,y:.7,r:150,color:'rgba(96,165,250,.05)',spd:.0012},
+    {x:.5,y:.1,r:100,color:'rgba(244,162,97,.04)',spd:.001},
+  ];
+  function resizeBg(){bg.width=bg.offsetWidth;bg.height=bg.offsetHeight;}
+  resizeBg();
+  window.addEventListener('resize',resizeBg);
+  var t=0;
+  function drawHomeBg(){
+    if(document.getElementById('home').style.display==='none'){requestAnimationFrame(drawHomeBg);return;}
+    ctx.clearRect(0,0,bg.width,bg.height);
+    t+=0.01;
+    // Orbs
+    orbs.forEach(function(o){
+      var x=(o.x+Math.sin(t*o.spd*60)*.05)*bg.width;
+      var y=(o.y+Math.cos(t*o.spd*60)*.05)*bg.height;
+      var g=ctx.createRadialGradient(x,y,0,x,y,o.r);
+      g.addColorStop(0,o.color);g.addColorStop(1,'transparent');
+      ctx.fillStyle=g;ctx.fillRect(0,0,bg.width,bg.height);
+    });
+    // Stars
+    stars.forEach(function(s){
+      s.a+=s.spd;
+      var alpha=(Math.sin(s.a)+1)/2*0.8;
+      ctx.beginPath();
+      ctx.arc(s.x*bg.width,s.y*bg.height,s.r,0,Math.PI*2);
+      ctx.fillStyle=s.color;
+      ctx.globalAlpha=alpha;
+      ctx.fill();
+      ctx.globalAlpha=1;
+    });
+    requestAnimationFrame(drawHomeBg);
+  }
+  drawHomeBg();
+}
+window.addEventListener('load', initHomeBg);
+
 </script>
 </body>
 </html>
