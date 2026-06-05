@@ -445,7 +445,7 @@ function getAvatarSVG(id,size=40){
 function activatePremium(){window.open(STRIPE_LINK,'_blank');}
 function setPremiumActive(){isPremium=true;document.getElementById('planPill').textContent='PREMIUM';document.getElementById('planPill').className='plan-pill premium';document.getElementById('credFill').style.width='100%';document.getElementById('credTxt').textContent='Illimité ∞';document.getElementById('limitBar').style.display='none';localStorage.setItem('nexo_premium','true');}
 
-function openChat(id){
+async function openChat(id){
   current=id;const ex=EXPERTS[id];
   if(!convos[id]) convos[id]=[];
   document.getElementById('chatHdrName').textContent=ex.name;
@@ -457,8 +457,21 @@ function openChat(id){
   document.getElementById('home').style.display='none';
   document.getElementById('chat-view').style.display='flex';
   const area=document.getElementById('msgsArea');area.innerHTML='';
-  if(convos[id].length===0){addBotBubble(ex.welcome,id);showSuggs(id);}
-  else{convos[id].forEach(m=>{if(m.role==='user')appendUser(m.content);else appendBot(m.content,id);});}
+  if(convos[id].length===0 && userSession){
+    try{
+      const r=await fetch(`${SUPABASE_URL}/rest/v1/messages?expert=eq.${id}&order=created_at.asc&limit=50`,{headers:{'apikey':SUPABASE_ANON,'Authorization':`Bearer ${userSession.access_token}`}});
+      const hist=await r.json();
+      if(hist&&hist.length>0){convos[id]=hist.map(m=>({role:m.role,content:m.content}));convos[id].forEach(m=>{if(m.role==='user')appendUser(m.content);else appendBot(m.content,id);});}
+      else{addBotBubble(ex.welcome,id);showSuggs(id);}
+    }catch(e){addBotBubble(ex.welcome,id);showSuggs(id);}
+  } else {
+    if(convos[id].length===0){addBotBubble(ex.welcome,id);showSuggs(id);}
+    else{convos[id].forEach(m=>{if(m.role==='user')appendUser(m.content);else appendBot(m.content,id);});}
+  }
+}
+async function saveMessage(expert,role,content){
+  if(!userSession)return;
+  try{await fetch(`${SUPABASE_URL}/rest/v1/messages`,{method:'POST',headers:{'apikey':SUPABASE_ANON,'Authorization':`Bearer ${userSession.access_token}`,'Content-Type':'application/json'},body:JSON.stringify({expert,role,content})});}catch(e){}
 }
 function closeChat(){document.getElementById('chat-view').style.display='none';document.getElementById('home').style.display='block';}
 function addBotBubble(text,id){convos[id].push({role:'assistant',content:text});appendBot(text,id);}
@@ -492,7 +505,7 @@ async function sendText(txt){
   const id=current;const ex=EXPERTS[id];
   document.getElementById('suggArea').innerHTML='';
   if(!isPremium&&getUsage(id)>=ex.freeLimit){showLocked(id);return;}
-  appendUser(txt);convos[id].push({role:'user',content:txt});incUsage(id);updateLimitBar(id);
+  appendUser(txt);convos[id].push({role:'user',content:txt});saveMessage(id,'user',txt);incUsage(id);updateLimitBar(id);
   const area=document.getElementById('msgsArea');
   const ty=document.createElement('div');ty.className='msg bot typing';ty.id='typing';
   ty.innerHTML=`<div class="msg-mini-avatar">${getAvatarSVG(id,28)}</div><div class="bubble"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>`;
@@ -503,7 +516,7 @@ async function sendText(txt){
     const d=await r.json();
     const reply=d.content?.map(b=>b.text||'').join('')||"Je n'ai pas pu répondre, réessayez.";
     document.getElementById('typing')?.remove();
-    addBotBubble(reply,id);
+    addBotBubble(reply,id);saveMessage(id,'assistant',reply);
   }catch(e){document.getElementById('typing')?.remove();addBotBubble("❌ Connexion impossible. Vérifiez votre connexion.",id);}
 }
 function showLocked(id){
