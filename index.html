@@ -469,9 +469,9 @@ async function openChat(id){
     else{convos[id].forEach(m=>{if(m.role==='user')appendUser(m.content);else appendBot(m.content,id);});}
   }
 }
-async function async function saveMessage(expert,role,content){   if(!userSession||!currentUser)return;   try{await fetch(`${SUPABASE_URL}/rest/v1/messages`,{method:'POST',headers:{'apikey':SUPABASE_ANON,'Authorization':`Bearer ${userSession.access_token}`,'Content-Type':'application/json','Prefer':'return=minimal'},body:JSON.stringify({user_id:currentUser.id,expert,role,content})});}catch(e){console.log('save error',e);} }(expert,role,content){
-  if(!userSession)return;
-  try{await fetch(`${SUPABASE_URL}/rest/v1/messages`,{method:'POST',headers:{'apikey':SUPABASE_ANON,'Authorization':`Bearer ${userSession.access_token}`,'Content-Type':'application/json'},body:JSON.stringify({expert,role,content})});}catch(e){}
+async function saveMessage(expert,role,content){
+  if(!userSession||!currentUser||!currentUser.id)return;
+  try{await fetch(`${SUPABASE_URL}/rest/v1/messages`,{method:'POST',headers:{'apikey':SUPABASE_ANON,'Authorization':`Bearer ${userSession.access_token}`,'Content-Type':'application/json','Prefer':'return=minimal'},body:JSON.stringify({user_id:currentUser.id,expert,role,content})});}catch(e){console.error('save err',e);}
 }
 function closeChat(){document.getElementById('chat-view').style.display='none';document.getElementById('home').style.display='block';}
 function addBotBubble(text,id){convos[id].push({role:'assistant',content:text});appendBot(text,id);}
