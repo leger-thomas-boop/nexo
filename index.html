@@ -368,13 +368,22 @@ async function doSignup(){
 
 function doLogout(){clearSession();document.getElementById('userMenu').classList.remove('open');document.getElementById('home').style.display='none';document.getElementById('auth-screen').style.display='flex';convos={};isPremium=false;}
 
-function enterApp(){
+async function enterApp(){
   document.getElementById('auth-screen').style.display='none';
   document.getElementById('home').style.display='block';
   const letter=(currentUser?.email||'U')[0].toUpperCase();
   document.getElementById('avatarHdr').textContent=letter;
   document.getElementById('userEmailDisplay').textContent=currentUser?.email||'';
-  if(localStorage.getItem('nexo_premium')==='true') setPremiumActive();
+  // Vérifier le Premium depuis Supabase
+  try {
+    const r = await fetch(`${SUPABASE_URL}/rest/v1/profiles?email=eq.${currentUser.email}&select=is_premium`, {
+      headers: { 'apikey': SUPABASE_ANON, 'Authorization': `Bearer ${userSession.access_token}` }
+    });
+    const data = await r.json();
+    if (data[0]?.is_premium) setPremiumActive();
+  } catch(e) {
+    if(localStorage.getItem('nexo_premium')==='true') setPremiumActive();
+  }
 }
 
 function toggleUserMenu(){document.getElementById('userMenu').classList.toggle('open');}
