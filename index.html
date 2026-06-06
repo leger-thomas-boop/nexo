@@ -1259,9 +1259,9 @@ async function openChat(id){
   document.getElementById('home').style.display='none';
   document.getElementById('chat-view').style.display='flex';
   var area=document.getElementById('msgsArea');area.innerHTML='';
-  if(convos[id].length===0&&userSession){
+  if(convos[id].length===0&&userSession&&currentUser&&currentUser.id){
     try{
-      var r=await fetch(SUPABASE_URL+'/rest/v1/messages?expert=eq.'+id+'&order=created_at.asc&limit=50',{headers:{'apikey':SUPABASE_ANON,'Authorization':'Bearer '+userSession.access_token}});
+      var r=await fetch(SUPABASE_URL+'/rest/v1/messages?expert=eq.'+id+'&user_id=eq.'+currentUser.id+'&order=created_at.asc&limit=50',{headers:{'apikey':SUPABASE_ANON,'Authorization':'Bearer '+userSession.access_token}});
       var hist=await r.json();
       if(hist&&hist.length>0){convos[id]=hist.map(function(m){return{role:m.role,content:m.content};});convos[id].forEach(function(m){if(m.role==='user')appendUser(m.content);else appendBot(m.content,id);});}
       else{addBotBubble(ex.welcome,id);showSuggs(id);}
