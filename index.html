@@ -843,6 +843,11 @@ header{
 
 <script>
 var STRIPE_LINK='https://buy.stripe.com/aFa5kD9IvfUcgcpeCoc7u00';
+// Visibility helpers to pause off-screen animations (perf)
+function _visible(el){return el && el.offsetParent!==null && getComputedStyle(el).display!=='none';}
+function authVisible(){return _visible(document.getElementById('auth-screen'));}
+function homeVisible(){var h=document.getElementById('home');return h && h.style.display!=='none' && _visible(document.getElementById('sec-home'));}
+function discoverVisible(){var h=document.getElementById('home');return h && h.style.display!=='none' && _visible(document.getElementById('sec-discover'));}
 var SUPABASE_URL='https://zoycmayrynkisgiybqij.supabase.co';
 var SUPABASE_ANON='sb_publishable_MjyHgFrLGSz9qV5LkIqX0Q_AQ7fnd0P';
 
@@ -955,6 +960,7 @@ var SUPABASE_ANON='sb_publishable_MjyHgFrLGSz9qV5LkIqX0Q_AQ7fnd0P';
   }
 
   function draw(){
+    if(!authVisible()){requestAnimationFrame(draw);return;}
     ctx.clearRect(0,0,W,H);
     rot+=0.005;t+=0.018;
     var pulse=1+Math.sin(t*0.7)*0.035;
@@ -1402,7 +1408,7 @@ function initHomeBg(){
   window.addEventListener('resize',resizeBg);
   var t=0;
   function drawHomeBg(){
-    if(document.getElementById('home').style.display==='none'){requestAnimationFrame(drawHomeBg);return;}
+    if(document.getElementById('home').style.display==='none' || document.hidden){requestAnimationFrame(drawHomeBg);return;}
     ctx.clearRect(0,0,bg.width,bg.height);
     t+=0.01;
     // Orbs (drifting around)
@@ -1464,6 +1470,7 @@ function initOrbes(){
     var rot=0,t=0;
     function ha(hex,a){var h=hex.replace('#','');return 'rgba('+parseInt(h.substr(0,2),16)+','+parseInt(h.substr(2,2),16)+','+parseInt(h.substr(4,2),16)+','+a+')';}
     function frame(){
+      if(!homeVisible()){requestAnimationFrame(frame);return;}
       ctx.clearRect(0,0,W,H);
       rot+=0.012; t+=0.03;
       var pulse=1+Math.sin(t*0.8)*0.05;
@@ -1554,6 +1561,7 @@ function initDiscOrbe(){
   var rot=0,t=0;
   function ha(hex,a){var h=hex.replace('#','');return 'rgba('+parseInt(h.substr(0,2),16)+','+parseInt(h.substr(2,2),16)+','+parseInt(h.substr(4,2),16)+','+a+')';}
   function frame(){
+    if(!discoverVisible()){requestAnimationFrame(frame);return;}
     ctx.clearRect(0,0,W,H);rot+=0.006;t+=0.02;
     var pulse=1+Math.sin(t*0.7)*0.04;
     for(var ring=0;ring<3;ring++){var rg=ctx.createRadialGradient(CX,CY,R*pulse*(0.5+ring*.2),CX,CY,R*pulse*(0.85+ring*.25));rg.addColorStop(0,'rgba(168,85,247,'+[0.08,0.05,0.025][ring]+')');rg.addColorStop(1,'transparent');ctx.beginPath();ctx.arc(CX,CY,R*pulse*(0.85+ring*.25),0,Math.PI*2);ctx.fillStyle=rg;ctx.fill();}
