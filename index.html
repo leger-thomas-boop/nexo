@@ -844,10 +844,10 @@ header{
 <script>
 var STRIPE_LINK='https://buy.stripe.com/aFa5kD9IvfUcgcpeCoc7u00';
 // Visibility helpers to pause off-screen animations (perf)
-function _visible(el){return el && el.offsetParent!==null && getComputedStyle(el).display!=='none';}
-function authVisible(){return _visible(document.getElementById('auth-screen'));}
-function homeVisible(){var h=document.getElementById('home');return h && h.style.display!=='none' && _visible(document.getElementById('sec-home'));}
-function discoverVisible(){var h=document.getElementById('home');return h && h.style.display!=='none' && _visible(document.getElementById('sec-discover'));}
+function _shown(el){return el && getComputedStyle(el).display!=='none';}
+function authVisible(){return _shown(document.getElementById('auth-screen'));}
+function homeVisible(){return _shown(document.getElementById('home')) && _shown(document.getElementById('sec-home'));}
+function discoverVisible(){return _shown(document.getElementById('home')) && _shown(document.getElementById('sec-discover'));}
 var SUPABASE_URL='https://zoycmayrynkisgiybqij.supabase.co';
 var SUPABASE_ANON='sb_publishable_MjyHgFrLGSz9qV5LkIqX0Q_AQ7fnd0P';
 
