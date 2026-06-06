@@ -130,6 +130,7 @@ header{position:sticky;top:0;z-index:200;background:rgba(8,8,16,.88);backdrop-fi
 .card-alex .avatar-halo{background:var(--alex);}
 .expert-card:hover .avatar-halo{opacity:.45;}
 .ec-avatar{width:68px;height:68px;border-radius:18px;position:relative;overflow:hidden;}
+.orbe-canvas{width:68px;height:68px;display:block;}
 .avatar-inner{width:100%;height:100%;display:flex;align-items:center;justify-content:center;position:relative;}
 .card-sofia .avatar-inner{background:linear-gradient(135deg,#022c22,#064e3b,#065f46);}
 .card-marcus .avatar-inner{background:linear-gradient(135deg,#172554,#1e3a8a,#1d4ed8);}
@@ -249,6 +250,56 @@ header{position:sticky;top:0;z-index:200;background:rgba(8,8,16,.88);backdrop-fi
 .menu-item{padding:10px 12px;border-radius:12px;font-size:.82rem;font-weight:500;cursor:pointer;transition:.15s;color:var(--text);}
 .menu-item:hover{background:rgba(255,255,255,.06);}
 .menu-item.danger{color:#f87171;}
+
+/* ── DÉCOUVRIR ── */
+#sec-discover{padding-bottom:40px;}
+.disc-hero{text-align:center;padding:28px 22px 8px;position:relative;}
+.disc-orbe-wrap{width:180px;height:180px;margin:0 auto 6px;}
+#discOrbe{width:180px;height:180px;display:block;filter:drop-shadow(0 0 30px rgba(168,85,247,.4));}
+.disc-eyebrow{font-size:.6rem;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);font-family:'JetBrains Mono',monospace;margin-bottom:10px;opacity:.8;}
+.disc-title{font-family:'Syne',sans-serif;font-weight:800;font-size:1.7rem;line-height:1.1;letter-spacing:-.05em;margin-bottom:12px;}
+.disc-title em{font-style:normal;color:var(--gold);}
+.disc-sub{font-size:.85rem;color:var(--muted);line-height:1.7;font-weight:300;margin-bottom:18px;}
+.disc-share-btn{
+  background:linear-gradient(135deg,var(--gold),var(--gold2));
+  border:none;border-radius:14px;padding:13px 22px;
+  font-family:'Syne',sans-serif;font-weight:700;font-size:.88rem;color:#000;cursor:pointer;
+  transition:.25s;box-shadow:0 8px 28px rgba(244,162,97,.28);
+}
+.disc-share-btn:hover{transform:translateY(-2px);opacity:.92;}
+.disc-share-btn.full{width:100%;margin-top:14px;}
+
+.disc-feats{padding:0 16px;display:flex;flex-direction:column;gap:10px;margin-bottom:8px;}
+.disc-feat{
+  display:flex;gap:14px;align-items:flex-start;
+  background:rgba(255,255,255,.04);backdrop-filter:blur(12px);
+  border:1px solid rgba(255,255,255,.08);border-radius:18px;padding:16px;
+}
+.disc-feat-ico{font-size:1.6rem;flex-shrink:0;line-height:1;}
+.disc-feat-t{font-family:'Syne',sans-serif;font-weight:700;font-size:.92rem;margin-bottom:3px;letter-spacing:-.02em;}
+.disc-feat-d{font-size:.76rem;color:var(--muted);line-height:1.6;font-weight:300;}
+
+.install-card{
+  margin:0 16px;background:rgba(255,255,255,.04);backdrop-filter:blur(16px);
+  border:1px solid rgba(255,255,255,.1);border-radius:20px;padding:20px;
+}
+.install-block{}
+.install-head{font-family:'Syne',sans-serif;font-weight:700;font-size:.9rem;margin-bottom:12px;display:flex;align-items:center;gap:8px;}
+.install-os{font-size:1.1rem;}
+.install-steps{list-style:none;counter-reset:step;display:flex;flex-direction:column;gap:9px;}
+.install-steps li{counter-increment:step;position:relative;padding-left:34px;font-size:.8rem;color:rgba(240,240,248,.7);line-height:1.5;font-weight:300;}
+.install-steps li::before{content:counter(step);position:absolute;left:0;top:-1px;width:24px;height:24px;border-radius:8px;background:linear-gradient(135deg,var(--gold),var(--gold2));color:#000;font-family:'Syne',sans-serif;font-weight:800;font-size:.72rem;display:flex;align-items:center;justify-content:center;}
+.install-steps strong{color:var(--text);font-weight:600;}
+.install-div{height:1px;background:rgba(255,255,255,.08);margin:18px 0;}
+.install-note{margin-top:16px;font-size:.72rem;color:var(--muted);line-height:1.6;font-weight:300;background:rgba(168,85,247,.06);border:1px solid rgba(168,85,247,.12);border-radius:12px;padding:12px 14px;}
+
+.disc-cta-card{
+  margin:24px 16px 0;text-align:center;
+  background:linear-gradient(135deg,rgba(244,162,97,.1),rgba(231,111,81,.06));
+  border:1px solid rgba(244,162,97,.18);border-radius:20px;padding:24px 20px;
+}
+.disc-cta-t{font-family:'Syne',sans-serif;font-weight:800;font-size:1.2rem;letter-spacing:-.03em;margin-bottom:6px;}
+.disc-cta-d{font-size:.8rem;color:var(--muted);line-height:1.6;font-weight:300;}
 
 /* PRICE COMPARE */
 .price-compare{display:flex;align-items:center;gap:10px;margin-bottom:16px;width:100%;}
@@ -639,6 +690,7 @@ header{
 </header>
 <div class="tabs">
   <div class="tab active" onclick="goSection('home',this)">Accueil</div>
+  <div class="tab" onclick="goSection('discover',this)">✦ Découvrir</div>
   <div class="tab" onclick="goSection('premium',this)">⭐ Premium</div>
 </div>
 <div id="sec-home">
@@ -653,7 +705,7 @@ header{
       <div class="ec-status"><div class="status-dot"></div>En ligne</div>
       <div class="ec-content">
         <div class="ec-top">
-          <div class="ec-avatar-wrap"><div class="avatar-halo"></div><div class="ec-avatar"><div class="avatar-inner"><div class="avatar-shine"></div><span class="avatar-emoji float">💚</span></div></div></div>
+          <div class="ec-avatar-wrap"><div class="avatar-halo"></div><div class="ec-avatar"><canvas class="orbe-canvas" data-expert="sofia" width="136" height="136"></canvas></div></div>
           <div class="ec-info"><div class="ec-name">Sofia</div><div class="ec-role">Conseillère Financière</div><div class="ec-desc">Budget, épargne, dettes et placements — Sofia vous guide vers la liberté financière.</div></div>
         </div>
         <div class="ec-bottom"><div class="ec-tags"><span class="ec-tag">Budget</span><span class="ec-tag">Épargne</span><span class="ec-tag">Investissement</span></div><div class="ec-cta">Consulter →</div></div>
@@ -663,7 +715,7 @@ header{
       <div class="ec-status"><div class="status-dot"></div>En ligne</div>
       <div class="ec-content">
         <div class="ec-top">
-          <div class="ec-avatar-wrap"><div class="avatar-halo"></div><div class="ec-avatar"><div class="avatar-inner"><div class="avatar-shine"></div><span class="avatar-emoji float2">⚖️</span></div></div></div>
+          <div class="ec-avatar-wrap"><div class="avatar-halo"></div><div class="ec-avatar"><canvas class="orbe-canvas" data-expert="marcus" width="136" height="136"></canvas></div></div>
           <div class="ec-info"><div class="ec-name">Marcus</div><div class="ec-role">Expert Droit du Travail</div><div class="ec-desc">Vos droits, vos devoirs, conflits avec l'employeur — Marcus est votre avocat du quotidien.</div></div>
         </div>
         <div class="ec-bottom"><div class="ec-tags"><span class="ec-tag">Contrats</span><span class="ec-tag">Licenciement</span><span class="ec-tag">Conflits</span></div><div class="ec-cta">Consulter →</div></div>
@@ -673,7 +725,7 @@ header{
       <div class="ec-status"><div class="status-dot"></div>En ligne</div>
       <div class="ec-content">
         <div class="ec-top">
-          <div class="ec-avatar-wrap"><div class="avatar-halo"></div><div class="ec-avatar"><div class="avatar-inner"><div class="avatar-shine"></div><span class="avatar-emoji float3">✨</span></div></div></div>
+          <div class="ec-avatar-wrap"><div class="avatar-halo"></div><div class="ec-avatar"><canvas class="orbe-canvas" data-expert="luna" width="136" height="136"></canvas></div></div>
           <div class="ec-info"><div class="ec-name">Luna</div><div class="ec-role">Assistante Polyvalente</div><div class="ec-desc">Culture, explications, rédaction, calculs, conseils — Luna répond à toutes vos questions.</div></div>
         </div>
         <div class="ec-bottom"><div class="ec-tags"><span class="ec-tag">Tout sujet</span><span class="ec-tag">Rédaction</span><span class="ec-tag">Conseils</span></div><div class="ec-cta">Consulter →</div></div>
@@ -683,12 +735,59 @@ header{
       <div class="ec-status"><div class="status-dot"></div>En ligne</div>
       <div class="ec-content">
         <div class="ec-top">
-          <div class="ec-avatar-wrap"><div class="avatar-halo"></div><div class="ec-avatar"><div class="avatar-inner"><div class="avatar-shine"></div><span class="avatar-emoji float4">🏢</span></div></div></div>
+          <div class="ec-avatar-wrap"><div class="avatar-halo"></div><div class="ec-avatar"><canvas class="orbe-canvas" data-expert="alex" width="136" height="136"></canvas></div></div>
           <div class="ec-info"><div class="ec-name">Alex</div><div class="ec-role">Expert Entreprise & AE</div><div class="ec-desc">Création, comptabilité, TVA, URSSAF — Alex gère toute votre paperasse d'entrepreneur.</div></div>
         </div>
         <div class="ec-bottom"><div class="ec-tags"><span class="ec-tag">Auto-Entrepreneur</span><span class="ec-tag">SASU</span><span class="ec-tag">Compta</span></div><div class="ec-cta">Consulter →</div></div>
       </div>
     </div>
+  </div>
+</div>
+<div id="sec-discover" style="display:none">
+  <div class="disc-hero">
+    <div class="disc-orbe-wrap"><canvas id="discOrbe" width="180" height="180"></canvas></div>
+    <div class="disc-eyebrow">La nouvelle génération d'IA</div>
+    <h2 class="disc-title">Une IA <em>spécialisée</em><br>pour chaque besoin</h2>
+    <p class="disc-sub">Nexo réunit 4 experts IA de pointe. Au lieu d'un assistant généraliste, vous parlez à un spécialiste qui maîtrise vraiment son domaine.</p>
+    <button class="disc-share-btn" onclick="shareNexo()">↗ Partager Nexo à mes amis</button>
+  </div>
+
+  <div class="sec-label">Ce qui rend Nexo unique</div>
+  <div class="disc-feats">
+    <div class="disc-feat"><div class="disc-feat-ico">🎯</div><div><div class="disc-feat-t">4 experts spécialisés</div><div class="disc-feat-d">Finance, droit du travail, entreprise et une assistante polyvalente — chacun expert dans son domaine.</div></div></div>
+    <div class="disc-feat"><div class="disc-feat-ico">💸</div><div><div class="disc-feat-t">50% moins cher que ChatGPT</div><div class="disc-feat-d">9,99€/mois au lieu de 20€. Le même niveau d'intelligence, deux fois moins cher.</div></div></div>
+    <div class="disc-feat"><div class="disc-feat-ico">⚡</div><div><div class="disc-feat-t">Réponses instantanées 24h/24</div><div class="disc-feat-d">Vos experts sont toujours disponibles, sans rendez-vous, sans attente.</div></div></div>
+    <div class="disc-feat"><div class="disc-feat-ico">🇫🇷</div><div><div class="disc-feat-t">100% adapté à la France</div><div class="disc-feat-d">Livret A, URSSAF, Code du travail... Nos experts connaissent les règles françaises.</div></div></div>
+  </div>
+
+  <div class="sec-label">Installer Nexo comme une appli 📱</div>
+  <div class="install-card">
+    <div class="install-block">
+      <div class="install-head"><span class="install-os"></span> Sur iPhone (Safari)</div>
+      <ol class="install-steps">
+        <li>Ouvrez Nexo dans <strong>Safari</strong></li>
+        <li>Touchez le bouton <strong>Partager</strong> ⬆️ en bas de l'écran</li>
+        <li>Choisissez <strong>« Sur l'écran d'accueil »</strong></li>
+        <li>Touchez <strong>Ajouter</strong> — c'est fait ! 🎉</li>
+      </ol>
+    </div>
+    <div class="install-div"></div>
+    <div class="install-block">
+      <div class="install-head"><span class="install-os">🤖</span> Sur Android (Chrome)</div>
+      <ol class="install-steps">
+        <li>Ouvrez Nexo dans <strong>Chrome</strong></li>
+        <li>Touchez le menu <strong>⋮</strong> en haut à droite</li>
+        <li>Choisissez <strong>« Ajouter à l'écran d'accueil »</strong></li>
+        <li>Touchez <strong>Ajouter</strong> — c'est fait ! 🎉</li>
+      </ol>
+    </div>
+    <div class="install-note">Une fois ajoutée, Nexo s'ouvre en plein écran comme une vraie application, directement depuis votre écran d'accueil.</div>
+  </div>
+
+  <div class="disc-cta-card">
+    <div class="disc-cta-t">Faites découvrir Nexo</div>
+    <div class="disc-cta-d">Vos amis paient 20€ pour ChatGPT ? Montrez-leur Nexo.</div>
+    <button class="disc-share-btn full" onclick="shareNexo()">↗ Envoyer le lien d'inscription</button>
   </div>
 </div>
 <div id="sec-premium" style="display:none">
@@ -1082,6 +1181,7 @@ async function enterApp(){
     document.getElementById('auth-screen').style.display='none';
     document.getElementById('home').style.display='block';
     initHomeBg();
+    initOrbes();
     var letter=(currentUser&&currentUser.email?currentUser.email[0]:'U').toUpperCase();
     document.getElementById('avatarHdr').textContent=letter;
     document.getElementById('userEmailDisplay').textContent=currentUser&&currentUser.email?currentUser.email:'';
@@ -1127,10 +1227,13 @@ function incUsage(id){usage[todayKey][id]=(getUsage(id)+1);localStorage.setItem(
 
 function goSection(name,el){
   document.getElementById('sec-home').style.display=name==='home'?'block':'none';
+  document.getElementById('sec-discover').style.display=name==='discover'?'block':'none';
   document.getElementById('sec-premium').style.display=name==='premium'?'block':'none';
   document.querySelectorAll('.tab').forEach(function(t){t.classList.remove('active');});el.classList.add('active');
+  window.scrollTo(0,0);
 }
-function showPremium(){goSection('premium',document.querySelectorAll('.tab')[1]);document.getElementById('userMenu').classList.remove('open');}
+function showPremium(){goSection('premium',document.querySelectorAll('.tab')[2]);document.getElementById('userMenu').classList.remove('open');}
+function showDiscover(){goSection('discover',document.querySelectorAll('.tab')[1]);document.getElementById('userMenu').classList.remove('open');}
 function getAvatarMini(id){var ex=EXPERTS[id];return '<div style="width:100%;height:100%;background:'+ex.bg+';display:flex;align-items:center;justify-content:center;font-size:1.2rem;">'+ex.emoji+'</div>';}
 function activatePremium(){window.open(STRIPE_LINK,'_blank');}
 function setPremiumActive(){isPremium=true;document.getElementById('planPill').textContent='PREMIUM';document.getElementById('planPill').className='plan-pill premium';document.getElementById('credFill').style.width='100%';document.getElementById('credTxt').textContent='Illimité ∞';document.getElementById('limitBar').style.display='none';localStorage.setItem('nexo_premium','true');}
@@ -1292,6 +1395,144 @@ function initHomeBg(){
   drawHomeBg();
 }
 window.addEventListener('load', initHomeBg);
+
+// ── ORBE AVATARS (mini 3D spheres per expert) ──
+var ORBE_COLORS={
+  sofia:['#34d399','#10b981','#6ee7b7','#a7f3d0'],
+  marcus:['#60a5fa','#3b82f6','#93c5fd','#bfdbfe'],
+  luna:['#a78bfa','#c084fc','#d8b4fe','#e9d5ff'],
+  alex:['#fb923c','#f97316','#fdba74','#fed7aa']
+};
+function initOrbes(){
+  var canvases=document.querySelectorAll('.orbe-canvas');
+  canvases.forEach(function(canvas){
+    if(canvas._orbeInit)return;
+    canvas._orbeInit=true;
+    var ctx=canvas.getContext('2d');
+    var W=canvas.width, H=canvas.height, CX=W/2, CY=H/2, R=W*0.32;
+    var expert=canvas.getAttribute('data-expert');
+    var cols=ORBE_COLORS[expert]||ORBE_COLORS.luna;
+    // sphere points
+    var pts=[];
+    var N=90;
+    for(var i=0;i<N;i++){
+      var phi=Math.acos(-1+(2*i)/N);
+      var theta=Math.sqrt(N*Math.PI)*phi;
+      pts.push({ox:Math.sin(phi)*Math.cos(theta),oy:Math.sin(phi)*Math.sin(theta),oz:Math.cos(phi),phase:Math.random()*Math.PI*2,spd:0.3+Math.random()*0.5,ci:Math.floor(Math.random()*cols.length)});
+    }
+    // orbiting sparks
+    var sparks=[];
+    for(var j=0;j<6;j++){
+      sparks.push({a:Math.random()*Math.PI*2,r:R+W*0.06+Math.random()*W*0.06,tilt:Math.random()*Math.PI,spd:(0.01+Math.random()*0.012)*(Math.random()>.5?1:-1),sz:0.8+Math.random()*1.5,ci:Math.floor(Math.random()*cols.length)});
+    }
+    var rot=0,t=0;
+    function ha(hex,a){var h=hex.replace('#','');return 'rgba('+parseInt(h.substr(0,2),16)+','+parseInt(h.substr(2,2),16)+','+parseInt(h.substr(4,2),16)+','+a+')';}
+    function frame(){
+      ctx.clearRect(0,0,W,H);
+      rot+=0.012; t+=0.03;
+      var pulse=1+Math.sin(t*0.8)*0.05;
+      // glow
+      var g=ctx.createRadialGradient(CX,CY,0,CX,CY,R*pulse*1.7);
+      g.addColorStop(0,ha(cols[0],0.18));
+      g.addColorStop(0.6,ha(cols[1],0.06));
+      g.addColorStop(1,'transparent');
+      ctx.beginPath();ctx.arc(CX,CY,R*pulse*1.7,0,Math.PI*2);ctx.fillStyle=g;ctx.fill();
+      // project
+      var cosR=Math.cos(rot),sinR=Math.sin(rot);
+      var proj=pts.map(function(p){
+        var x3=p.ox*cosR-p.oz*sinR,z3=p.ox*sinR+p.oz*cosR,y3=p.oy;
+        var rp=R*pulse;
+        return{sx:CX+x3*rp,sy:CY+y3*rp,depth:(z3+1)/2,glow:(Math.sin(t*p.spd+p.phase)+1)/2,ci:p.ci};
+      });
+      proj.sort(function(a,b){return a.depth-b.depth;});
+      // filaments
+      var front=proj.filter(function(p){return p.depth>0.5;});
+      for(var a=0;a<front.length;a++){
+        for(var b=a+1;b<front.length;b++){
+          var dx=front[a].sx-front[b].sx,dy=front[a].sy-front[b].sy;
+          var dist=Math.sqrt(dx*dx+dy*dy);
+          if(dist<W*0.13){
+            var alp=(1-dist/(W*0.13))*front[a].depth*0.3;
+            ctx.beginPath();ctx.moveTo(front[a].sx,front[a].sy);ctx.lineTo(front[b].sx,front[b].sy);
+            ctx.strokeStyle=ha(cols[front[a].ci],alp);ctx.lineWidth=0.5;ctx.stroke();
+          }
+        }
+      }
+      // points
+      proj.forEach(function(p){
+        if(p.depth<0.1)return;
+        var size=p.depth*1.8+p.glow*0.9;
+        var alpha=p.depth*0.55+p.glow*0.45;
+        var color=cols[p.ci];
+        var gr=ctx.createRadialGradient(p.sx,p.sy,0,p.sx,p.sy,size*2);
+        gr.addColorStop(0,ha(color,alpha));gr.addColorStop(1,ha(color,0));
+        ctx.beginPath();ctx.arc(p.sx,p.sy,size,0,Math.PI*2);ctx.fillStyle=gr;ctx.fill();
+      });
+      // sparks
+      sparks.forEach(function(s){
+        s.a+=s.spd;
+        var x=CX+Math.cos(s.a)*s.r*pulse;
+        var y=CY+Math.sin(s.a)*s.r*Math.sin(s.tilt+t*0.1)*pulse;
+        var color=cols[s.ci];
+        var sg=ctx.createRadialGradient(x,y,0,x,y,s.sz*2.5);
+        sg.addColorStop(0,ha(color,0.9));sg.addColorStop(1,ha(color,0));
+        ctx.beginPath();ctx.arc(x,y,s.sz,0,Math.PI*2);ctx.fillStyle=sg;ctx.fill();
+      });
+      requestAnimationFrame(frame);
+    }
+    frame();
+  });
+}
+window.addEventListener('load', initOrbes);
+
+// ── SHARE ──
+function shareNexo(){
+  var url='https://nexo-eight-theta.vercel.app';
+  var shareData={
+    title:'Nexo — 4 experts IA spécialisés',
+    text:'Découvre Nexo : 4 experts IA spécialisés (finance, droit, entreprise + assistante) pour 9,99€/mois, soit 50% moins cher que ChatGPT. Inscris-toi :',
+    url:url
+  };
+  if(navigator.share){
+    navigator.share(shareData).catch(function(){});
+  }else{
+    var txt=shareData.text+' '+url;
+    if(navigator.clipboard&&navigator.clipboard.writeText){
+      navigator.clipboard.writeText(txt).then(function(){alert('Lien copié ! Partagez-le à vos amis 🎉');}).catch(function(){fallbackCopy(txt,function(){alert('Lien copié ! 🎉');});});
+    }else{fallbackCopy(txt,function(){alert('Lien copié ! 🎉');});}
+  }
+}
+
+// ── DÉCOUVRIR ORBE (big violet sphere like home) ──
+function initDiscOrbe(){
+  var canvas=document.getElementById('discOrbe');
+  if(!canvas||canvas._init)return;
+  canvas._init=true;
+  var ctx=canvas.getContext('2d');
+  var W=180,H=180,CX=90,CY=90,R=58;
+  var cols=['#c084fc','#e879f9','#a855f7','#d946ef','#f0abfc'];
+  var acc=['#f4a261','#34d399','#60a5fa','#a78bfa','#fb923c'];
+  var pts=[];var N=130;
+  for(var i=0;i<N;i++){var phi=Math.acos(-1+(2*i)/N);var theta=Math.sqrt(N*Math.PI)*phi;pts.push({ox:Math.sin(phi)*Math.cos(theta),oy:Math.sin(phi)*Math.sin(theta),oz:Math.cos(phi),phase:Math.random()*Math.PI*2,spd:0.25+Math.random()*0.5,ci:Math.floor(Math.random()*cols.length)});}
+  var sparks=[];for(var j=0;j<10;j++){sparks.push({a:Math.random()*Math.PI*2,r:R+10+Math.random()*16,tilt:Math.random()*Math.PI,spd:(0.006+Math.random()*0.008)*(Math.random()>.5?1:-1),sz:0.9+Math.random()*1.8,ci:Math.floor(Math.random()*acc.length)});}
+  var rot=0,t=0;
+  function ha(hex,a){var h=hex.replace('#','');return 'rgba('+parseInt(h.substr(0,2),16)+','+parseInt(h.substr(2,2),16)+','+parseInt(h.substr(4,2),16)+','+a+')';}
+  function frame(){
+    ctx.clearRect(0,0,W,H);rot+=0.006;t+=0.02;
+    var pulse=1+Math.sin(t*0.7)*0.04;
+    for(var ring=0;ring<3;ring++){var rg=ctx.createRadialGradient(CX,CY,R*pulse*(0.5+ring*.2),CX,CY,R*pulse*(0.85+ring*.25));rg.addColorStop(0,'rgba(168,85,247,'+[0.08,0.05,0.025][ring]+')');rg.addColorStop(1,'transparent');ctx.beginPath();ctx.arc(CX,CY,R*pulse*(0.85+ring*.25),0,Math.PI*2);ctx.fillStyle=rg;ctx.fill();}
+    var cosR=Math.cos(rot),sinR=Math.sin(rot);
+    var proj=pts.map(function(p){var x3=p.ox*cosR-p.oz*sinR,z3=p.ox*sinR+p.oz*cosR,y3=p.oy;var rp=R*pulse;return{sx:CX+x3*rp,sy:CY+y3*rp,depth:(z3+1)/2,glow:(Math.sin(t*p.spd+p.phase)+1)/2,ci:p.ci};});
+    proj.sort(function(a,b){return a.depth-b.depth;});
+    var front=proj.filter(function(p){return p.depth>0.45;});
+    for(var a=0;a<front.length;a++){for(var b=a+1;b<front.length;b++){var dx=front[a].sx-front[b].sx,dy=front[a].sy-front[b].sy;var dist=Math.sqrt(dx*dx+dy*dy);if(dist<20){var alp=(1-dist/20)*front[a].depth*0.28;ctx.beginPath();ctx.moveTo(front[a].sx,front[a].sy);ctx.lineTo(front[b].sx,front[b].sy);ctx.strokeStyle=ha(cols[front[a].ci],alp);ctx.lineWidth=0.5;ctx.stroke();}}}
+    proj.forEach(function(p){if(p.depth<0.08)return;var size=p.depth*2+p.glow*0.9;var alpha=p.depth*0.5+p.glow*0.5;var gr=ctx.createRadialGradient(p.sx,p.sy,0,p.sx,p.sy,size*2);gr.addColorStop(0,ha(cols[p.ci],alpha));gr.addColorStop(1,ha(cols[p.ci],0));ctx.beginPath();ctx.arc(p.sx,p.sy,size,0,Math.PI*2);ctx.fillStyle=gr;ctx.fill();});
+    sparks.forEach(function(s){s.a+=s.spd;var x=CX+Math.cos(s.a)*s.r*pulse;var y=CY+Math.sin(s.a)*s.r*Math.sin(s.tilt+t*0.08)*pulse;var sg=ctx.createRadialGradient(x,y,0,x,y,s.sz*2.5);sg.addColorStop(0,ha(acc[s.ci],0.9));sg.addColorStop(1,ha(acc[s.ci],0));ctx.beginPath();ctx.arc(x,y,s.sz,0,Math.PI*2);ctx.fillStyle=sg;ctx.fill();});
+    requestAnimationFrame(frame);
+  }
+  frame();
+}
+window.addEventListener('load', initDiscOrbe);
 
 </script>
 </body>
