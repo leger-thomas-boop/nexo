@@ -1065,11 +1065,17 @@ async function doLogin(){
   var password=document.getElementById('login-password').value;
   var err=document.getElementById('login-error');var btn=document.getElementById('btn-login');
   err.style.display='none';
-  if(!email||!password){err.textContent='Remplissez tous les champs.';err.style.display='block';return;}
+  if(!email||!password){err.textContent='Veuillez remplir tous les champs.';err.style.display='block';return;}
   btn.disabled=true;btn.textContent='Connexion...';
   var data=await supabaseLogin(email,password);
   btn.disabled=false;btn.textContent='Se connecter →';
-  if(data.error||!data.access_token){err.textContent=data.error_description||data.msg||'Email ou mot de passe incorrect.';err.style.display='block';return;}
+  if(data.error||!data.access_token){
+    var raw=(data.error_description||data.msg||data.error||'').toString().toLowerCase();
+    var fr='Email ou mot de passe incorrect.';
+    if(raw.indexOf('email not confirmed')>-1||(raw.indexOf('confirm')>-1&&raw.indexOf('email')>-1))fr='Vous devez d\'abord confirmer votre email. Vérifiez votre boîte de réception (et vos spams).';
+    else if(raw.indexOf('rate limit')>-1||raw.indexOf('too many')>-1)fr='Trop de tentatives. Patientez quelques minutes.';
+    err.textContent=fr;err.style.display='block';return;
+  }
   saveSession(data.user,{access_token:data.access_token});enterApp();
 }
 async function doSignup(){
@@ -1077,14 +1083,25 @@ async function doSignup(){
   var password=document.getElementById('signup-password').value;
   var err=document.getElementById('signup-error');var suc=document.getElementById('signup-success');var btn=document.getElementById('btn-signup');
   err.style.display='none';suc.style.display='none';
-  if(!email||!password){err.textContent='Remplissez tous les champs.';err.style.display='block';return;}
-  if(password.length<6){err.textContent='Minimum 6 caractères.';err.style.display='block';return;}
+  if(!email||!password){err.textContent='Veuillez remplir tous les champs.';err.style.display='block';return;}
+  if(password.length<6){err.textContent='Le mot de passe doit contenir au moins 6 caractères.';err.style.display='block';return;}
   btn.disabled=true;btn.textContent='Création...';
   var data=await supabaseSignup(email,password);
   btn.disabled=false;btn.textContent='Créer mon compte gratuit →';
-  if(data.error){err.textContent=data.msg||'Une erreur est survenue.';err.style.display='block';return;}
+  if(data.error||data.msg){err.textContent=traduireErreur(data.msg||data.error_description||data.error);err.style.display='block';return;}
   if(data.access_token){saveSession(data.user,{access_token:data.access_token});enterApp();}
-  else{suc.textContent='✅ Compte créé ! Connectez-vous.';suc.style.display='block';setTimeout(function(){switchAuth('login');},1500);}
+  else{suc.innerHTML='✅ <strong>Compte créé !</strong><br>Un email de confirmation vient de vous être envoyé. Ouvrez-le et cliquez sur le lien pour activer votre compte, puis connectez-vous.';suc.style.display='block';}
+}
+// Traduit les messages d'erreur Supabase (anglais) en français
+function traduireErreur(msg){
+  if(!msg)return 'Une erreur est survenue. Réessayez.';
+  var m=msg.toLowerCase();
+  if(m.indexOf('already registered')>-1||m.indexOf('already been registered')>-1||m.indexOf('user already')>-1)return 'Cette adresse email est déjà utilisée. Essayez de vous connecter.';
+  if(m.indexOf('invalid')>-1&&m.indexOf('email')>-1)return "L'adresse email n'est pas valide.";
+  if(m.indexOf('password')>-1&&m.indexOf('6')>-1)return 'Le mot de passe doit contenir au moins 6 caractères.';
+  if(m.indexOf('rate limit')>-1||m.indexOf('too many')>-1)return 'Trop de tentatives. Patientez quelques minutes avant de réessayer.';
+  if(m.indexOf('email')>-1&&m.indexOf('confirm')>-1)return 'Veuillez confirmer votre email avant de vous connecter.';
+  return 'Une erreur est survenue. Réessayez.';
 }
 function doLogout(){clearSession();document.getElementById('userMenu').classList.remove('open');document.getElementById('home').style.display='none';document.getElementById('auth-screen').style.display='flex';convos={};isPremium=false;}
 // TRANSITION ANIMATION
