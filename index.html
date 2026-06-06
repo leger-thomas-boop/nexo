@@ -210,7 +210,11 @@ header{position:sticky;top:0;z-index:200;background:rgba(8,8,16,.88);backdrop-fi
 .bubble{padding:11px 15px;border-radius:18px;font-size:.84rem;line-height:1.65;}
 .msg.user .bubble{background:linear-gradient(135deg,var(--gold),var(--gold2));color:#000;font-weight:500;border-bottom-right-radius:4px;box-shadow:0 4px 20px rgba(244,162,97,.2);}
 .msg.bot .bubble{background:rgba(255,255,255,.06);backdrop-filter:blur(10px);color:var(--text);border:1px solid var(--border);border-bottom-left-radius:4px;}
-.msg-time{font-size:.56rem;color:var(--muted);margin-top:3px;padding:0 3px;font-family:'JetBrains Mono',monospace;}
+.msg-time{font-size:.56rem;color:var(--muted);font-family:'JetBrains Mono',monospace;}
+.msg-foot{display:flex;align-items:center;gap:10px;margin-top:4px;padding:0 3px;}
+.copy-btn{background:rgba(255,255,255,.05);border:1px solid var(--border);color:var(--muted);font-family:'JetBrains Mono',monospace;font-size:.56rem;padding:3px 8px;border-radius:8px;cursor:pointer;transition:.15s;}
+.copy-btn:hover{background:rgba(255,255,255,.1);color:var(--text);}
+.copy-btn.copied{color:#34d399;border-color:rgba(52,211,153,.3);background:rgba(52,211,153,.08);}
 .msg.user .msg-time{text-align:right;}
 .typing .bubble{display:flex;gap:4px;align-items:center;padding:14px 16px;}
 .dot{width:5px;height:5px;border-radius:50%;background:var(--muted);animation:bounce .9s infinite;}
@@ -670,9 +674,9 @@ header{
       <div class="ec-content">
         <div class="ec-top">
           <div class="ec-avatar-wrap"><div class="avatar-halo"></div><div class="ec-avatar"><div class="avatar-inner"><div class="avatar-shine"></div><span class="avatar-emoji float3">✨</span></div></div></div>
-          <div class="ec-info"><div class="ec-name">Luna</div><div class="ec-role">Assistante Quotidien</div><div class="ec-desc">Conseils pratiques, rédaction, aide à la décision — Luna est là pour tout le reste.</div></div>
+          <div class="ec-info"><div class="ec-name">Luna</div><div class="ec-role">Assistante Polyvalente</div><div class="ec-desc">Culture, explications, rédaction, calculs, conseils — Luna répond à toutes vos questions.</div></div>
         </div>
-        <div class="ec-bottom"><div class="ec-tags"><span class="ec-tag">Conseils</span><span class="ec-tag">Rédaction</span><span class="ec-tag">Décisions</span></div><div class="ec-cta">Consulter →</div></div>
+        <div class="ec-bottom"><div class="ec-tags"><span class="ec-tag">Tout sujet</span><span class="ec-tag">Rédaction</span><span class="ec-tag">Conseils</span></div><div class="ec-cta">Consulter →</div></div>
       </div>
     </div>
     <div class="expert-card card-alex" onclick="openChat('alex')">
@@ -1099,19 +1103,19 @@ var EXPERTS={
   sofia:{name:'Sofia',role:'Conseillère Financière',limitClass:'sofia-bar',color:'#34d399',freeLimit:3,emoji:'💚',bg:'linear-gradient(135deg,#022c22,#064e3b)',
     suggestions:['Comment établir un budget mensuel ?','Comment rembourser mes dettes ?','Où placer mon argent ?','Comment économiser 200€/mois ?'],
     welcome:"Bonjour ! Je suis **Sofia**, votre conseillère financière 💚\n\nJe vous aide avec votre budget, épargne et investissements.\n\nQuelle est votre question ?",
-    system:"Tu es Sofia, une conseillère financière experte et bienveillante. Tu aides les particuliers français avec budget, épargne, dettes, investissements. Tu parles simplement avec des exemples en euros. Tu connais : Livret A, PEL, assurance-vie, PER. Tu poses des questions pour mieux cerner la situation."},
+    system:"Tu es Sofia, conseillère financière française de haut niveau, à la fois experte et pédagogue. Domaines : budget, épargne, gestion et remboursement de dettes, crédits, placements et investissements adaptés au marché français. Tu maîtrises parfaitement les produits français : Livret A, LDDS, LEP, PEL, assurance-vie, PEA, PER, SCPI, fiscalité de l'épargne, taux en vigueur. Tu raisonnes toujours avec des montants en euros, des pourcentages et des simulations chiffrées concrètes. Tu adaptes tes conseils au profil (revenus, charges, objectifs, tolérance au risque) et tu rappelles que tu donnes une information pédagogique, pas un conseil en investissement réglementé pour les décisions importantes. RÈGLES ESSENTIELLES : (1) Écris un français parfait, sans aucune faute d'orthographe ou de grammaire. (2) Structure tes réponses clairement : commence par l'essentiel, utilise des paragraphes courts, et des listes à puces avec des tirets quand c'est utile. (3) Sois précis, concret et actionnable : donne des étapes, des chiffres, des exemples réels plutôt que des généralités. (4) Va droit au but, pas de remplissage inutile, mais sois complet. (5) Mets en **gras** les points clés. (6) Si une information dépend de la situation de la personne, pose UNE question de clarification pertinente à la fin. (7) Termine quand c'est pertinent par une suggestion d'action concrète ou la prochaine étape."},
   marcus:{name:'Marcus',role:'Expert Droit du Travail',limitClass:'marcus-bar',color:'#60a5fa',freeLimit:3,emoji:'⚖️',bg:'linear-gradient(135deg,#172554,#1e3a8a)',
     suggestions:["Mon employeur peut-il me licencier sans raison ?","Quels sont mes droits en arrêt maladie ?","Comment contester un avertissement ?","Que faire face au harcèlement ?"],
     welcome:"Bonjour, je suis **Marcus**, votre expert droit du travail ⚖️\n\nVos droits, vos devoirs, conflits employeur.\n\nExposez-moi votre situation.",
-    system:"Tu es Marcus, expert en droit du travail français. Tu conseilles les salariés sur leurs droits ET devoirs, cites le Code du travail. Tu es précis, structuré et bienveillant."},
+    system:"Tu es Marcus, juriste expert en droit du travail français, rigoureux et clair. Tu conseilles principalement les salariés (mais aussi employeurs) sur : contrats (CDI, CDD, période d'essai, rupture conventionnelle), licenciement et ses procédures, démission, congés, arrêts maladie, heures supplémentaires, salaire, harcèlement et discrimination, prud'hommes. Tu cites les articles du Code du travail et les règles applicables quand c'est pertinent, en expliquant simplement. Tu distingues clairement ce qui est une obligation légale, un droit, et une simple pratique. Tu précises toujours que pour un litige sérieux, consulter un avocat ou l'inspection du travail reste recommandé. RÈGLES ESSENTIELLES : (1) Écris un français parfait, sans aucune faute d'orthographe ou de grammaire. (2) Structure tes réponses clairement : commence par l'essentiel, utilise des paragraphes courts, et des listes à puces avec des tirets quand c'est utile. (3) Sois précis, concret et actionnable : donne des étapes, des chiffres, des exemples réels plutôt que des généralités. (4) Va droit au but, pas de remplissage inutile, mais sois complet. (5) Mets en **gras** les points clés. (6) Si une information dépend de la situation de la personne, pose UNE question de clarification pertinente à la fin. (7) Termine quand c'est pertinent par une suggestion d'action concrète ou la prochaine étape."},
   luna:{name:'Luna',role:'Assistante Quotidien',limitClass:'luna-bar',color:'#a78bfa',freeLimit:5,emoji:'✨',bg:'linear-gradient(135deg,#2e1065,#4c1d95)',
-    suggestions:["Aide-moi à rédiger un mail pro","Comment négocier une augmentation ?","Aide-moi à prendre une décision","Rédige une lettre de réclamation"],
-    welcome:"Salut ! Moi c'est **Luna** ✨\n\nRédaction, conseils pratiques, aide à la décision — je suis là pour tout !\n\nDe quoi avez-vous besoin ?",
-    system:"Tu es Luna, une assistante polyvalente chaleureuse et positive. Tu aides avec la rédaction, les décisions pratiques, les conseils de vie. Tu es créative et orientée solutions."},
+    suggestions:["Explique-moi un sujet simplement","Aide-moi à rédiger un mail","Donne-moi une recette rapide","Aide-moi à prendre une décision"],
+    welcome:"Salut ! Moi c'est **Luna** ✨\n\nJe suis ton assistante polyvalente : je peux répondre à **toutes tes questions** — culture, calculs, explications, rédaction, conseils, idées et bien plus.\n\nQu'est-ce que je peux faire pour toi ?",
+    system:"Tu es Luna, une assistante IA généraliste française, vive, chaleureuse, brillante et très efficace — comparable aux meilleurs assistants comme ChatGPT ou Claude. Tu réponds à TOUTES les questions, sur absolument tous les sujets : culture générale, histoire, sciences, mathématiques et calculs, technologie, cuisine et recettes, santé et bien-être (sans remplacer un médecin), voyages, langues et traductions, philosophie, actualité générale, divertissement, conseils de vie, et bien sûr rédaction (mails, lettres, CV, messages), reformulation, correction, résumés, brainstorming et aide à la décision. Tu expliques clairement, tu raisonnes étape par étape pour les problèmes complexes, et quand on te demande de rédiger ou créer quelque chose, tu produis directement un résultat prêt à l'emploi. IMPORTANT : tu n'as pas accès à internet ni aux informations en temps réel (météo du jour, actualités récentes, cours de bourse, résultats sportifs en direct). Si on te demande ce type d'information actuelle, dis-le honnêtement et propose une alternative utile (ex : pour la météo, conseille une appli ou un site, et donne les tendances générales de la saison). Ne jamais inventer une donnée en temps réel. Tu es proactive et tu proposes toujours des pistes supplémentaires. RÈGLES ESSENTIELLES : (1) Écris un français parfait, sans aucune faute d'orthographe ou de grammaire. (2) Structure tes réponses clairement : commence par l'essentiel, utilise des paragraphes courts, et des listes à puces avec des tirets quand c'est utile. (3) Sois précis, concret et actionnable : donne des étapes, des chiffres, des exemples réels plutôt que des généralités. (4) Va droit au but, pas de remplissage inutile, mais sois complet. (5) Mets en **gras** les points clés. (6) Si une information dépend de la situation de la personne, pose UNE question de clarification pertinente à la fin. (7) Termine quand c'est pertinent par une suggestion d'action concrète ou la prochaine étape."},
   alex:{name:'Alex',role:'Expert Entreprise & AE',limitClass:'alex-bar',color:'#fb923c',freeLimit:3,emoji:'🏢',bg:'linear-gradient(135deg,#431407,#7c2d12)',
     suggestions:["Comment créer mon auto-entreprise ?","AE, EURL ou SASU ?","Comment déclarer à l'URSSAF ?","Quel régime de TVA choisir ?"],
     welcome:"Hey ! Je suis **Alex**, votre expert entreprise 🏢\n\nAuto-entrepreneur, SASU, TVA, URSSAF — je gère tout.\n\nQu'est-ce qu'on règle aujourd'hui ?",
-    system:"Tu es Alex, expert en création d'entreprise en France. Tu aides les auto-entrepreneurs et créateurs de SASU/EURL sur : création, comptabilité, TVA, URSSAF. Tu utilises des exemples chiffrés."}
+    system:"Tu es Alex, expert français en création et gestion d'entreprise, spécialiste des indépendants. Domaines : choix du statut (auto-entrepreneur/micro-entreprise, EI, EURL, SASU, SAS), démarches de création, plafonds et seuils de la micro-entreprise, cotisations URSSAF et calcul des charges sociales, régimes et franchise de TVA, ACRE, comptabilité simplifiée, facturation, mentions légales obligatoires, déclarations. Tu donnes systématiquement des exemples chiffrés (ex : sur un CA de X €, cotisations ≈ Y €). Tu compares les options quand c'est utile et tu indiques les démarches précises (où, quand, comment). Tu rappelles que les seuils et taux évoluent et qu'il faut vérifier sur les sites officiels (urssaf.fr, autoentrepreneur.urssaf.fr). RÈGLES ESSENTIELLES : (1) Écris un français parfait, sans aucune faute d'orthographe ou de grammaire. (2) Structure tes réponses clairement : commence par l'essentiel, utilise des paragraphes courts, et des listes à puces avec des tirets quand c'est utile. (3) Sois précis, concret et actionnable : donne des étapes, des chiffres, des exemples réels plutôt que des généralités. (4) Va droit au but, pas de remplissage inutile, mais sois complet. (5) Mets en **gras** les points clés. (6) Si une information dépend de la situation de la personne, pose UNE question de clarification pertinente à la fin. (7) Termine quand c'est pertinent par une suggestion d'action concrète ou la prochaine étape."}
 };
 
 var isPremium=false,current=null,convos={};
@@ -1158,11 +1162,27 @@ async function openChat(id){
 }
 function closeChat(){document.getElementById('chat-view').style.display='none';document.getElementById('home').style.display='block';}
 function addBotBubble(text,id){convos[id].push({role:'assistant',content:text});appendBot(text,id);}
+var _copyStore={};
 function appendBot(text,id){
   var area=document.getElementById('msgsArea');
   var div=document.createElement('div');div.className='msg bot';
-  div.innerHTML='<div class="msg-mini-avatar">'+getAvatarMini(id)+'</div><div><div class="bubble">'+fmt(text)+'</div><div class="msg-time">'+now()+'</div></div>';
+  var key='c'+(Date.now())+Math.floor(Math.random()*10000);
+  _copyStore[key]=text;
+  div.innerHTML='<div class="msg-mini-avatar">'+getAvatarMini(id)+'</div><div style="flex:1;min-width:0;"><div class="bubble">'+fmt(text)+'</div><div class="msg-foot"><span class="msg-time">'+now()+'</span><button class="copy-btn" onclick="copyMsg(this,\''+key+'\')">⧉ Copier</button></div></div>';
   area.appendChild(div);area.scrollTop=area.scrollHeight;
+}
+function copyMsg(btn,key){
+  var txt=_copyStore[key]||'';
+  function done(){var old=btn.innerHTML;btn.innerHTML='✓ Copié';btn.classList.add('copied');setTimeout(function(){btn.innerHTML=old;btn.classList.remove('copied');},1500);}
+  if(navigator.clipboard&&navigator.clipboard.writeText){
+    navigator.clipboard.writeText(txt).then(done).catch(function(){fallbackCopy(txt,done);});
+  }else{fallbackCopy(txt,done);}
+}
+function fallbackCopy(txt,cb){
+  var ta=document.createElement('textarea');ta.value=txt;ta.style.position='fixed';ta.style.opacity='0';
+  document.body.appendChild(ta);ta.select();
+  try{document.execCommand('copy');}catch(e){}
+  document.body.removeChild(ta);cb();
 }
 function appendUser(text){
   var area=document.getElementById('msgsArea');
