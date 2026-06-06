@@ -216,6 +216,8 @@ header{position:sticky;top:0;z-index:200;background:rgba(8,8,16,.88);backdrop-fi
 .copy-btn{background:rgba(255,255,255,.05);border:1px solid var(--border);color:var(--muted);font-family:'JetBrains Mono',monospace;font-size:.56rem;padding:3px 8px;border-radius:8px;cursor:pointer;transition:.15s;}
 .copy-btn:hover{background:rgba(255,255,255,.1);color:var(--text);}
 .copy-btn.copied{color:#34d399;border-color:rgba(52,211,153,.3);background:rgba(52,211,153,.08);}
+.stream-caret{display:inline-block;width:7px;height:14px;margin-left:2px;border-radius:2px;background:var(--gold);vertical-align:text-bottom;animation:caret-blink .8s steps(1) infinite;}
+@keyframes caret-blink{0%,50%{opacity:1}51%,100%{opacity:0}}
 .msg.user .msg-time{text-align:right;}
 .typing .bubble{display:flex;gap:4px;align-items:center;padding:14px 16px;}
 .dot{width:5px;height:5px;border-radius:50%;background:var(--muted);animation:bounce .9s infinite;}
@@ -1265,6 +1267,40 @@ async function openChat(id){
 }
 function closeChat(){document.getElementById('chat-view').style.display='none';document.getElementById('home').style.display='block';}
 function addBotBubble(text,id){convos[id].push({role:'assistant',content:text});appendBot(text,id);}
+// Streaming effect: type the reply progressively like a real AI
+function streamBotBubble(text,id){
+  convos[id].push({role:'assistant',content:text});
+  var area=document.getElementById('msgsArea');
+  var div=document.createElement('div');div.className='msg bot';
+  var key='c'+(Date.now())+Math.floor(Math.random()*10000);
+  _copyStore[key]=text;
+  div.innerHTML='<div class="msg-mini-avatar">'+getAvatarMini(id)+'</div><div style="flex:1;min-width:0;"><div class="bubble"><span class="stream-txt"></span><span class="stream-caret"></span></div><div class="msg-foot" style="visibility:hidden"><span class="msg-time">'+now()+'</span><button class="copy-btn" onclick="copyMsg(this,\''+key+'\')">⧉ Copier</button></div></div>';
+  area.appendChild(div);
+  var span=div.querySelector('.stream-txt');
+  var caret=div.querySelector('.stream-caret');
+  var foot=div.querySelector('.msg-foot');
+  // split into tokens (keep spaces) for a smooth word-by-word reveal
+  var tokens=text.split(/(\s+)/);
+  var i=0;
+  var nearBottom=function(){return area.scrollHeight-area.scrollTop-area.clientHeight<120;};
+  function step(){
+    if(i>=tokens.length){
+      // done: render full formatted text, remove caret, show copy
+      span.innerHTML=fmt(text);
+      if(caret)caret.remove();
+      foot.style.visibility='visible';
+      area.scrollTop=area.scrollHeight;
+      return;
+    }
+    // reveal a few tokens per frame for a natural fast pace
+    var burst=2;
+    while(burst-- >0 && i<tokens.length){ i++; }
+    span.innerHTML=fmt(tokens.slice(0,i).join(''));
+    if(nearBottom())area.scrollTop=area.scrollHeight;
+    setTimeout(step,18);
+  }
+  step();
+}
 var _copyStore={};
 function appendBot(text,id){
   var area=document.getElementById('msgsArea');
@@ -1322,7 +1358,7 @@ async function sendText(txt){
     var d=await r.json();
     var reply=d.content?d.content.map(function(b){return b.text||'';}).join(''):"Je n'ai pas pu répondre, réessayez.";
     document.getElementById('typing')&&document.getElementById('typing').remove();
-    addBotBubble(reply,id);saveMessage(id,'assistant',reply);
+    streamBotBubble(reply,id);saveMessage(id,'assistant',reply);
   }catch(e){document.getElementById('typing')&&document.getElementById('typing').remove();addBotBubble("❌ Connexion impossible.",id);}
 }
 async function saveMessage(expert,role,content){
