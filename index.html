@@ -211,6 +211,10 @@ header{position:sticky;top:0;z-index:200;background:rgba(8,8,16,.88);backdrop-fi
 .bubble{padding:11px 15px;border-radius:18px;font-size:.84rem;line-height:1.65;}
 .msg.user .bubble{background:linear-gradient(135deg,var(--gold),var(--gold2));color:#000;font-weight:500;border-bottom-right-radius:4px;box-shadow:0 4px 20px rgba(244,162,97,.2);}
 .msg.bot .bubble{background:rgba(255,255,255,.06);backdrop-filter:blur(10px);color:var(--text);border:1px solid var(--border);border-bottom-left-radius:4px;}
+.bubble .md-h{font-family:'Syne',sans-serif;font-weight:700;font-size:.92rem;margin:8px 0 4px;letter-spacing:-.02em;}
+.bubble .md-h:first-child{margin-top:0;}
+.bubble .md-li{position:relative;padding-left:14px;margin:2px 0;}
+.bubble .md-li::before{content:'•';position:absolute;left:2px;color:var(--gold);}
 .msg-time{font-size:.56rem;color:var(--muted);font-family:'JetBrains Mono',monospace;}
 .msg-foot{display:flex;align-items:center;gap:10px;margin-top:4px;padding:0 3px;}
 .copy-btn{background:rgba(255,255,255,.05);border:1px solid var(--border);color:var(--muted);font-family:'JetBrains Mono',monospace;font-size:.56rem;padding:3px 8px;border-radius:8px;cursor:pointer;transition:.15s;}
@@ -1335,7 +1339,33 @@ function appendUser(text){
   div.innerHTML='<div><div class="bubble">'+esc(text)+'</div><div class="msg-time">'+now()+'</div></div>';
   area.appendChild(div);area.scrollTop=area.scrollHeight;
 }
-function fmt(t){return t.replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>').replace(/\n/g,'<br>');}
+function fmt(t){
+  // échapper le HTML d'abord pour la sécurité
+  t=t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  // gras et italique
+  t=t.replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>');
+  // traiter ligne par ligne pour les titres et listes
+  var lines=t.split('\n');
+  var out=[];
+  for(var i=0;i<lines.length;i++){
+    var ln=lines[i];
+    var h=ln.match(/^\s*(#{1,4})\s+(.*)$/);
+    if(h){
+      out.push('<div class="md-h">'+h[2]+'</div>');
+      continue;
+    }
+    var b=ln.match(/^\s*[-•*]\s+(.*)$/);
+    if(b){
+      out.push('<div class="md-li">'+b[1]+'</div>');
+      continue;
+    }
+    out.push(ln);
+  }
+  t=out.join('\n');
+  // pas de <br> superflu juste après un bloc titre/liste
+  t=t.replace(/(<\/div>)\n/g,'$1');
+  return t.replace(/\n/g,'<br>');
+}
 function esc(t){return t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
 function now(){return new Date().toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'});}
 function showSuggs(id){
@@ -1359,8 +1389,11 @@ async function sendText(txt){
   ty.innerHTML='<div class="msg-mini-avatar">'+getAvatarMini(id)+'</div><div class="bubble"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>';
   area.appendChild(ty);area.scrollTop=area.scrollHeight;
   var msgs=convos[id].slice(-12).map(function(m){return{role:m.role,content:m.content};});
+  var _now=new Date();
+  var _dateStr=_now.toLocaleDateString('fr-FR',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
+  var _sysWithDate=ex.system+" CONTEXTE TEMPOREL : nous sommes aujourd'hui le "+_dateStr+". Utilise systématiquement cette date comme référence pour toute question liée au temps (aujourd'hui, demain, ce week-end, cette semaine, etc.). Ne te base jamais sur une autre date.";
   try{
-    var r=await fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({system:ex.system,messages:msgs,webSearch:(id==='luna')})});
+    var r=await fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({system:_sysWithDate,messages:msgs,webSearch:(id==='luna')})});
     var d=await r.json();
     var reply=d.content?d.content.map(function(b){return b.text||'';}).join(''):"Je n'ai pas pu répondre, réessayez.";
     document.getElementById('typing')&&document.getElementById('typing').remove();
