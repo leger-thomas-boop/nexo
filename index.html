@@ -1360,7 +1360,7 @@ async function sendText(txt){
   area.appendChild(ty);area.scrollTop=area.scrollHeight;
   var msgs=convos[id].slice(-12).map(function(m){return{role:m.role,content:m.content};});
   try{
-    var r=await fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({system:ex.system,messages:msgs})});
+    var r=await fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({system:ex.system,messages:msgs,webSearch:(id==='luna')})});
     var d=await r.json();
     var reply=d.content?d.content.map(function(b){return b.text||'';}).join(''):"Je n'ai pas pu répondre, réessayez.";
     document.getElementById('typing')&&document.getElementById('typing').remove();
