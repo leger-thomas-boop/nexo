@@ -599,6 +599,16 @@ header{
     </div>
   </div>
 </div>
+
+<!-- TRANSITION SCREEN -->
+<div id="transition-screen" style="display:none;position:fixed;inset:0;z-index:600;max-width:480px;margin:0 auto;overflow:hidden;background:#080810;">
+  <canvas id="transCanvas" style="position:absolute;inset:0;width:100%;height:100%;"></canvas>
+  <div id="transText" style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:1;">
+    <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:3rem;letter-spacing:-.07em;opacity:0;transform:scale(.5);transition:all .6s cubic-bezier(.34,1.56,.64,1);color:#fff;" id="transLogo">Nex<span style="background:linear-gradient(135deg,#f4a261,#e76f51);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">o</span></div>
+    <div style="font-family:'JetBrains Mono',monospace;font-size:.65rem;letter-spacing:.2em;text-transform:uppercase;color:#a78bfa;margin-top:8px;opacity:0;transition:all .6s .3s;" id="transTagline">Initialisation...</div>
+  </div>
+</div>
+
 <!-- USER MENU -->
 <div class="user-menu" id="userMenu">
   <div class="user-email" id="userEmailDisplay"></div>
@@ -962,12 +972,116 @@ async function doSignup(){
   else{suc.textContent='✅ Compte créé ! Connectez-vous.';suc.style.display='block';setTimeout(function(){switchAuth('login');},1500);}
 }
 function doLogout(){clearSession();document.getElementById('userMenu').classList.remove('open');document.getElementById('home').style.display='none';document.getElementById('auth-screen').style.display='flex';convos={};isPremium=false;}
+// TRANSITION ANIMATION
+function showTransition(callback){
+  var screen=document.getElementById('transition-screen');
+  var canvas=document.getElementById('transCanvas');
+  var logo=document.getElementById('transLogo');
+  var tagline=document.getElementById('transTagline');
+  if(!screen||!canvas){callback();return;}
+  screen.style.display='block';
+  var ctx=canvas.getContext('2d');
+  function resize(){canvas.width=canvas.offsetWidth;canvas.height=canvas.offsetHeight;}
+  resize();
+  var CX=canvas.width/2, CY=canvas.height/2;
+
+  // Particles bursting outward
+  var particles=[];
+  var pcols=['#c084fc','#a855f7','#e879f9','#f4a261','#60a5fa','#34d399'];
+  for(var i=0;i<140;i++){
+    var ang=Math.random()*Math.PI*2;
+    var dist=Math.random()*40;
+    particles.push({
+      x:CX+Math.cos(ang)*dist, y:CY+Math.sin(ang)*dist,
+      ang:ang, spd:1+Math.random()*7,
+      sz:1+Math.random()*3,
+      col:pcols[Math.floor(Math.random()*pcols.length)],
+      trail:[]
+    });
+  }
+  // Expanding rings
+  var rings=[];
+  for(var r=0;r<4;r++) rings.push({radius:0, delay:r*8, life:1});
+
+  var frame=0;
+  var maxFrames=72; // ~1.2s
+  var logoShown=false;
+
+  function anim(){
+    frame++;
+    ctx.fillStyle='rgba(8,8,16,0.25)';
+    ctx.fillRect(0,0,canvas.width,canvas.height);
+
+    // Rings
+    rings.forEach(function(ring){
+      if(frame>ring.delay){
+        ring.radius+=6;
+        ring.life-=0.012;
+        if(ring.life>0){
+          ctx.beginPath();
+          ctx.arc(CX,CY,ring.radius,0,Math.PI*2);
+          ctx.strokeStyle='rgba(168,85,247,'+Math.max(0,ring.life*0.5)+')';
+          ctx.lineWidth=2;
+          ctx.stroke();
+        }
+      }
+    });
+
+    // Central glow
+    var pulse=1+Math.sin(frame*0.2)*0.3;
+    var cg=ctx.createRadialGradient(CX,CY,0,CX,CY,60*pulse);
+    cg.addColorStop(0,'rgba(192,132,252,'+Math.max(0,0.6-frame/maxFrames)+')');
+    cg.addColorStop(1,'transparent');
+    ctx.beginPath();ctx.arc(CX,CY,60*pulse,0,Math.PI*2);ctx.fillStyle=cg;ctx.fill();
+
+    // Particles
+    particles.forEach(function(p){
+      p.x+=Math.cos(p.ang)*p.spd;
+      p.y+=Math.sin(p.ang)*p.spd;
+      p.spd*=1.02;
+      var g=ctx.createRadialGradient(p.x,p.y,0,p.x,p.y,p.sz*2);
+      g.addColorStop(0,p.col);
+      g.addColorStop(1,p.col+'00');
+      ctx.beginPath();ctx.arc(p.x,p.y,p.sz,0,Math.PI*2);
+      ctx.fillStyle=g;ctx.fill();
+    });
+
+    // Show logo midway
+    if(frame>28 && !logoShown){
+      logoShown=true;
+      logo.style.opacity='1';
+      logo.style.transform='scale(1)';
+      tagline.style.opacity='1';
+    }
+
+    if(frame<maxFrames){
+      requestAnimationFrame(anim);
+    }else{
+      // Fade out
+      screen.style.transition='opacity .4s';
+      screen.style.opacity='0';
+      setTimeout(function(){
+        screen.style.display='none';
+        screen.style.opacity='1';
+        logo.style.opacity='0';logo.style.transform='scale(.5)';
+        tagline.style.opacity='0';
+        callback();
+      },400);
+    }
+  }
+  anim();
+}
+
 async function enterApp(){
-  document.getElementById('auth-screen').style.display='none';
-  document.getElementById('home').style.display='block';
-  var letter=(currentUser&&currentUser.email?currentUser.email[0]:'U').toUpperCase();
-  document.getElementById('avatarHdr').textContent=letter;
-  document.getElementById('userEmailDisplay').textContent=currentUser&&currentUser.email?currentUser.email:'';
+  // Show transition
+  showTransition(function(){
+    document.getElementById('auth-screen').style.display='none';
+    document.getElementById('home').style.display='block';
+    initHomeBg();
+    var letter=(currentUser&&currentUser.email?currentUser.email[0]:'U').toUpperCase();
+    document.getElementById('avatarHdr').textContent=letter;
+    document.getElementById('userEmailDisplay').textContent=currentUser&&currentUser.email?currentUser.email:'';
+  });
   try{
     var r=await fetch(SUPABASE_URL+'/rest/v1/profiles?email=eq.'+currentUser.email+'&select=is_premium',{headers:{'apikey':SUPABASE_ANON,'Authorization':'Bearer '+userSession.access_token}});
     var data=await r.json();
@@ -1107,20 +1221,22 @@ function initHomeBg(){
   bg._init=true;
   var ctx=bg.getContext('2d');
   var stars=[];
-  for(var i=0;i<100;i++){
+  for(var i=0;i<110;i++){
     stars.push({
       x:Math.random(),y:Math.random(),
-      r:0.3+Math.random()*1.4,
+      r:0.3+Math.random()*1.6,
       a:Math.random()*Math.PI*2,
-      spd:0.004+Math.random()*0.01,
+      spd:0.006+Math.random()*0.014,
+      vx:(Math.random()-.5)*0.0006,
+      vy:-0.0003-Math.random()*0.0006,
       color:['#a78bfa','#60a5fa','#f4a261','#34d399','#ffffff','#e879f9'][Math.floor(Math.random()*6)]
     });
   }
   // Floating orbs
   var orbs=[
-    {x:.2,y:.3,r:120,color:'rgba(168,85,247,.06)',spd:.0008},
-    {x:.8,y:.7,r:150,color:'rgba(96,165,250,.05)',spd:.0012},
-    {x:.5,y:.1,r:100,color:'rgba(244,162,97,.04)',spd:.001},
+    {x:.2,y:.3,r:130,color:'rgba(168,85,247,.08)',sx:.12,sy:.09,px:0,py:1.2},
+    {x:.8,y:.7,r:160,color:'rgba(96,165,250,.06)',sx:.1,sy:.13,px:2,py:.4},
+    {x:.5,y:.15,r:110,color:'rgba(244,162,97,.05)',sx:.14,sy:.07,px:4,py:2.5},
   ];
   function resizeBg(){bg.width=bg.offsetWidth;bg.height=bg.offsetHeight;}
   resizeBg();
@@ -1130,18 +1246,20 @@ function initHomeBg(){
     if(document.getElementById('home').style.display==='none'){requestAnimationFrame(drawHomeBg);return;}
     ctx.clearRect(0,0,bg.width,bg.height);
     t+=0.01;
-    // Orbs
+    // Orbs (drifting around)
     orbs.forEach(function(o){
-      var x=(o.x+Math.sin(t*o.spd*60)*.05)*bg.width;
-      var y=(o.y+Math.cos(t*o.spd*60)*.05)*bg.height;
+      var x=(o.x+Math.sin(t*o.sx+o.px)*.14)*bg.width;
+      var y=(o.y+Math.cos(t*o.sy+o.py)*.12)*bg.height;
       var g=ctx.createRadialGradient(x,y,0,x,y,o.r);
       g.addColorStop(0,o.color);g.addColorStop(1,'transparent');
       ctx.fillStyle=g;ctx.fillRect(0,0,bg.width,bg.height);
     });
-    // Stars
+    // Stars (drifting + twinkling)
     stars.forEach(function(s){
       s.a+=s.spd;
-      var alpha=(Math.sin(s.a)+1)/2*0.8;
+      s.x+=s.vx; s.y+=s.vy;
+      if(s.y<-0.02)s.y=1.02; if(s.x<-0.02)s.x=1.02; if(s.x>1.02)s.x=-0.02;
+      var alpha=(Math.sin(s.a)+1)/2*0.85;
       ctx.beginPath();
       ctx.arc(s.x*bg.width,s.y*bg.height,s.r,0,Math.PI*2);
       ctx.fillStyle=s.color;
