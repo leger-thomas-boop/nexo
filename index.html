@@ -217,8 +217,9 @@ header{position:sticky;top:0;z-index:200;background:rgba(8,8,16,.88);backdrop-fi
 .msg.bot{align-self:flex-start;display:flex;gap:8px;align-items:flex-end;}
 .msg-mini-avatar{width:28px;height:28px;border-radius:9px;flex-shrink:0;overflow:hidden;}
 .bubble{padding:11px 15px;border-radius:18px;font-size:.84rem;line-height:1.65;overflow-wrap:break-word;word-break:break-word;}
-.chat-link{color:var(--gold);text-decoration:underline;word-break:break-all;}
+.chat-link{color:var(--gold);text-decoration:underline;word-break:break-all;pointer-events:auto;position:relative;z-index:2;cursor:pointer;}
 .msg.user .chat-link{color:#000;text-decoration:underline;}
+.bubble{position:relative;}
 .msg.user .bubble{background:linear-gradient(135deg,var(--gold),var(--gold2));color:#000;font-weight:500;border-bottom-right-radius:4px;box-shadow:0 4px 20px rgba(244,162,97,.2);}
 .msg.bot .bubble{background:rgba(255,255,255,.06);backdrop-filter:blur(10px);color:var(--text);border:1px solid var(--border);border-bottom-left-radius:4px;}
 .bubble .md-h{font-family:'Syne',sans-serif;font-weight:700;font-size:.92rem;margin:8px 0 4px;letter-spacing:-.02em;}
