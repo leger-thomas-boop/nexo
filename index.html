@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover">
 <title>Nexo — Vos experts IA</title>
 <link rel="manifest" href="/manifest.json">
 <meta name="theme-color" content="#f4a261">
@@ -620,6 +620,16 @@ header{
 .testi{
   background:rgba(255,255,255,.04) !important;
   backdrop-filter:blur(10px) !important;
+}
+
+
+/* FIX CLAVIER MOBILE - évite écran noir quand le clavier s'ouvre */
+html,body{height:100%;}
+.keyboard-open #chat-view{height:100dvh !important;}
+.keyboard-open .msgs{padding-bottom:12px;}
+.keyboard-open .input-wrap{position:relative;z-index:10;}
+@supports (-webkit-touch-callout:none){
+  #chat-view{height:-webkit-fill-available;}
 }
 
 </style>
@@ -1753,31 +1763,36 @@ function initDiscOrbe(){
 }
 window.addEventListener('load', initDiscOrbe);
 
-// ── CLAVIER MOBILE : garder le champ de saisie visible ──
+// ── CLAVIER MOBILE : version sûre, sans redimensionner #chat-view ──
 (function(){
-  if(!window.visualViewport)return;
-  var chatView=null;
-  function adjust(){
-    chatView=document.getElementById('chat-view');
-    if(!chatView||chatView.style.display==='none')return;
-    var vh=window.visualViewport.height;
-    // ajuste la hauteur de la zone de chat à la partie visible (au-dessus du clavier)
-    chatView.style.height=vh+'px';
-    // garde le dernier message visible
-    var area=document.getElementById('msgsArea');
-    if(area)area.scrollTop=area.scrollHeight;
+  function scrollChatBottom(delay){
+    setTimeout(function(){
+      var area=document.getElementById('msgsArea');
+      if(area) area.scrollTop=area.scrollHeight;
+    }, delay || 250);
   }
-  window.visualViewport.addEventListener('resize',adjust);
-  window.visualViewport.addEventListener('scroll',adjust);
-  // quand on focus le champ, on scrolle en bas après l'ouverture du clavier
+
   document.addEventListener('focusin',function(e){
-    if(e.target&&e.target.id==='msgInp'){
-      setTimeout(function(){
-        var area=document.getElementById('msgsArea');
-        if(area)area.scrollTop=area.scrollHeight;
-      },300);
+    if(e.target && e.target.id==='msgInp'){
+      document.body.classList.add('keyboard-open');
+      scrollChatBottom(350);
     }
   });
+
+  document.addEventListener('focusout',function(e){
+    if(e.target && e.target.id==='msgInp'){
+      document.body.classList.remove('keyboard-open');
+      scrollChatBottom(120);
+    }
+  });
+
+  // iOS/Android : on garde juste le bas du chat visible, sans toucher à la hauteur globale.
+  if(window.visualViewport){
+    window.visualViewport.addEventListener('resize',function(){
+      var inp=document.getElementById('msgInp');
+      if(document.activeElement===inp) scrollChatBottom(120);
+    });
+  }
 })();
 
 </script>
