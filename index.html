@@ -16,7 +16,7 @@
   --bg:#080810;--bg2:#0d0d18;--card:rgba(255,255,255,.04);
   --border:rgba(255,255,255,.08);--text:#f0f0f8;--muted:#5a5a78;
   --gold:#f4a261;--gold2:#e76f51;
-  --sofia:#34d399;--marcus:#60a5fa;--luna:#a78bfa;--alex:#fb923c;--max:#22d3ee;
+  --sofia:#34d399;--marcus:#60a5fa;--luna:#a78bfa;--alex:#fb923c;--max:#22d3ee;--nova:#f472b6;
 }
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
 body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min-height:100vh;max-width:480px;margin:0 auto;overflow-x:hidden;}
@@ -126,7 +126,18 @@ header{position:sticky;top:0;z-index:200;background:rgba(8,8,16,.88);backdrop-fi
 .card-max .status-dot{background:var(--max);box-shadow:0 0 6px var(--max);}
 .card-max .ec-tag{background:rgba(34,211,238,.08);color:var(--max);border-color:rgba(34,211,238,.15);}
 .card-max .ec-cta{color:var(--max);}
-.limit-bar.max-bar{color:var(--max);}
+.limit-bar.max-bar{color:var(--max);} 
+.card-nova::before{background:var(--nova);}
+.card-nova::after{box-shadow:inset 0 0 0 1px rgba(244,114,182,.3),0 20px 60px rgba(244,114,182,.1);}
+.card-nova .avatar-halo{background:var(--nova);}
+.card-nova .ec-name{color:var(--nova);}
+.card-nova .status-dot{background:var(--nova);box-shadow:0 0 6px var(--nova);}
+.card-nova .ec-tag{background:rgba(244,114,182,.08);color:var(--nova);border-color:rgba(244,114,182,.15);}
+.card-nova .ec-cta{color:var(--nova);}
+.limit-bar.nova-bar{color:var(--nova);}
+.generated-image{width:100%;max-width:260px;border-radius:14px;display:block;margin-bottom:8px;border:1px solid var(--border);}
+.download-img-btn{display:inline-flex;align-items:center;gap:6px;margin-top:8px;padding:7px 10px;border-radius:10px;background:rgba(255,255,255,.06);border:1px solid var(--border);color:var(--text);font-size:.7rem;text-decoration:none;font-family:'JetBrains Mono',monospace;}
+
 .expert-card:hover::after{opacity:1;}
 .ec-content{position:relative;z-index:1;}
 .ec-top{padding:20px 20px 0;display:flex;align-items:flex-start;gap:16px;}
@@ -652,7 +663,7 @@ html,body{height:100%;}
     <div class="auth-top">
       <div class="auth-badge"><div class="live-dot"></div>v1.6 · Nouvelle génération</div>
       <div class="auth-logo"><span class="logo-nex">Nex</span><span class="logo-o">o</span></div>
-      <div class="auth-tagline"><strong>5 IA spécialisées</strong> · 50% moins cher que ChatGPT</div>
+      <div class="auth-tagline"><strong>6 IA spécialisées</strong> · 50% moins cher que ChatGPT</div>
       <div class="price-compare">
         <div class="pc-nexo">
           <div class="pc-badge">−50%</div>
@@ -731,7 +742,7 @@ html,body{height:100%;}
 <div id="sec-home">
   <div class="hero">
     <div class="hero-eyebrow">Vos experts IA · 24h/24</div>
-    <h2>Rencontrez vos<br><em>5 experts</em> Nexo</h2>
+    <h2>Rencontrez vos<br><em>6 experts</em> Nexo</h2>
     <p>Des conseillers spécialisés, toujours disponibles pour vous guider dans chaque aspect de votre vie.</p>
   </div>
   <div class="sec-label">Choisissez votre expert</div>
@@ -786,6 +797,16 @@ html,body{height:100%;}
         <div class="ec-bottom"><div class="ec-tags"><span class="ec-tag">Slicer</span><span class="ec-tag">Photo</span><span class="ec-tag">Dépannage</span></div><div class="ec-cta">Consulter →</div></div>
       </div>
     </div>
+    <div class="expert-card card-nova" onclick="openChat('nova')">
+      <div class="ec-status"><div class="status-dot"></div>En ligne</div>
+      <div class="ec-content">
+        <div class="ec-top">
+          <div class="ec-avatar-wrap"><div class="avatar-halo"></div><div class="ec-avatar"><canvas class="orbe-canvas" data-expert="nova" width="136" height="136"></canvas></div></div>
+          <div class="ec-info"><div class="ec-name">Nova</div><div class="ec-role">Créatrice d’images IA</div><div class="ec-desc">Logos, affiches, visuels TikTok, mockups produit — Nova transforme vos idées en images.</div></div>
+        </div>
+        <div class="ec-bottom"><div class="ec-tags"><span class="ec-tag">Images</span><span class="ec-tag">Logo</span><span class="ec-tag">TikTok</span></div><div class="ec-cta">Créer →</div></div>
+      </div>
+    </div>
   </div>
 </div>
 <div id="sec-discover" style="display:none">
@@ -793,13 +814,13 @@ html,body{height:100%;}
     <div class="disc-orbe-wrap"><canvas id="discOrbe" width="180" height="180"></canvas></div>
     <div class="disc-eyebrow">La nouvelle génération d'IA</div>
     <h2 class="disc-title">Une IA <em>spécialisée</em><br>pour chaque besoin</h2>
-    <p class="disc-sub">Nexo réunit 5 experts IA de pointe. Au lieu d'un assistant généraliste, vous parlez à un spécialiste qui maîtrise vraiment son domaine.</p>
+    <p class="disc-sub">Nexo réunit 6 experts IA de pointe. Au lieu d'un assistant généraliste, vous parlez à un spécialiste qui maîtrise vraiment son domaine.</p>
     <button class="disc-share-btn" onclick="shareNexo()">↗ Partager Nexo à mes amis</button>
   </div>
 
   <div class="sec-label">Ce qui rend Nexo unique</div>
   <div class="disc-feats">
-    <div class="disc-feat"><div class="disc-feat-ico">🎯</div><div><div class="disc-feat-t">5 experts spécialisés</div><div class="disc-feat-d">Finance, droit du travail, entreprise, impression 3D et une assistante polyvalente — chacun expert dans son domaine.</div></div></div>
+    <div class="disc-feat"><div class="disc-feat-ico">🎯</div><div><div class="disc-feat-t">6 experts spécialisés</div><div class="disc-feat-d">Finance, droit du travail, entreprise, impression 3D, création d’images et une assistante polyvalente — chacun expert dans son domaine.</div></div></div>
     <div class="disc-feat"><div class="disc-feat-ico">💸</div><div><div class="disc-feat-t">50% moins cher que ChatGPT</div><div class="disc-feat-d">9,99€/mois au lieu de 20€. Le même niveau d'intelligence, deux fois moins cher.</div></div></div>
     <div class="disc-feat"><div class="disc-feat-ico">⚡</div><div><div class="disc-feat-t">Réponses instantanées 24h/24</div><div class="disc-feat-d">Vos experts sont toujours disponibles, sans rendez-vous, sans attente.</div></div></div>
     <div class="disc-feat"><div class="disc-feat-ico">🇫🇷</div><div><div class="disc-feat-t">100% adapté à la France</div><div class="disc-feat-d">Livret A, URSSAF, Code du travail... Nos experts connaissent les règles françaises.</div></div></div>
@@ -1294,7 +1315,11 @@ var EXPERTS={
   max:{name:'Max',role:'Expert Impression 3D',limitClass:'max-bar',color:'#22d3ee',freeLimit:3,emoji:'🖨️',bg:'linear-gradient(135deg,#083344,#0e7490)',vision:true,
     suggestions:["Quels réglages pour du PLA ?","Mon impression a des fils (stringing), pourquoi ?","Où trouver des modèles STL gratuits ?","PLA, PETG ou résine pour mon projet ?"],
     welcome:"Salut ! Je suis **Max**, ton expert en impression 3D 🖨️\n\nRéglages de slicer, choix du matériau, dépannage... et tu peux même **m'envoyer une photo** d'une impression ratée pour que je t'aide à corriger !\n\n_Petit point honnête : je ne crée pas les fichiers STL moi-même, mais je te guide pour les trouver, les régler et bien les imprimer._\n\nSur quoi je t'aide ?",
-    system:"Tu es Max, expert français passionné en impression 3D (FDM et résine). TRÈS IMPORTANT : tu DISPOSES d'un outil de recherche web et tu as accès à Internet. Ne dis JAMAIS que tu n'as pas accès à Internet. Quand l'utilisateur cherche un modèle 3D ou un fichier STL, UTILISE la recherche web pour trouver des modèles réels et DONNE-LUI les liens directs que tu trouves (vers Printables, Thingiverse, MakerWorld, Cults3D, Thangs). Cite le nom du modèle et l'URL trouvée. Si tu ne trouves pas de lien précis, propose les termes de recherche exacts à taper sur ces sites. Tu maîtrises : les slicers (Cura, PrusaSlicer, OrcaSlicer, Bambu Studio), les réglages (température buse/plateau, vitesse, rétraction, remplissage, supports, adhérence, hauteur de couche), les matériaux (PLA, PETG, ABS, TPU, résine) et leurs cas d'usage, le dépannage des défauts d'impression (warping, stringing, under-extrusion, décollement, etc.), et les imprimantes courantes (Ender, Prusa, Bambu Lab). IMPORTANT : tu ne génères pas toi-même le fichier STL (tu n'es pas un logiciel de modélisation), mais tu trouves des modèles existants et tu donnes leurs liens ; pour des formes géométriques simples (boîte, support, entretoise, porte-clés avec texte), tu peux fournir du code OpenSCAD prêt à copier que l'utilisateur transformera en STL. Quand l'utilisateur envoie une PHOTO, analyse-la attentivement : identifie l'objet ou le défaut d'impression, explique la cause et donne les réglages précis à corriger. STYLE DE RÉPONSE OBLIGATOIRE : Réponds comme un ami expert — court, direct, sans pavé. 2-4 phrases pour les questions simples, une liste courte si vraiment utile. Développe seulement si on demande des détails. Pas d'intro inutile. Donne des valeurs précises (ex : buse 210°C) sans noyer l'info. Français parfait, **gras** uniquement pour les points vraiment clés."}
+    system:"Tu es Max, expert français passionné en impression 3D (FDM et résine). TRÈS IMPORTANT : tu DISPOSES d'un outil de recherche web et tu as accès à Internet. Ne dis JAMAIS que tu n'as pas accès à Internet. Quand l'utilisateur cherche un modèle 3D ou un fichier STL, UTILISE la recherche web pour trouver des modèles réels et DONNE-LUI les liens directs que tu trouves (vers Printables, Thingiverse, MakerWorld, Cults3D, Thangs). Cite le nom du modèle et l'URL trouvée. Si tu ne trouves pas de lien précis, propose les termes de recherche exacts à taper sur ces sites. Tu maîtrises : les slicers (Cura, PrusaSlicer, OrcaSlicer, Bambu Studio), les réglages (température buse/plateau, vitesse, rétraction, remplissage, supports, adhérence, hauteur de couche), les matériaux (PLA, PETG, ABS, TPU, résine) et leurs cas d'usage, le dépannage des défauts d'impression (warping, stringing, under-extrusion, décollement, etc.), et les imprimantes courantes (Ender, Prusa, Bambu Lab). IMPORTANT : tu ne génères pas toi-même le fichier STL (tu n'es pas un logiciel de modélisation), mais tu trouves des modèles existants et tu donnes leurs liens ; pour des formes géométriques simples (boîte, support, entretoise, porte-clés avec texte), tu peux fournir du code OpenSCAD prêt à copier que l'utilisateur transformera en STL. Quand l'utilisateur envoie une PHOTO, analyse-la attentivement : identifie l'objet ou le défaut d'impression, explique la cause et donne les réglages précis à corriger. STYLE DE RÉPONSE OBLIGATOIRE : Réponds comme un ami expert — court, direct, sans pavé. 2-4 phrases pour les questions simples, une liste courte si vraiment utile. Développe seulement si on demande des détails. Pas d'intro inutile. Donne des valeurs précises (ex : buse 210°C) sans noyer l'info. Français parfait, **gras** uniquement pour les points vraiment clés."},
+  nova:{name:'Nova',role:'Créatrice d’images IA',limitClass:'nova-bar',color:'#f472b6',freeLimit:1,emoji:'🎨',bg:'linear-gradient(135deg,#500724,#9d174d)',imageGen:true,
+    suggestions:["Crée un logo moderne pour mon business","Fais une miniature TikTok accrocheuse","Crée une affiche publicitaire premium","Génère un mockup produit réaliste"],
+    welcome:"Salut ! Je suis **Nova**, ta créatrice d’images IA 🎨\n\nDécris-moi l’image que tu veux : logo, miniature TikTok, affiche, avatar, visuel produit...\n\nPlus tu donnes de détails, meilleur sera le rendu.",
+    system:"Tu es Nova, experte en création d’images IA. Tu transformes les demandes en prompts visuels très précis : sujet, style, ambiance, cadrage, couleurs, lumière, format et détails utiles. Tu aides à créer des logos, affiches, visuels TikTok, avatars, images produit, mockups et concepts créatifs."}
 };
 
 var isPremium=false,current=null,convos={};
@@ -1327,7 +1352,7 @@ async function openChat(id){
   document.getElementById('sendBtn').style.boxShadow='0 4px 16px '+ex.color+'40';
   clearAttachedImage();
   document.getElementById('attachBtn').style.display=ex.vision?'flex':'none';
-  document.getElementById('msgInp').placeholder=ex.vision?'Écrivez ou envoyez une photo...':'Écrivez votre question...';
+  document.getElementById('msgInp').placeholder=ex.imageGen?'Décrivez l’image à créer...':(ex.vision?'Écrivez ou envoyez une photo...':'Écrivez votre question...');
   var lb=document.getElementById('limitBar');
   if(isPremium){lb.style.display='none';}else{lb.style.display='flex';lb.className='limit-bar '+ex.limitClass;updateLimitBar(id);}
   document.getElementById('home').style.display='none';
@@ -1388,6 +1413,13 @@ function appendBot(text,id){
   var key='c'+(Date.now())+Math.floor(Math.random()*10000);
   _copyStore[key]=text;
   div.innerHTML='<div class="msg-mini-avatar">'+getAvatarMini(id)+'</div><div style="flex:1;min-width:0;"><div class="bubble">'+fmt(text)+'</div><div class="msg-foot"><span class="msg-time">'+now()+'</span><button class="copy-btn" onclick="copyMsg(this,\''+key+'\')">⧉ Copier</button></div></div>';
+  area.appendChild(div);area.scrollTop=area.scrollHeight;
+}
+function appendBotImage(imageUrl,prompt,id){
+  var area=document.getElementById('msgsArea');
+  var div=document.createElement('div');div.className='msg bot';
+  var safePrompt=esc(prompt||'Image générée');
+  div.innerHTML='<div class="msg-mini-avatar">'+getAvatarMini(id)+'</div><div style="flex:1;min-width:0;"><div class="bubble"><img class="generated-image" src="'+imageUrl+'" alt="'+safePrompt+'"><div><strong>Image générée.</strong></div><a class="download-img-btn" href="'+imageUrl+'" download="nexo-nova-image.png">⬇ Télécharger</a></div><div class="msg-foot"><span class="msg-time">'+now()+'</span></div></div>';
   area.appendChild(div);area.scrollTop=area.scrollHeight;
 }
 function copyMsg(btn,key){
@@ -1533,6 +1565,19 @@ async function sendText(txt){
   var ty=document.createElement('div');ty.className='msg bot typing';ty.id='typing';
   ty.innerHTML='<div class="msg-mini-avatar">'+getAvatarMini(id)+'</div><div class="bubble"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>';
   area.appendChild(ty);area.scrollTop=area.scrollHeight;
+  if(ex.imageGen){
+    try{
+      var promptTxt=txt.trim();
+      var gr=await fetch('/api/generate-image',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({prompt:promptTxt,size:'1024x1024',quality:'medium'})});
+      var gd=await gr.json();
+      document.getElementById('typing')&&document.getElementById('typing').remove();
+      if(!gr.ok||!gd.image){addBotBubble(gd.error||'❌ Impossible de générer l’image.',id);return;}
+      convos[id].push({role:'assistant',content:'Image générée : '+promptTxt});
+      appendBotImage(gd.image,promptTxt,id);
+      saveMessage(id,'assistant','Image générée : '+promptTxt);
+    }catch(e){document.getElementById('typing')&&document.getElementById('typing').remove();addBotBubble('❌ Génération impossible pour le moment.',id);}
+    return;
+  }
   var msgs=convos[id].slice(-12).map(function(m){return{role:m.role,content:m.content};});
   // après avoir préparé l'envoi, on remplace l'image stockée par son texte seul
   // (évite de renvoyer la photo à chaque message suivant = économie + pas de limite)
@@ -1628,7 +1673,8 @@ var ORBE_COLORS={
   marcus:['#60a5fa','#3b82f6','#93c5fd','#bfdbfe'],
   luna:['#a78bfa','#c084fc','#d8b4fe','#e9d5ff'],
   alex:['#fb923c','#f97316','#fdba74','#fed7aa'],
-  max:['#22d3ee','#06b6d4','#67e8f9','#a5f3fc']
+  max:['#22d3ee','#06b6d4','#67e8f9','#a5f3fc'],
+  nova:['#f472b6','#ec4899','#f9a8d4','#fce7f3']
 };
 function initOrbes(){
   var canvases=document.querySelectorAll('.orbe-canvas');
