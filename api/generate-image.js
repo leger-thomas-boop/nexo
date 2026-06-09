@@ -1,75 +1,37 @@
-// api/generate-image.js
-// Route Vercel sécurisée : la clé OpenAI reste côté serveur.
-// Dans Vercel > Settings > Environment Variables, ajoute : OPENAI_API_KEY=sk-...
-
 export default async function handler(req, res) {
-  if (req.method !== 'POST') {
-    return res.status(405).json({ error: 'Méthode non autorisée' });
-  }
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+  if (req.method === 'OPTIONS') return res.status(200).end();
+  if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
   try {
-    const { prompt, size = '1024x1024', quality = 'medium' } = req.body || {};
-
-    if (!process.env.OPENAI_API_KEY) {
-      return res.status(500).json({ error: 'OPENAI_API_KEY manquante côté serveur.' });
-    }
-
-    if (!prompt || typeof prompt !== 'string' || prompt.trim().length < 3) {
-      return res.status(400).json({ error: 'Prompt image manquant ou trop court.' });
-    }
-
-    if (prompt.length > 1200) {
-      return res.status(400).json({ error: 'Prompt trop long. Réduisez la demande.' });
-    }
-
-    const allowedSizes = ['1024x1024', '1024x1536', '1536x1024'];
-    const allowedQualities = ['low', 'medium', 'high'];
-
-    const safeSize = allowedSizes.includes(size) ? size : '1024x1024';
-    const safeQuality = allowedQualities.includes(quality) ? quality : 'medium';
-
-    const finalPrompt = `
-Tu es Nova, créatrice d'images pour Nexo.
-Crée une image propre, moderne, exploitable commercialement.
-Demande utilisateur : ${prompt.trim()}
-Évite les textes illisibles, les logos de marques existantes et les éléments protégés.
-`.trim();
+    const { prompt, size, quality } = req.body;
+    if (!prompt) return res.status(400).json({ error: 'Prompt manquant' });
 
     const response = await fetch('https://api.openai.com/v1/images/generations', {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`,
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`
       },
       body: JSON.stringify({
-        model: 'gpt-image-1',
-        prompt: finalPrompt,
-        size: safeSize,
-        quality: safeQuality,
+        model: 'dall-e-3',
+        prompt: prompt,
         n: 1,
-        output_format: 'png'
+        size: size || '1024x1024',
+        quality: quality || 'standard',
+        response_format: 'url'
       })
     });
 
     const data = await response.json();
-
-    if (!response.ok) {
-      return res.status(response.status).json({
-        error: data?.error?.message || 'Erreur OpenAI pendant la génération.'
-      });
+    if (!response.ok || !data.data || !data.data[0]) {
+      return res.status(500).json({ error: data.error?.message || 'Erreur génération image' });
     }
 
-    const first = data?.data?.[0];
-    const image = first?.b64_json
-      ? `data:image/png;base64,${first.b64_json}`
-      : first?.url;
-
-    if (!image) {
-      return res.status(500).json({ error: 'Image non reçue depuis OpenAI.' });
-    }
-
-    return res.status(200).json({ image });
+    return res.status(200).json({ image: data.data[0].url });
   } catch (error) {
-    return res.status(500).json({ error: 'Erreur serveur génération image.' });
+    return res.status(500).json({ error: error.message });
   }
 }
