@@ -1,14 +1,18 @@
 {
   "name": "Nexo — Vos experts IA",
   "short_name": "Nexo",
-  "description": "6 experts IA spécialisés : finance, droit du travail, entreprise, impression 3D et plus. 50% moins cher que ChatGPT.",
+  "description": "6 experts IA spécialisés : finance, droit du travail, entreprise, impression 3D et plus. L'expertise IA pour tous, à 9,99€/mois.",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#080810",
   "theme_color": "#f4a261",
   "orientation": "portrait",
   "lang": "fr",
-  "categories": ["productivity", "utilities", "business"],
+  "categories": [
+    "productivity",
+    "utilities",
+    "business"
+  ],
   "screenshots": [],
   "icons": [
     {
@@ -30,14 +34,24 @@
       "short_name": "Sofia",
       "description": "Conseillère financière",
       "url": "/?expert=sofia",
-      "icons": [{ "src": "/icon-192.png", "sizes": "192x192" }]
+      "icons": [
+        {
+          "src": "/icon-192.png",
+          "sizes": "192x192"
+        }
+      ]
     },
     {
       "name": "Luna — Assistante",
       "short_name": "Luna",
       "description": "Assistante polyvalente",
       "url": "/?expert=luna",
-      "icons": [{ "src": "/icon-192.png", "sizes": "192x192" }]
+      "icons": [
+        {
+          "src": "/icon-192.png",
+          "sizes": "192x192"
+        }
+      ]
     }
   ]
 }
