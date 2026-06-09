@@ -8,12 +8,7 @@
   "theme_color": "#f4a261",
   "orientation": "portrait",
   "lang": "fr",
-  "categories": [
-    "productivity",
-    "utilities",
-    "business"
-  ],
-  "screenshots": [],
+  "categories": ["productivity", "utilities", "business"],
   "icons": [
     {
       "src": "/icon-192.png",
@@ -26,32 +21,6 @@
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"
-    }
-  ],
-  "shortcuts": [
-    {
-      "name": "Sofia — Finance",
-      "short_name": "Sofia",
-      "description": "Conseillère financière",
-      "url": "/?expert=sofia",
-      "icons": [
-        {
-          "src": "/icon-192.png",
-          "sizes": "192x192"
-        }
-      ]
-    },
-    {
-      "name": "Luna — Assistante",
-      "short_name": "Luna",
-      "description": "Assistante polyvalente",
-      "url": "/?expert=luna",
-      "icons": [
-        {
-          "src": "/icon-192.png",
-          "sizes": "192x192"
-        }
-      ]
     }
   ]
 }
