@@ -632,6 +632,30 @@ header{
   backdrop-filter:blur(10px) !important;
 }
 
+
+/* ── LEGAL PAGES ── */
+#legal-screen{position:fixed;inset:0;z-index:550;background:var(--bg);max-width:480px;margin:0 auto;display:none;flex-direction:column;}
+.legal-hdr{padding:14px 20px;display:flex;align-items:center;gap:12px;border-bottom:1px solid var(--border);background:rgba(8,8,16,.9);backdrop-filter:blur(24px);flex-shrink:0;}
+.legal-back{width:36px;height:36px;border-radius:12px;background:rgba(255,255,255,.06);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--text);font-size:1rem;}
+.legal-title{font-family:'Syne',sans-serif;font-weight:700;font-size:1rem;}
+.legal-content{flex:1;overflow-y:auto;padding:24px 20px 40px;}
+.legal-content h2{font-family:'Syne',sans-serif;font-weight:700;font-size:1.1rem;margin:20px 0 8px;color:var(--gold);}
+.legal-content h2:first-child{margin-top:0;}
+.legal-content p{font-size:.82rem;color:rgba(240,240,248,.6);line-height:1.8;margin-bottom:10px;font-weight:300;}
+.legal-content strong{color:var(--text);font-weight:600;}
+.legal-date{font-size:.65rem;color:var(--muted);font-family:'JetBrains Mono',monospace;margin-bottom:20px;}
+
+/* ── MENU LINKS ── */
+.menu-divider{height:1px;background:var(--border);margin:6px 0;}
+.menu-item.small{font-size:.72rem;color:var(--muted);}
+
+/* ── FOOTER LINKS in auth ── */
+.auth-footer{text-align:center;padding:12px 0 0;display:flex;justify-content:center;gap:16px;}
+.auth-footer a{font-size:.65rem;color:var(--muted);text-decoration:underline;cursor:pointer;font-family:'JetBrains Mono',monospace;}
+
+/* ── MEMORY BADGE ── */
+.memory-badge{display:inline-flex;align-items:center;gap:4px;background:rgba(167,139,250,.08);border:1px solid rgba(167,139,250,.15);border-radius:20px;padding:2px 8px;font-size:.6rem;color:var(--luna);font-family:'JetBrains Mono',monospace;margin-left:6px;}
+
 </style>
 </head>
 <body>
@@ -686,8 +710,23 @@ header{
         <div class="auth-error" id="signup-error"></div>
         <div class="auth-success" id="signup-success"></div>
       </div>
+      <div class="auth-footer">
+        <a onclick="showLegal('privacy')">Confidentialité</a>
+        <a onclick="showLegal('cgu')">CGU</a>
+        <a onclick="showLegal('about')">À propos</a>
+      </div>
     </div>
   </div>
+</div>
+
+
+<!-- LEGAL SCREEN -->
+<div id="legal-screen">
+  <div class="legal-hdr">
+    <div class="legal-back" onclick="closeLegal()">←</div>
+    <div class="legal-title" id="legalTitle">Politique de confidentialité</div>
+  </div>
+  <div class="legal-content" id="legalContent"></div>
 </div>
 
 <!-- TRANSITION SCREEN -->
@@ -704,6 +743,9 @@ header{
   <div class="user-email" id="userEmailDisplay"></div>
   <div class="menu-item" onclick="showPremium()">⭐ Passer Premium</div>
   <div class="menu-item" onclick="window.open('https://billing.stripe.com/p/login/aFa5kD9IvfUcgcpeCoc7u00','_blank')">💳 Gérer mon abonnement</div>
+  <div class="menu-divider"></div>
+  <div class="menu-item small" onclick="showLegal('privacy')">🔒 Confidentialité</div>
+  <div class="menu-item small" onclick="showLegal('cgu')">📄 CGU</div>
   <div class="menu-item danger" onclick="doLogout()">Se déconnecter</div>
 </div>
 
@@ -1159,6 +1201,142 @@ function traduireErreur(msg){
   if(m.indexOf('email')>-1&&m.indexOf('confirm')>-1)return 'Veuillez confirmer votre email avant de vous connecter.';
   return 'Une erreur est survenue. Réessayez.';
 }
+
+// ── LEGAL PAGES ──
+var LEGAL_CONTENT = {
+  privacy: {
+    title: 'Politique de confidentialité',
+    html: `<div class="legal-date">Dernière mise à jour : juin 2026</div>
+<h2>1. Qui sommes-nous ?</h2>
+<p><strong>Nexo</strong> est une application web d'assistants IA spécialisés. Éditeur : Thomas Léger (France). Contact : leger-thomas@outlook.com</p>
+<h2>2. Données collectées</h2>
+<p>Nous collectons uniquement :<br>
+• <strong>Votre adresse email</strong> — pour créer et gérer votre compte<br>
+• <strong>Vos conversations</strong> avec nos experts IA — stockées pour afficher votre historique<br>
+• <strong>Votre statut d'abonnement</strong> — pour gérer l'accès Premium</p>
+<p>Nous ne collectons pas : votre nom, adresse, numéro de téléphone, données de localisation précise.</p>
+<h2>3. Comment nous utilisons vos données</h2>
+<p>Vos données servent uniquement à :<br>
+• Faire fonctionner votre compte<br>
+• Afficher votre historique de conversations<br>
+• Gérer votre abonnement Premium via Stripe<br>
+• Améliorer la qualité du service</p>
+<p>Nous ne vendons jamais vos données à des tiers.</p>
+<h2>4. Hébergement et sous-traitants</h2>
+<p>• <strong>Supabase</strong> (base de données) — serveurs Europe<br>
+• <strong>Vercel</strong> (hébergement) — serveurs Europe/USA<br>
+• <strong>Anthropic</strong> (IA Claude) — USA<br>
+• <strong>Stripe</strong> (paiements) — certifié PCI DSS</p>
+<h2>5. Durée de conservation</h2>
+<p>Vos données sont conservées tant que votre compte est actif. Sur demande, nous supprimons l'intégralité de vos données sous 30 jours.</p>
+<h2>6. Vos droits (RGPD)</h2>
+<p>Conformément au RGPD, vous avez le droit de :<br>
+• Accéder à vos données<br>
+• Les rectifier ou les supprimer<br>
+• Vous opposer à leur traitement<br>
+• Demander leur portabilité</p>
+<p>Pour exercer ces droits : leger-thomas@outlook.com</p>
+<h2>7. Cookies</h2>
+<p>Nexo n'utilise pas de cookies publicitaires. Seul un token de session est stocké localement pour maintenir votre connexion.</p>`
+  },
+  cgu: {
+    title: "Conditions Générales d'Utilisation",
+    html: `<div class="legal-date">En vigueur depuis juin 2026</div>
+<h2>1. Objet</h2>
+<p>Les présentes CGU régissent l'utilisation de l'application <strong>Nexo</strong>, service d'assistants IA spécialisés accessible sur nexo-eight-theta.vercel.app</p>
+<h2>2. Accès au service</h2>
+<p>L'utilisation de Nexo nécessite la création d'un compte. Le compte est personnel et non transférable. Vous devez avoir au moins 16 ans.</p>
+<h2>3. Offres et tarifs</h2>
+<p>• <strong>Gratuit</strong> : accès limité (3 à 5 messages/jour par expert)<br>
+• <strong>Premium</strong> : 9,99€/mois, messages illimités, accès à tous les experts</p>
+<p>Les prix sont TTC. L'abonnement est résiliable à tout moment depuis votre espace client Stripe.</p>
+<h2>4. Nature du service IA</h2>
+<p>Les réponses de nos experts IA sont fournies <strong>à titre informatif uniquement</strong>. Elles ne constituent pas un conseil juridique, financier ou médical professionnel. Pour toute décision importante, consultez un professionnel qualifié.</p>
+<h2>5. Utilisation acceptable</h2>
+<p>Il est interdit d'utiliser Nexo pour :<br>
+• Générer des contenus illégaux ou préjudiciables<br>
+• Tenter de contourner les limites du service<br>
+• Revendre ou redistribuer l'accès à des tiers</p>
+<h2>6. Disponibilité</h2>
+<p>Nexo est accessible 24h/24, 7j/7, sous réserve de maintenance. Nous ne garantissons pas une disponibilité permanente.</p>
+<h2>7. Propriété intellectuelle</h2>
+<p>L'application, son design et ses contenus sont protégés par le droit d'auteur. Les conversations générées vous appartiennent.</p>
+<h2>8. Responsabilité</h2>
+<p>Nexo ne peut être tenu responsable des décisions prises sur la base des conseils de l'IA. L'utilisateur reste seul responsable de l'usage qu'il fait du service.</p>
+<h2>9. Droit applicable</h2>
+<p>Les présentes CGU sont soumises au droit français. Tout litige relève de la compétence des tribunaux français.</p>
+<h2>10. Contact</h2>
+<p>leger-thomas@outlook.com</p>`
+  },
+  about: {
+    title: 'À propos de Nexo',
+    html: `<h2>Nexo v1.6</h2>
+<p><strong>Nexo</strong> est une application française d'assistants IA spécialisés. Notre mission : rendre les conseils d'experts accessibles à tous, à un prix juste.</p>
+<h2>Nos 6 experts</h2>
+<p>• 💚 <strong>Sofia</strong> — Finance & épargne<br>
+• ⚖️ <strong>Marcus</strong> — Droit du travail<br>
+• ✨ <strong>Luna</strong> — Assistante polyvalente (connectée à internet)<br>
+• 🏢 <strong>Alex</strong> — Entreprise & auto-entrepreneur<br>
+• 🖨️ <strong>Max</strong> — Impression 3D (analyse photos)<br>
+• 🎨 <strong>Nova</strong> — Création d'images IA (Premium)</p>
+<h2>Technologie</h2>
+<p>Nexo est propulsé par <strong>Claude</strong> d'Anthropic, l'un des modèles IA les plus avancés au monde.</p>
+<h2>Contact</h2>
+<p>leger-thomas@outlook.com</p>
+<h2>Liens</h2>
+<p><a href="#" onclick="showLegal('privacy');return false;" class="chat-link">Politique de confidentialité</a><br>
+<a href="#" onclick="showLegal('cgu');return false;" class="chat-link">Conditions générales d'utilisation</a></p>`
+  }
+};
+
+function showLegal(page){
+  var data = LEGAL_CONTENT[page];
+  if(!data) return;
+  document.getElementById('legalTitle').textContent = data.title;
+  document.getElementById('legalContent').innerHTML = data.html;
+  document.getElementById('legal-screen').style.display = 'flex';
+  document.getElementById('legal-screen').scrollTop = 0;
+}
+function closeLegal(){
+  document.getElementById('legal-screen').style.display = 'none';
+}
+
+// ── MÉMOIRE UTILISATEUR (session) ──
+var _userMemory = {};
+
+function saveMemory(key, value){
+  _userMemory[key] = value;
+}
+function getMemory(key){
+  return _userMemory[key] || null;
+}
+
+// Détecte et mémorise des infos clés dans les messages utilisateur
+function extractMemory(text){
+  if(!text) return;
+  // Prénom
+  var prenomMatch = text.match(/je m['\'']appelle ([A-ZÀ-Ü][a-zà-ü]+)/i) ||
+                    text.match(/mon prénom est ([A-ZÀ-Ü][a-zà-ü]+)/i) ||
+                    text.match(/c['\']est ([A-ZÀ-Ü][a-zà-ü]+)/i);
+  if(prenomMatch && !getMemory('prenom')){
+    saveMemory('prenom', prenomMatch[1]);
+  }
+  // Profession
+  var profMatch = text.match(/je suis ([a-zà-ü\s]+)(?:,| et| depuis)/i);
+  if(profMatch && profMatch[1].length < 40 && !getMemory('profession')){
+    saveMemory('profession', profMatch[1].trim());
+  }
+}
+
+// Injecte la mémoire dans le system prompt
+function buildSystemWithMemory(baseSystem){
+  var mem = [];
+  if(getMemory('prenom')) mem.push('Le prénom de l\'utilisateur est ' + getMemory('prenom') + '.');
+  if(getMemory('profession')) mem.push('Il/elle est ' + getMemory('profession') + '.');
+  if(mem.length === 0) return baseSystem;
+  return baseSystem + ' MÉMOIRE UTILISATEUR : ' + mem.join(' ') + ' Utilise naturellement ces informations sans les répéter systématiquement.';
+}
+
 function doLogout(){clearSession();document.getElementById('userMenu').classList.remove('open');document.getElementById('home').style.display='none';document.getElementById('auth-screen').style.display='flex';convos={};isPremium=false;}
 // TRANSITION ANIMATION
 function showTransition(callback){
@@ -1580,7 +1758,8 @@ async function sendText(txt){
   }
   var _now=new Date();
   var _dateStr=_now.toLocaleDateString('fr-FR',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
-  var _sysWithDate=ex.system+" CONTEXTE TEMPOREL : nous sommes aujourd'hui le "+_dateStr+". Utilise systématiquement cette date comme référence pour toute question liée au temps (aujourd'hui, demain, ce week-end, cette semaine, etc.). Ne te base jamais sur une autre date.";
+  extractMemory(displayTxt);
+  var _sysWithDate=buildSystemWithMemory(ex.system)+" CONTEXTE TEMPOREL : nous sommes aujourd'hui le "+_dateStr+". Utilise systématiquement cette date comme référence pour toute question liée au temps (aujourd'hui, demain, ce week-end, cette semaine, etc.). Ne te base jamais sur une autre date.";
   try{
     var r=await fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({system:_sysWithDate,messages:msgs,webSearch:(id==='luna'||id==='max')})});
     var d=await r.json();
