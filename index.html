@@ -482,7 +482,7 @@ header{position:sticky;top:0;z-index:200;background:rgba(8,8,16,.88);backdrop-fi
   background:var(--bg);
   max-width:480px;margin:0 auto;
   overflow:hidden;
-  display:flex;flex-direction:column;
+  display:none;flex-direction:column;
 }
 
 /* Sphere fullscreen background */
@@ -656,9 +656,209 @@ header{
 /* ── MEMORY BADGE ── */
 .memory-badge{display:inline-flex;align-items:center;gap:4px;background:rgba(167,139,250,.08);border:1px solid rgba(167,139,250,.15);border-radius:20px;padding:2px 8px;font-size:.6rem;color:var(--luna);font-family:'JetBrains Mono',monospace;margin-left:6px;}
 
+
+/* ════════════════════════════════════════════
+   LANDING PAGE PUBLIQUE (visiteur non connecté)
+   ════════════════════════════════════════════ */
+#landing{position:fixed;inset:0;z-index:450;background:var(--bg);max-width:480px;margin:0 auto;overflow-y:auto;overflow-x:hidden;display:none;}
+#landing.show{display:block;}
+#landingBgCanvas{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none;max-width:480px;margin:0 auto;left:50%;transform:translateX(-50%);}
+.ld-inner{position:relative;z-index:1;padding-bottom:40px;}
+
+/* Header landing */
+.ld-hdr{position:sticky;top:0;z-index:20;display:flex;align-items:center;justify-content:space-between;padding:14px 20px;background:rgba(8,8,16,.6);backdrop-filter:blur(20px);border-bottom:1px solid rgba(255,255,255,.06);}
+.ld-logo{font-family:'Syne',sans-serif;font-weight:800;font-size:1.6rem;letter-spacing:-.06em;}
+.ld-logo .nex{color:var(--text);}
+.ld-logo .o{background:linear-gradient(135deg,var(--gold),var(--gold2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.ld-hdr-btn{background:rgba(255,255,255,.06);border:1px solid var(--border);color:var(--text);font-family:'DM Sans',sans-serif;font-weight:500;font-size:.78rem;padding:8px 16px;border-radius:20px;cursor:pointer;transition:.2s;}
+.ld-hdr-btn:hover{background:rgba(255,255,255,.12);}
+
+/* Hero */
+.ld-hero{padding:30px 22px 10px;text-align:center;}
+.ld-sphere-wrap{width:160px;height:160px;margin:0 auto 16px;}
+#ldSphere{width:160px;height:160px;display:block;filter:drop-shadow(0 0 30px rgba(168,85,247,.45));}
+.ld-eyebrow{display:inline-flex;align-items:center;gap:6px;background:rgba(244,162,97,.08);border:1px solid rgba(244,162,97,.2);border-radius:30px;padding:5px 14px;font-size:.58rem;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);font-family:'JetBrains Mono',monospace;margin-bottom:14px;}
+.ld-eyebrow .live-dot{background:var(--gold);box-shadow:0 0 8px var(--gold);}
+.ld-hero h1{font-family:'Syne',sans-serif;font-weight:800;font-size:2.1rem;line-height:1.08;letter-spacing:-.05em;margin-bottom:14px;}
+.ld-hero h1 em{font-style:normal;color:var(--gold);}
+.ld-hero-sub{font-size:.88rem;color:rgba(240,240,248,.6);line-height:1.6;font-weight:300;margin-bottom:22px;padding:0 6px;}
+
+/* CTA principal */
+.ld-cta-main{width:100%;padding:16px;background:linear-gradient(135deg,var(--gold),var(--gold2));border:none;border-radius:16px;font-family:'Syne',sans-serif;font-weight:700;font-size:1rem;color:#000;cursor:pointer;transition:.25s;box-shadow:0 8px 32px rgba(244,162,97,.3);display:flex;flex-direction:column;align-items:center;gap:2px;}
+.ld-cta-main:hover{transform:translateY(-2px);opacity:.95;}
+.ld-cta-main .ld-cta-sub{font-family:'DM Sans',sans-serif;font-weight:400;font-size:.68rem;opacity:.75;}
+
+/* Reassurance row */
+.ld-reassure{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;margin-top:18px;}
+.ld-re{flex:1;display:flex;flex-direction:column;align-items:center;text-align:center;gap:5px;}
+.ld-re-ico{font-size:1.1rem;}
+.ld-re-t{font-size:.66rem;font-weight:600;color:var(--text);line-height:1.2;}
+.ld-re-d{font-size:.56rem;color:var(--muted);line-height:1.2;}
+
+/* Testimonial card hero */
+.ld-testi-hero{margin-top:20px;background:rgba(255,255,255,.04);backdrop-filter:blur(10px);border:1px solid var(--border);border-radius:18px;padding:16px;text-align:left;}
+.ld-testi-hero .stars{color:var(--gold);font-size:.8rem;letter-spacing:2px;margin-bottom:8px;}
+.ld-testi-hero .txt{font-size:.84rem;line-height:1.5;color:var(--text);margin-bottom:8px;}
+.ld-testi-hero .author{font-size:.66rem;color:var(--muted);font-family:'JetBrains Mono',monospace;}
+
+/* Section title */
+.ld-sec-title{font-family:'Syne',sans-serif;font-weight:800;font-size:1.2rem;letter-spacing:-.03em;padding:28px 22px 4px;}
+.ld-sec-title em{font-style:normal;color:var(--gold);}
+.ld-sec-link{padding:0 22px 12px;font-size:.72rem;color:var(--gold);font-weight:600;cursor:pointer;}
+
+/* Démo Marcus */
+.ld-demo{margin:8px 16px 0;background:rgba(96,165,250,.04);border:1px solid rgba(96,165,250,.15);border-radius:20px;padding:18px;}
+.ld-demo-head{font-family:'Syne',sans-serif;font-weight:700;font-size:1rem;margin-bottom:4px;}
+.ld-demo-head em{font-style:normal;color:var(--luna);}
+.ld-demo-sub{font-size:.74rem;color:var(--muted);line-height:1.5;margin-bottom:14px;font-weight:300;}
+.ld-demo-chips{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px;}
+.ld-demo-chip{font-size:.66rem;padding:6px 12px;border-radius:20px;border:1px solid var(--border);background:rgba(255,255,255,.04);color:var(--muted);}
+.ld-demo-chip.active{background:rgba(96,165,250,.15);border-color:rgba(96,165,250,.3);color:var(--marcus);font-weight:600;}
+.ld-demo-conv{display:flex;flex-direction:column;gap:10px;}
+.ld-demo-q{align-self:flex-end;max-width:85%;background:rgba(167,139,250,.12);border:1px solid rgba(167,139,250,.2);border-radius:16px;border-bottom-right-radius:5px;padding:10px 14px;font-size:.82rem;line-height:1.4;}
+.ld-demo-a{align-self:flex-start;display:flex;gap:8px;max-width:90%;}
+.ld-demo-a-av{width:30px;height:30px;border-radius:9px;background:linear-gradient(135deg,#172554,#1e3a8a);display:flex;align-items:center;justify-content:center;font-size:.9rem;flex-shrink:0;}
+.ld-demo-a-bubble{background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:16px;border-bottom-left-radius:5px;padding:10px 14px;}
+.ld-demo-a-name{font-size:.66rem;color:var(--marcus);font-weight:600;margin-bottom:3px;}
+.ld-demo-a-txt{font-size:.82rem;line-height:1.5;color:rgba(240,240,248,.85);}
+.ld-demo-foot{margin-top:14px;text-align:right;font-size:.74rem;color:var(--luna);font-weight:600;cursor:pointer;}
+
+/* Compteurs */
+.ld-stats{display:grid;grid-template-columns:1fr 1fr;gap:1px;margin:8px 16px 0;background:rgba(255,255,255,.06);border:1px solid var(--border);border-radius:18px;overflow:hidden;}
+.ld-stat{background:var(--bg2);padding:18px 12px;display:flex;flex-direction:column;align-items:center;gap:4px;text-align:center;}
+.ld-stat-ico{font-size:1.2rem;margin-bottom:2px;}
+.ld-stat-val{font-family:'Syne',sans-serif;font-weight:800;font-size:1.5rem;letter-spacing:-.04em;background:linear-gradient(135deg,var(--gold),var(--gold2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.ld-stat-lbl{font-size:.62rem;color:var(--muted);}
+
+/* Témoignages bas */
+.ld-testis{padding:8px 16px 0;display:flex;flex-direction:column;gap:10px;}
+.ld-testi{background:rgba(255,255,255,.04);backdrop-filter:blur(10px);border:1px solid var(--border);border-radius:16px;padding:15px;}
+.ld-testi .stars{color:var(--gold);font-size:.72rem;letter-spacing:2px;margin-bottom:7px;}
+.ld-testi .txt{font-size:.8rem;line-height:1.55;color:rgba(240,240,248,.75);margin-bottom:10px;font-weight:300;}
+.ld-testi-author{display:flex;align-items:center;gap:9px;}
+.ld-testi-ava{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:800;font-size:.85rem;color:#000;flex-shrink:0;}
+.ld-testi-name{font-size:.74rem;font-weight:600;}
+.ld-testi-role{font-size:.62rem;color:var(--muted);}
+
+/* CTA final */
+.ld-final{margin:28px 16px 0;text-align:center;background:linear-gradient(135deg,rgba(244,162,97,.12),rgba(231,111,81,.06));border:1px solid rgba(244,162,97,.2);border-radius:20px;padding:26px 20px;}
+.ld-final-t{font-family:'Syne',sans-serif;font-weight:800;font-size:1.3rem;letter-spacing:-.03em;margin-bottom:6px;}
+.ld-final-d{font-size:.8rem;color:var(--muted);line-height:1.5;margin-bottom:18px;font-weight:300;}
+.ld-final .ld-cta-main{max-width:100%;}
+
+/* Footer landing */
+.ld-foot{text-align:center;padding:24px 20px 8px;display:flex;justify-content:center;gap:18px;}
+.ld-foot a{font-size:.66rem;color:var(--muted);text-decoration:underline;cursor:pointer;font-family:'JetBrains Mono',monospace;}
+
 </style>
 </head>
 <body>
+
+<!-- ════════ LANDING PUBLIQUE (visiteur non connecté) ════════ -->
+<div id="landing">
+  <canvas id="landingBgCanvas"></canvas>
+  <div class="ld-inner">
+
+    <!-- Header -->
+    <div class="ld-hdr">
+      <div class="ld-logo"><span class="nex">Nex</span><span class="o">o</span></div>
+      <button class="ld-hdr-btn" onclick="landingToAuth('login')">Se connecter</button>
+    </div>
+
+    <!-- Hero -->
+    <div class="ld-hero">
+      <div class="ld-sphere-wrap"><canvas id="ldSphere" width="160" height="160"></canvas></div>
+      <div class="ld-eyebrow"><div class="live-dot"></div>Vos experts IA · 24h/24</div>
+      <h1>Une IA <em>spécialisée</em> pour chaque besoin</h1>
+      <p class="ld-hero-sub">Épargnez plus vite, protégez vos droits, développez votre activité avec 6 experts IA spécialisés, toujours disponibles.</p>
+      <button class="ld-cta-main" onclick="landingToAuth('signup')">
+        🚀 Essayer gratuitement
+        <span class="ld-cta-sub">Aucune carte bancaire</span>
+      </button>
+      <div class="ld-reassure">
+        <div class="ld-re"><div class="ld-re-ico">⚡</div><div class="ld-re-t">Réponses 24h/24</div><div class="ld-re-d">Sans rendez-vous</div></div>
+        <div class="ld-re"><div class="ld-re-ico">🔒</div><div class="ld-re-t">Confidentiel</div><div class="ld-re-d">Sécurisé à 100%</div></div>
+        <div class="ld-re"><div class="ld-re-ico">🇫🇷</div><div class="ld-re-t">Adapté France</div><div class="ld-re-d">URSSAF, Code du travail</div></div>
+      </div>
+      <div class="ld-testi-hero">
+        <div class="stars">★★★★★</div>
+        <div class="txt">"Marcus m'a permis de récupérer 2400 € d'indemnités. Incroyable !"</div>
+        <div class="author">Thomas M. · Ouvrier en usine</div>
+      </div>
+    </div>
+
+    <!-- Démo Marcus -->
+    <div class="ld-sec-title">Essayez une question <em>gratuitement</em> ✦</div>
+    <div class="ld-demo">
+      <div class="ld-demo-head">Posez votre question à un <em>expert</em></div>
+      <div class="ld-demo-sub">Recevez une réponse claire et instantanée. Exemple avec Marcus, expert droit du travail.</div>
+      <div class="ld-demo-chips">
+        <span class="ld-demo-chip active">Droit du travail</span>
+        <span class="ld-demo-chip">Finance</span>
+        <span class="ld-demo-chip">Entreprise</span>
+        <span class="ld-demo-chip">Impression 3D</span>
+      </div>
+      <div class="ld-demo-conv">
+        <div class="ld-demo-q">Mon patron peut-il me licencier pendant un arrêt maladie ?</div>
+        <div class="ld-demo-a">
+          <div class="ld-demo-a-av">⚖️</div>
+          <div class="ld-demo-a-bubble">
+            <div class="ld-demo-a-name">Marcus</div>
+            <div class="ld-demo-a-txt">Non, votre employeur ne peut pas vous licencier pendant un arrêt maladie, sauf en cas de faute grave ou d'impossibilité de maintenir votre contrat pour un motif étranger à votre absence. Vous êtes protégé par la loi.</div>
+          </div>
+        </div>
+      </div>
+      <div class="ld-demo-foot" onclick="landingToAuth('signup')">Posez votre propre question →</div>
+    </div>
+
+    <!-- Compteurs -->
+    <div class="ld-stats">
+      <div class="ld-stat"><div class="ld-stat-ico">💬</div><div class="ld-stat-val">1 200+</div><div class="ld-stat-lbl">Questions répondues</div></div>
+      <div class="ld-stat"><div class="ld-stat-ico">👥</div><div class="ld-stat-val">150+</div><div class="ld-stat-lbl">Utilisateurs satisfaits</div></div>
+      <div class="ld-stat"><div class="ld-stat-ico">⭐</div><div class="ld-stat-val">6</div><div class="ld-stat-lbl">Experts IA spécialisés</div></div>
+      <div class="ld-stat"><div class="ld-stat-ico">🔒</div><div class="ld-stat-val">100%</div><div class="ld-stat-lbl">Sécurisé & confidentiel</div></div>
+    </div>
+
+    <!-- Témoignages -->
+    <div class="ld-sec-title">Ils utilisent <em>Nexo</em> au quotidien</div>
+    <div class="ld-testis">
+      <div class="ld-testi">
+        <div class="stars">★★★★★</div>
+        <div class="txt">"Grâce à Marcus, j'ai compris mes droits et j'ai obtenu 2400 € d'indemnités que je n'aurais jamais réclamées."</div>
+        <div class="ld-testi-author"><div class="ld-testi-ava" style="background:linear-gradient(135deg,#60a5fa,#3b82f6)">T</div><div><div class="ld-testi-name">Thomas M.</div><div class="ld-testi-role">Ouvrier en usine</div></div></div>
+      </div>
+      <div class="ld-testi">
+        <div class="stars">★★★★★</div>
+        <div class="txt">"Sofia m'aide chaque mois à mieux épargner et à investir intelligemment. Un vrai coach financier !"</div>
+        <div class="ld-testi-author"><div class="ld-testi-ava" style="background:linear-gradient(135deg,#34d399,#10b981)">J</div><div><div class="ld-testi-name">Julie D.</div><div class="ld-testi-role">Infirmière</div></div></div>
+      </div>
+      <div class="ld-testi">
+        <div class="stars">★★★★★</div>
+        <div class="txt">"Nova me permet de créer des visuels incroyables pour mes clients en quelques secondes. Génial !"</div>
+        <div class="ld-testi-author"><div class="ld-testi-ava" style="background:linear-gradient(135deg,#f472b6,#ec4899)">L</div><div><div class="ld-testi-name">Lucas R.</div><div class="ld-testi-role">Graphiste freelance</div></div></div>
+      </div>
+    </div>
+
+    <!-- CTA final -->
+    <div class="ld-final">
+      <div class="ld-final-t">Prêt à essayer ?</div>
+      <div class="ld-final-d">6 experts IA spécialisés vous attendent. Commencez gratuitement, sans carte bancaire.</div>
+      <button class="ld-cta-main" onclick="landingToAuth('signup')">
+        🚀 Créer mon compte gratuit
+        <span class="ld-cta-sub">9,99€/mois pour le Premium illimité</span>
+      </button>
+    </div>
+
+    <!-- Footer -->
+    <div class="ld-foot">
+      <a onclick="showLegal('privacy')">Confidentialité</a>
+      <a onclick="showLegal('cgu')">CGU</a>
+      <a onclick="showLegal('about')">À propos</a>
+    </div>
+
+  </div>
+</div>
+
 
 <!-- AUTH -->
 <div id="auth-screen">
@@ -1337,7 +1537,7 @@ function buildSystemWithMemory(baseSystem){
   return baseSystem + ' MÉMOIRE UTILISATEUR : ' + mem.join(' ') + ' Utilise naturellement ces informations sans les répéter systématiquement.';
 }
 
-function doLogout(){clearSession();document.getElementById('userMenu').classList.remove('open');document.getElementById('home').style.display='none';document.getElementById('auth-screen').style.display='flex';convos={};isPremium=false;}
+function doLogout(){clearSession();document.getElementById('userMenu').classList.remove('open');document.getElementById('home').style.display='none';document.getElementById('auth-screen').style.display='none';showLanding();convos={};isPremium=false;}
 // TRANSITION ANIMATION
 function showTransition(callback){
   var screen=document.getElementById('transition-screen');
@@ -1460,7 +1660,7 @@ document.addEventListener('click',function(e){
   var menu=document.getElementById('userMenu');var avatar=document.getElementById('avatarHdr');
   if(!menu.contains(e.target)&&!avatar.contains(e.target)) menu.classList.remove('open');
 });
-window.addEventListener('load',function(){if(loadSession()) enterApp();if('serviceWorker' in navigator) navigator.serviceWorker.register('/sw.js');});
+window.addEventListener('load',function(){if(loadSession()){document.getElementById('auth-screen').style.display='none';enterApp();}else{document.getElementById('auth-screen').style.display='none';showLanding();}if('serviceWorker' in navigator) navigator.serviceWorker.register('/sw.js');});
 
 var EXPERTS={
   sofia:{name:'Sofia',role:'Conseillère Financière',limitClass:'sofia-bar',color:'#34d399',freeLimit:3,emoji:'💚',bg:'linear-gradient(135deg,#022c22,#064e3b)',
@@ -2008,6 +2208,101 @@ window.addEventListener('load', initDiscOrbe);
     });
   }
 })();
+
+
+// ════════ LANDING PAGE LOGIC ════════
+function showLanding(){
+  var el=document.getElementById('landing');
+  if(el){el.classList.add('show');initLandingBg();initLdSphere();}
+}
+function hideLanding(){
+  var el=document.getElementById('landing');
+  if(el) el.classList.remove('show');
+}
+// Bouton "Essayer gratuitement" / "Se connecter" -> ouvre l'écran d'auth
+function landingToAuth(mode){
+  hideLanding();
+  var auth=document.getElementById('auth-screen');
+  if(auth) auth.style.display='flex';
+  if(typeof switchAuth==='function') switchAuth(mode||'signup');
+  window.scrollTo(0,0);
+}
+function landingVisible(){
+  var el=document.getElementById('landing');
+  return el && el.classList.contains('show');
+}
+
+// Fond étoilé de la landing
+function initLandingBg(){
+  var bg=document.getElementById('landingBgCanvas');
+  if(!bg||bg._init)return;bg._init=true;
+  var ctx=bg.getContext('2d');var stars=[];
+  for(var i=0;i<90;i++){stars.push({x:Math.random(),y:Math.random(),r:0.3+Math.random()*1.4,a:Math.random()*Math.PI*2,spd:0.006+Math.random()*0.012,color:['#a78bfa','#60a5fa','#f4a261','#34d399','#ffffff'][Math.floor(Math.random()*5)]});}
+  function rz(){bg.width=bg.offsetWidth;bg.height=bg.offsetHeight;}rz();window.addEventListener('resize',rz);
+  function draw(){
+    if(!landingVisible()||document.hidden){requestAnimationFrame(draw);return;}
+    ctx.clearRect(0,0,bg.width,bg.height);
+    stars.forEach(function(s){s.a+=s.spd;var al=(Math.sin(s.a)+1)/2*0.8;ctx.beginPath();ctx.arc(s.x*bg.width,s.y*bg.height,s.r,0,Math.PI*2);ctx.fillStyle=s.color;ctx.globalAlpha=al;ctx.fill();ctx.globalAlpha=1;});
+    requestAnimationFrame(draw);
+  }
+  draw();
+}
+
+// Mini-sphère violette de la landing
+function initLdSphere(){
+  var canvas=document.getElementById('ldSphere');
+  if(!canvas||canvas._init)return;canvas._init=true;
+  var ctx=canvas.getContext('2d');
+  var W=160,H=160,CX=80,CY=80,R=52;
+  var cols=['#c084fc','#e879f9','#a855f7','#d946ef','#f0abfc'];
+  var acc=['#f4a261','#34d399','#60a5fa','#a78bfa','#fb923c'];
+  var pts=[];var N=120;
+  for(var i=0;i<N;i++){var phi=Math.acos(-1+(2*i)/N);var theta=Math.sqrt(N*Math.PI)*phi;pts.push({ox:Math.sin(phi)*Math.cos(theta),oy:Math.sin(phi)*Math.sin(theta),oz:Math.cos(phi),phase:Math.random()*Math.PI*2,spd:0.25+Math.random()*0.5,ci:Math.floor(Math.random()*cols.length)});}
+  var sparks=[];for(var j=0;j<9;j++){sparks.push({a:Math.random()*Math.PI*2,r:R+9+Math.random()*15,tilt:Math.random()*Math.PI,spd:(0.006+Math.random()*0.008)*(Math.random()>.5?1:-1),sz:0.8+Math.random()*1.6,ci:Math.floor(Math.random()*acc.length)});}
+  var rot=0,t=0;
+  function ha(hex,a){var h=hex.replace('#','');return 'rgba('+parseInt(h.substr(0,2),16)+','+parseInt(h.substr(2,2),16)+','+parseInt(h.substr(4,2),16)+','+a+')';}
+  function frame(){
+    if(!landingVisible()){requestAnimationFrame(frame);return;}
+    ctx.clearRect(0,0,W,H);rot+=0.006;t+=0.02;
+    var pulse=1+Math.sin(t*0.7)*0.04;
+    for(var ring=0;ring<3;ring++){var rg=ctx.createRadialGradient(CX,CY,R*pulse*(0.5+ring*.2),CX,CY,R*pulse*(0.85+ring*.25));rg.addColorStop(0,'rgba(168,85,247,'+[0.08,0.05,0.025][ring]+')');rg.addColorStop(1,'transparent');ctx.beginPath();ctx.arc(CX,CY,R*pulse*(0.85+ring*.25),0,Math.PI*2);ctx.fillStyle=rg;ctx.fill();}
+    var cosR=Math.cos(rot),sinR=Math.sin(rot);
+    var proj=pts.map(function(p){var x3=p.ox*cosR-p.oz*sinR,z3=p.ox*sinR+p.oz*cosR,y3=p.oy;var rp=R*pulse;return{sx:CX+x3*rp,sy:CY+y3*rp,depth:(z3+1)/2,glow:(Math.sin(t*p.spd+p.phase)+1)/2,ci:p.ci};});
+    proj.sort(function(a,b){return a.depth-b.depth;});
+    var front=proj.filter(function(p){return p.depth>0.45;});
+    for(var a=0;a<front.length;a++){for(var b=a+1;b<front.length;b++){var dx=front[a].sx-front[b].sx,dy=front[a].sy-front[b].sy;var dist=Math.sqrt(dx*dx+dy*dy);if(dist<18){var alp=(1-dist/18)*front[a].depth*0.28;ctx.beginPath();ctx.moveTo(front[a].sx,front[a].sy);ctx.lineTo(front[b].sx,front[b].sy);ctx.strokeStyle=ha(cols[front[a].ci],alp);ctx.lineWidth=0.5;ctx.stroke();}}}
+    proj.forEach(function(p){if(p.depth<0.08)return;var size=p.depth*1.8+p.glow*0.8;var alpha=p.depth*0.5+p.glow*0.5;var gr=ctx.createRadialGradient(p.sx,p.sy,0,p.sx,p.sy,size*2);gr.addColorStop(0,ha(cols[p.ci],alpha));gr.addColorStop(1,ha(cols[p.ci],0));ctx.beginPath();ctx.arc(p.sx,p.sy,size,0,Math.PI*2);ctx.fillStyle=gr;ctx.fill();});
+    sparks.forEach(function(s){s.a+=s.spd;var x=CX+Math.cos(s.a)*s.r*pulse;var y=CY+Math.sin(s.a)*s.r*Math.sin(s.tilt+t*0.08)*pulse;var sg=ctx.createRadialGradient(x,y,0,x,y,s.sz*2.5);sg.addColorStop(0,ha(acc[s.ci],0.9));sg.addColorStop(1,ha(acc[s.ci],0));ctx.beginPath();ctx.arc(x,y,s.sz,0,Math.PI*2);ctx.fillStyle=sg;ctx.fill();});
+    requestAnimationFrame(frame);
+  }
+  frame();
+}
+
+// Chips de la démo (changent la conversation affichée)
+(function(){
+  var demos={
+    'Droit du travail':{av:'⚖️',name:'Marcus',q:'Mon patron peut-il me licencier pendant un arrêt maladie ?',a:"Non, votre employeur ne peut pas vous licencier pendant un arrêt maladie, sauf en cas de faute grave ou d'impossibilité de maintenir votre contrat pour un motif étranger à votre absence. Vous êtes protégé par la loi."},
+    'Finance':{av:'💚',name:'Sofia',q:'Comment économiser 200€ par mois facilement ?',a:"Commencez par automatiser un virement de 200€ vers un Livret A dès réception du salaire. En le mettant de côté en premier, vous vous adaptez naturellement au reste. C'est la méthode « payez-vous d'abord »."},
+    'Entreprise':{av:'🏢',name:'Alex',q:'Auto-entrepreneur ou SASU pour débuter ?',a:"Pour débuter avec peu de charges, l'auto-entreprise est idéale : démarches simples, cotisations sur le CA réel. La SASU devient intéressante au-delà de ~50 000€ de bénéfices ou pour vous verser des dividendes."},
+    'Impression 3D':{av:'🖨️',name:'Max',q:'Quelle température pour imprimer du PLA ?',a:"Pour du PLA standard : buse entre 200 et 210°C, plateau à 60°C. Si vous avez du stringing, baissez la buse de 5°C et augmentez la rétraction. Première couche un peu plus chaude pour l'adhérence."}
+  };
+  document.addEventListener('click',function(e){
+    var chip=e.target.closest && e.target.closest('.ld-demo-chip');
+    if(!chip)return;
+    var label=chip.textContent.trim();
+    var d=demos[label];if(!d)return;
+    document.querySelectorAll('.ld-demo-chip').forEach(function(c){c.classList.remove('active');});
+    chip.classList.add('active');
+    var conv=document.querySelector('.ld-demo-conv');
+    if(conv){
+      conv.innerHTML='<div class="ld-demo-q">'+d.q+'</div>'+
+        '<div class="ld-demo-a"><div class="ld-demo-a-av">'+d.av+'</div>'+
+        '<div class="ld-demo-a-bubble"><div class="ld-demo-a-name">'+d.name+'</div>'+
+        '<div class="ld-demo-a-txt">'+d.a+'</div></div></div>';
+    }
+  });
+})();
+
 </script>
 </body>
 </html>
