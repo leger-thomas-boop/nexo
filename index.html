@@ -971,74 +971,424 @@ header{
   <div class="tab" onclick="goSection('premium',this)">⭐ Premium</div>
 </div>
 <div id="sec-home">
-  <div class="hero">
-    <div class="hero-eyebrow">Vos experts IA · 24h/24</div>
-    <h2>Rencontrez vos<br><em>6 experts</em> Nexo</h2>
-    <p>Des conseillers spécialisés, toujours disponibles pour vous guider dans chaque aspect de votre vie.</p>
+
+<!-- STYLES pour le nouveau home -->
+<style>
+/* ── HERO NEXO STYLE ── */
+.nh-hero{
+  padding:22px 20px 0;
+  position:relative;
+  display:flex;
+  flex-direction:column;
+}
+.nh-hero-row{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:12px;
+  margin-bottom:16px;
+}
+.nh-hero-left{flex:1;min-width:0;}
+.nh-eyebrow{
+  font-size:.55rem;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--gold);font-family:'JetBrains Mono',monospace;
+  margin-bottom:8px;opacity:.8;
+  display:flex;align-items:center;gap:6px;
+}
+.nh-eyebrow .live-dot{width:4px;height:4px;}
+.nh-hero h2{
+  font-family:'Syne',sans-serif;font-weight:800;
+  font-size:1.75rem;line-height:1.08;letter-spacing:-.05em;
+  margin-bottom:8px;color:var(--text);
+}
+.nh-hero h2 em{font-style:normal;color:var(--gold);}
+.nh-hero-sub{
+  font-size:.75rem;color:rgba(240,240,248,.45);
+  line-height:1.6;font-weight:300;margin-bottom:14px;
+}
+.nh-hero-btns{display:flex;gap:8px;flex-wrap:wrap;}
+.nh-btn-main{
+  padding:10px 16px;
+  background:linear-gradient(135deg,var(--gold),var(--gold2));
+  border:none;border-radius:12px;
+  font-family:'Syne',sans-serif;font-weight:700;font-size:.78rem;
+  color:#000;cursor:pointer;
+  display:flex;align-items:center;gap:6px;
+  box-shadow:0 6px 20px rgba(244,162,97,.3);
+  transition:.2s;
+}
+.nh-btn-main:hover{opacity:.9;transform:translateY(-1px);}
+.nh-btn-sec{
+  padding:10px 16px;
+  background:rgba(255,255,255,.06);
+  border:1px solid rgba(255,255,255,.1);border-radius:12px;
+  font-family:'DM Sans',sans-serif;font-weight:500;font-size:.78rem;
+  color:var(--text);cursor:pointer;transition:.2s;
+}
+.nh-btn-sec:hover{background:rgba(255,255,255,.1);}
+.nh-sphere-wrap{
+  width:110px;height:110px;flex-shrink:0;position:relative;
+}
+#homeHeroSphere{
+  width:110px;height:110px;display:block;
+  filter:drop-shadow(0 0 20px rgba(168,85,247,.5)) drop-shadow(0 0 40px rgba(168,85,247,.25));
+}
+
+/* Réassurance */
+.nh-reassure{
+  display:flex;gap:16px;
+  padding:10px 0 14px;
+  border-top:1px solid rgba(255,255,255,.06);
+  border-bottom:1px solid rgba(255,255,255,.06);
+  margin-bottom:16px;
+}
+.nh-re{display:flex;align-items:center;gap:6px;flex:1;}
+.nh-re-ico{font-size:.9rem;}
+.nh-re-t{font-size:.6rem;color:rgba(240,240,248,.5);font-weight:400;line-height:1.3;}
+
+/* Testi hero */
+.nh-testi-hero{
+  background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);
+  border-radius:14px;padding:12px 14px;margin-bottom:6px;
+}
+.nh-testi-stars{color:var(--gold);font-size:.7rem;margin-bottom:4px;}
+.nh-testi-txt{font-size:.75rem;color:rgba(240,240,248,.6);line-height:1.55;font-style:italic;margin-bottom:6px;font-weight:300;}
+.nh-testi-auth{font-size:.6rem;color:var(--muted);font-family:'JetBrains Mono',monospace;}
+
+/* Section label */
+.nh-sec-lbl{
+  padding:18px 20px 8px;
+  font-size:.58rem;font-weight:500;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--muted);font-family:'JetBrains Mono',monospace;
+}
+
+/* Expert icon scroll row */
+.nh-expert-scroll{
+  display:flex;gap:10px;overflow-x:auto;
+  padding:0 20px 12px;
+  scrollbar-width:none;-ms-overflow-style:none;
+}
+.nh-expert-scroll::-webkit-scrollbar{display:none;}
+.nh-eico{
+  display:flex;flex-direction:column;align-items:center;gap:5px;
+  flex-shrink:0;cursor:pointer;
+  transition:.2s;
+}
+.nh-eico:hover{transform:translateY(-3px);}
+.nh-eico-av{
+  width:54px;height:54px;border-radius:16px;
+  overflow:hidden;position:relative;
+  border:2px solid rgba(255,255,255,.1);
+  transition:.25s;
+}
+.nh-eico:hover .nh-eico-av{border-color:rgba(255,255,255,.25);}
+.nh-eico-av canvas{width:54px;height:54px;display:block;}
+.nh-eico-name{
+  font-family:'Syne',sans-serif;font-weight:700;
+  font-size:.65rem;letter-spacing:-.01em;
+}
+.nh-eico-role{font-size:.52rem;color:var(--muted);font-weight:300;text-align:center;max-width:60px;line-height:1.2;}
+.nh-eico-badge{
+  position:absolute;top:2px;right:2px;
+  background:rgba(10,10,20,.8);border-radius:6px;
+  padding:1px 5px;font-size:.42rem;font-weight:600;
+  letter-spacing:.06em;font-family:'JetBrains Mono',monospace;
+  border:1px solid rgba(255,255,255,.1);
+}
+
+/* Expert detail cards */
+.nh-detail-list{
+  padding:0 16px;display:flex;flex-direction:column;gap:10px;margin-bottom:16px;
+}
+.nh-dcard{
+  border-radius:18px;overflow:hidden;cursor:pointer;
+  transition:.25s cubic-bezier(.34,1.56,.64,1);
+  background:rgba(255,255,255,.04);
+  backdrop-filter:blur(16px);
+  border:1px solid rgba(255,255,255,.08);
+  position:relative;
+}
+.nh-dcard:hover{transform:translateY(-4px);}
+.nh-dcard-inner{display:flex;align-items:center;gap:12px;padding:14px 16px 10px;}
+.nh-dcard-av{width:52px;height:52px;border-radius:14px;overflow:hidden;flex-shrink:0;}
+.nh-dcard-av canvas{width:52px;height:52px;display:block;}
+.nh-dcard-info{flex:1;min-width:0;}
+.nh-dcard-name{
+  font-family:'Syne',sans-serif;font-weight:800;
+  font-size:1rem;letter-spacing:-.03em;margin-bottom:1px;
+}
+.nh-dcard-role{
+  font-size:.58rem;font-weight:500;letter-spacing:.08em;
+  text-transform:uppercase;color:var(--muted);
+  font-family:'JetBrains Mono',monospace;margin-bottom:5px;
+}
+.nh-dcard-desc{font-size:.76rem;color:rgba(240,240,248,.45);line-height:1.5;font-weight:300;}
+.nh-dcard-status{
+  position:absolute;top:12px;right:12px;
+  display:flex;align-items:center;gap:4px;
+  font-size:.56rem;color:var(--muted);
+  font-family:'JetBrains Mono',monospace;
+  background:rgba(255,255,255,.06);
+  border:1px solid rgba(255,255,255,.08);
+  border-radius:20px;padding:2px 7px;
+}
+.nh-dcard-foot{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:8px 16px 12px;
+  border-top:1px solid rgba(255,255,255,.06);
+}
+.nh-dcard-tags{display:flex;gap:5px;flex-wrap:wrap;}
+.nh-dcard-tag{
+  font-size:.55rem;padding:2px 8px;border-radius:20px;
+  font-weight:500;font-family:'JetBrains Mono',monospace;border:1px solid;
+}
+.nh-dcard-cta{font-size:.7rem;font-weight:600;flex-shrink:0;}
+
+/* Colors per expert */
+.nh-dcard-sofia .nh-dcard-name{color:var(--sofia);}
+.nh-dcard-sofia .nh-dcard-tag{background:rgba(52,211,153,.08);color:var(--sofia);border-color:rgba(52,211,153,.15);}
+.nh-dcard-sofia .nh-dcard-cta{color:var(--sofia);}
+.nh-dcard-sofia .nh-dcard-status .status-dot{background:var(--sofia);box-shadow:0 0 5px var(--sofia);}
+.nh-eico-sofia .nh-eico-name{color:var(--sofia);}
+
+.nh-dcard-marcus .nh-dcard-name{color:var(--marcus);}
+.nh-dcard-marcus .nh-dcard-tag{background:rgba(96,165,250,.08);color:var(--marcus);border-color:rgba(96,165,250,.15);}
+.nh-dcard-marcus .nh-dcard-cta{color:var(--marcus);}
+.nh-dcard-marcus .nh-dcard-status .status-dot{background:var(--marcus);box-shadow:0 0 5px var(--marcus);}
+.nh-eico-marcus .nh-eico-name{color:var(--marcus);}
+
+.nh-dcard-luna .nh-dcard-name{color:var(--luna);}
+.nh-dcard-luna .nh-dcard-tag{background:rgba(167,139,250,.08);color:var(--luna);border-color:rgba(167,139,250,.15);}
+.nh-dcard-luna .nh-dcard-cta{color:var(--luna);}
+.nh-dcard-luna .nh-dcard-status .status-dot{background:var(--luna);box-shadow:0 0 5px var(--luna);}
+.nh-eico-luna .nh-eico-name{color:var(--luna);}
+
+.nh-dcard-alex .nh-dcard-name{color:var(--alex);}
+.nh-dcard-alex .nh-dcard-tag{background:rgba(251,146,60,.08);color:var(--alex);border-color:rgba(251,146,60,.15);}
+.nh-dcard-alex .nh-dcard-cta{color:var(--alex);}
+.nh-dcard-alex .nh-dcard-status .status-dot{background:var(--alex);box-shadow:0 0 5px var(--alex);}
+.nh-eico-alex .nh-eico-name{color:var(--alex);}
+
+.nh-dcard-max .nh-dcard-name{color:var(--max);}
+.nh-dcard-max .nh-dcard-tag{background:rgba(34,211,238,.08);color:var(--max);border-color:rgba(34,211,238,.15);}
+.nh-dcard-max .nh-dcard-cta{color:var(--max);}
+.nh-dcard-max .nh-dcard-status .status-dot{background:var(--max);box-shadow:0 0 5px var(--max);}
+.nh-eico-max .nh-eico-name{color:var(--max);}
+
+.nh-dcard-nova .nh-dcard-name{color:var(--nova);}
+.nh-dcard-nova .nh-dcard-tag{background:rgba(244,114,182,.08);color:var(--nova);border-color:rgba(244,114,182,.15);}
+.nh-dcard-nova .nh-dcard-cta{color:var(--nova);}
+.nh-dcard-nova .nh-dcard-status .status-dot{background:var(--nova);box-shadow:0 0 5px var(--nova);}
+.nh-eico-nova .nh-eico-name{color:var(--nova);}
+
+/* Bloc pourquoi + stats */
+.nh-why{
+  margin:4px 16px 16px;
+  background:rgba(255,255,255,.04);
+  backdrop-filter:blur(16px);
+  border:1px solid rgba(255,255,255,.08);
+  border-radius:18px;padding:16px;
+}
+.nh-why-title{
+  font-family:'Syne',sans-serif;font-weight:800;
+  font-size:.85rem;letter-spacing:-.02em;
+  margin-bottom:12px;color:var(--text);
+}
+.nh-why-list{display:flex;flex-direction:column;gap:8px;margin-bottom:14px;}
+.nh-why-item{display:flex;align-items:flex-start;gap:8px;}
+.nh-why-ico{font-size:.85rem;flex-shrink:0;margin-top:1px;}
+.nh-why-txt{font-size:.73rem;color:rgba(240,240,248,.55);line-height:1.45;font-weight:300;}
+.nh-why-txt strong{color:var(--text);font-weight:600;}
+
+.nh-stats{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:14px;}
+.nh-stat{
+  background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);
+  border-radius:12px;padding:10px 12px;text-align:center;
+}
+.nh-stat-ico{font-size:.9rem;margin-bottom:3px;}
+.nh-stat-val{
+  font-family:'Syne',sans-serif;font-weight:800;font-size:1rem;
+  letter-spacing:-.04em;
+  background:linear-gradient(135deg,var(--gold),var(--gold2));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+}
+.nh-stat-lbl{font-size:.55rem;color:var(--muted);margin-top:1px;font-weight:300;}
+
+.nh-cta-block{
+  background:linear-gradient(135deg,rgba(244,162,97,.1),rgba(231,111,81,.05));
+  border:1px solid rgba(244,162,97,.18);
+  border-radius:14px;padding:14px 16px;
+  display:flex;flex-direction:column;align-items:center;gap:8px;text-align:center;
+}
+.nh-cta-txt{font-size:.72rem;color:rgba(240,240,248,.5);font-weight:300;}
+.nh-cta-btn{
+  width:100%;padding:11px;
+  background:linear-gradient(135deg,var(--gold),var(--gold2));
+  border:none;border-radius:11px;
+  font-family:'Syne',sans-serif;font-weight:700;font-size:.82rem;
+  color:#000;cursor:pointer;transition:.2s;
+  box-shadow:0 6px 20px rgba(244,162,97,.25);
+}
+.nh-cta-btn:hover{opacity:.9;}
+
+/* NOUVEAU badge */
+.nh-new-badge{
+  position:absolute;top:-6px;right:-6px;
+  background:linear-gradient(135deg,var(--nova),#ec4899);
+  color:#fff;font-size:.45rem;font-weight:700;
+  padding:2px 5px;border-radius:6px;letter-spacing:.06em;
+  font-family:'JetBrains Mono',monospace;
+  box-shadow:0 2px 8px rgba(244,114,182,.4);
+}
+</style>
+
+  <!-- HERO -->
+  <div class="nh-hero" style="padding:22px 20px 16px">
+    <div class="nh-hero-row">
+      <div class="nh-hero-left">
+        <div class="nh-eyebrow"><div class="live-dot"></div>Vos experts IA · 24h/24</div>
+        <h2>Une IA <em>spécialisée</em> pour chaque besoin.</h2>
+        <p class="nh-hero-sub">Épargne plus vite, protège tes droits, développe ton activité avec 6 experts IA spécialisés, toujours disponibles.</p>
+        <div class="nh-hero-btns">
+          <button class="nh-btn-main" onclick="openChat('sofia')">🚀 Essayer gratuitement</button>
+          <button class="nh-btn-sec" onclick="goSection('discover',null)">En savoir plus</button>
+        </div>
+      </div>
+      <div class="nh-sphere-wrap">
+        <canvas id="homeHeroSphere" width="220" height="220"></canvas>
+      </div>
+    </div>
+
+    <!-- Réassurance -->
+    <div class="nh-reassure">
+      <div class="nh-re"><div class="nh-re-ico">⚡</div><div class="nh-re-t">Réponses 24h/24<br><span style="font-size:.5rem;color:var(--muted)">Sans rendez-vous</span></div></div>
+      <div class="nh-re"><div class="nh-re-ico">🔒</div><div class="nh-re-t">Confidentiel<br><span style="font-size:.5rem;color:var(--muted)">Sécurisé à 100%</span></div></div>
+      <div class="nh-re"><div class="nh-re-ico">⭐</div><div class="nh-re-t">+1 200 questions<br><span style="font-size:.5rem;color:var(--muted)">déjà répondues</span></div></div>
+    </div>
+
+    <!-- Testi hero -->
+    <div class="nh-testi-hero">
+      <div class="nh-testi-stars">★★★★★</div>
+      <div class="nh-testi-txt">"Marcus m'a permis de récupérer 2400 € d'indemnités. Incroyable !"</div>
+      <div class="nh-testi-auth">Thomas M. · Ouvrier en usine</div>
+    </div>
   </div>
-  <div class="sec-label">Choisissez votre expert</div>
-  <div class="experts">
-    <div class="expert-card card-sofia" onclick="openChat('sofia')">
-      <div class="ec-status"><div class="status-dot"></div>En ligne</div>
-      <div class="ec-content">
-        <div class="ec-top">
-          <div class="ec-avatar-wrap"><div class="avatar-halo"></div><div class="ec-avatar"><canvas class="orbe-canvas" data-expert="sofia" width="136" height="136"></canvas></div></div>
-          <div class="ec-info"><div class="ec-name">Sofia</div><div class="ec-role">Conseillère Financière</div><div class="ec-desc">Budget, épargne, dettes et placements — Sofia vous guide vers la liberté financière.</div></div>
-        </div>
-        <div class="ec-bottom"><div class="ec-tags"><span class="ec-tag">Budget</span><span class="ec-tag">Épargne</span><span class="ec-tag">Investissement</span></div><div class="ec-cta">Consulter →</div></div>
-      </div>
+
+  <!-- EXPERT ICON SCROLL -->
+  <div class="nh-sec-lbl">Vos 6 experts IA</div>
+  <div class="nh-expert-scroll">
+    <div class="nh-eico nh-eico-sofia" onclick="openChat('sofia')">
+      <div class="nh-eico-av"><canvas class="orbe-canvas" data-expert="sofia" width="108" height="108"></canvas></div>
+      <div class="nh-eico-name">Sofia</div>
+      <div class="nh-eico-role">Finance</div>
     </div>
-    <div class="expert-card card-marcus" onclick="openChat('marcus')">
-      <div class="ec-status"><div class="status-dot"></div>En ligne</div>
-      <div class="ec-content">
-        <div class="ec-top">
-          <div class="ec-avatar-wrap"><div class="avatar-halo"></div><div class="ec-avatar"><canvas class="orbe-canvas" data-expert="marcus" width="136" height="136"></canvas></div></div>
-          <div class="ec-info"><div class="ec-name">Marcus</div><div class="ec-role">Expert Droit du Travail</div><div class="ec-desc">Vos droits, vos devoirs, conflits avec l'employeur — Marcus est votre avocat du quotidien.</div></div>
-        </div>
-        <div class="ec-bottom"><div class="ec-tags"><span class="ec-tag">Contrats</span><span class="ec-tag">Licenciement</span><span class="ec-tag">Conflits</span></div><div class="ec-cta">Consulter →</div></div>
-      </div>
+    <div class="nh-eico nh-eico-marcus" onclick="openChat('marcus')">
+      <div class="nh-eico-av"><canvas class="orbe-canvas" data-expert="marcus" width="108" height="108"></canvas></div>
+      <div class="nh-eico-name">Marcus</div>
+      <div class="nh-eico-role">Droit</div>
     </div>
-    <div class="expert-card card-luna" onclick="openChat('luna')">
-      <div class="ec-status"><div class="status-dot"></div>En ligne</div>
-      <div class="ec-content">
-        <div class="ec-top">
-          <div class="ec-avatar-wrap"><div class="avatar-halo"></div><div class="ec-avatar"><canvas class="orbe-canvas" data-expert="luna" width="136" height="136"></canvas></div></div>
-          <div class="ec-info"><div class="ec-name">Luna</div><div class="ec-role">Assistante Polyvalente</div><div class="ec-desc">Culture, explications, rédaction, calculs, conseils — Luna répond à toutes vos questions.</div></div>
-        </div>
-        <div class="ec-bottom"><div class="ec-tags"><span class="ec-tag">Tout sujet</span><span class="ec-tag">Rédaction</span><span class="ec-tag">Conseils</span></div><div class="ec-cta">Consulter →</div></div>
-      </div>
+    <div class="nh-eico nh-eico-luna" onclick="openChat('luna')">
+      <div class="nh-eico-av"><canvas class="orbe-canvas" data-expert="luna" width="108" height="108"></canvas></div>
+      <div class="nh-eico-name">Luna</div>
+      <div class="nh-eico-role">Tout sujet</div>
     </div>
-    <div class="expert-card card-alex" onclick="openChat('alex')">
-      <div class="ec-status"><div class="status-dot"></div>En ligne</div>
-      <div class="ec-content">
-        <div class="ec-top">
-          <div class="ec-avatar-wrap"><div class="avatar-halo"></div><div class="ec-avatar"><canvas class="orbe-canvas" data-expert="alex" width="136" height="136"></canvas></div></div>
-          <div class="ec-info"><div class="ec-name">Alex</div><div class="ec-role">Expert Entreprise & AE</div><div class="ec-desc">Création, comptabilité, TVA, URSSAF — Alex gère toute votre paperasse d'entrepreneur.</div></div>
-        </div>
-        <div class="ec-bottom"><div class="ec-tags"><span class="ec-tag">Auto-Entrepreneur</span><span class="ec-tag">SASU</span><span class="ec-tag">Compta</span></div><div class="ec-cta">Consulter →</div></div>
-      </div>
+    <div class="nh-eico nh-eico-alex" onclick="openChat('alex')">
+      <div class="nh-eico-av"><canvas class="orbe-canvas" data-expert="alex" width="108" height="108"></canvas></div>
+      <div class="nh-eico-name">Alex</div>
+      <div class="nh-eico-role">Entreprise</div>
     </div>
-    <div class="expert-card card-max" onclick="openChat('max')">
-      <div class="ec-status"><div class="status-dot"></div>En ligne</div>
-      <div class="ec-content">
-        <div class="ec-top">
-          <div class="ec-avatar-wrap"><div class="avatar-halo"></div><div class="ec-avatar"><canvas class="orbe-canvas" data-expert="max" width="136" height="136"></canvas></div></div>
-          <div class="ec-info"><div class="ec-name">Max</div><div class="ec-role">Expert Impression 3D</div><div class="ec-desc">Réglages, matériaux, dépannage — envoyez une photo, Max analyse vos impressions.</div></div>
-        </div>
-        <div class="ec-bottom"><div class="ec-tags"><span class="ec-tag">Slicer</span><span class="ec-tag">Photo</span><span class="ec-tag">Dépannage</span></div><div class="ec-cta">Consulter →</div></div>
-      </div>
+    <div class="nh-eico nh-eico-max" onclick="openChat('max')">
+      <div class="nh-eico-av"><canvas class="orbe-canvas" data-expert="max" width="108" height="108"></canvas></div>
+      <div class="nh-eico-name">Max</div>
+      <div class="nh-eico-role">Impression 3D</div>
     </div>
-    <div class="expert-card card-nova" onclick="openChat('nova')">
-      <div class="ec-status"><div class="status-dot"></div>En ligne</div>
-      <div class="ec-content">
-        <div class="ec-top">
-          <div class="ec-avatar-wrap"><div class="avatar-halo"></div><div class="ec-avatar"><canvas class="orbe-canvas" data-expert="nova" width="136" height="136"></canvas></div></div>
-          <div class="ec-info"><div class="ec-name">Nova</div><div class="ec-role">Créatrice d'images IA</div><div class="ec-desc">Logos, affiches, visuels TikTok, mockups produit — Nova transforme vos idées en images.</div></div>
-        </div>
-        <div class="ec-bottom"><div class="ec-tags"><span class="ec-tag">Images</span><span class="ec-tag">Logo</span><span class="ec-tag">TikTok</span></div><div class="ec-cta">Créer →</div></div>
-      </div>
+    <div class="nh-eico nh-eico-nova" onclick="openChat('nova')" style="position:relative">
+      <div class="nh-new-badge">NOUVEAU</div>
+      <div class="nh-eico-av"><canvas class="orbe-canvas" data-expert="nova" width="108" height="108"></canvas></div>
+      <div class="nh-eico-name">Nova</div>
+      <div class="nh-eico-role">Images IA</div>
     </div>
   </div>
+
+  <!-- EXPERT DETAIL CARDS -->
+  <div class="nh-sec-lbl" style="cursor:pointer" onclick="openChat('sofia')">Découvrez vos experts en détail</div>
+  <div class="nh-detail-list">
+
+    <div class="nh-dcard nh-dcard-sofia" onclick="openChat('sofia')">
+      <div class="nh-dcard-status"><div class="status-dot"></div>En ligne</div>
+      <div class="nh-dcard-inner">
+        <div class="nh-dcard-av"><canvas class="orbe-canvas" data-expert="sofia" width="104" height="104"></canvas></div>
+        <div class="nh-dcard-info">
+          <div class="nh-dcard-name">Sofia</div>
+          <div class="nh-dcard-role">Conseillère Financière</div>
+          <div class="nh-dcard-desc">Budget, épargne, dettes et placements — Sofia vous guide vers la liberté financière.</div>
+        </div>
+      </div>
+      <div class="nh-dcard-foot">
+        <div class="nh-dcard-tags"><span class="nh-dcard-tag">Budget</span><span class="nh-dcard-tag">Épargne</span><span class="nh-dcard-tag">Investissement</span></div>
+        <div class="nh-dcard-cta">Consulter →</div>
+      </div>
+    </div>
+
+    <div class="nh-dcard nh-dcard-marcus" onclick="openChat('marcus')">
+      <div class="nh-dcard-status"><div class="status-dot"></div>En ligne</div>
+      <div class="nh-dcard-inner">
+        <div class="nh-dcard-av"><canvas class="orbe-canvas" data-expert="marcus" width="104" height="104"></canvas></div>
+        <div class="nh-dcard-info">
+          <div class="nh-dcard-name">Marcus</div>
+          <div class="nh-dcard-role">Expert Droit du Travail</div>
+          <div class="nh-dcard-desc">Vos droits, vos devoirs, conflits avec l'employeur — Marcus est votre avocat du quotidien.</div>
+        </div>
+      </div>
+      <div class="nh-dcard-foot">
+        <div class="nh-dcard-tags"><span class="nh-dcard-tag">Contrats</span><span class="nh-dcard-tag">Licenciement</span><span class="nh-dcard-tag">Conflits</span></div>
+        <div class="nh-dcard-cta">Consulter →</div>
+      </div>
+    </div>
+
+    <div class="nh-dcard nh-dcard-luna" onclick="openChat('luna')">
+      <div class="nh-dcard-status"><div class="status-dot"></div>En ligne</div>
+      <div class="nh-dcard-inner">
+        <div class="nh-dcard-av"><canvas class="orbe-canvas" data-expert="luna" width="104" height="104"></canvas></div>
+        <div class="nh-dcard-info">
+          <div class="nh-dcard-name">Luna</div>
+          <div class="nh-dcard-role">Assistante Polyvalente</div>
+          <div class="nh-dcard-desc">Culture, explications, rédaction, calculs, conseils — Luna répond à toutes vos questions.</div>
+        </div>
+      </div>
+      <div class="nh-dcard-foot">
+        <div class="nh-dcard-tags"><span class="nh-dcard-tag">Tout sujet</span><span class="nh-dcard-tag">Rédaction</span><span class="nh-dcard-tag">Conseils</span></div>
+        <div class="nh-dcard-cta">Consulter →</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- BLOC POURQUOI + STATS + CTA -->
+  <div class="nh-why">
+    <div class="nh-why-title">Pourquoi choisir Nexo ?</div>
+    <div class="nh-why-list">
+      <div class="nh-why-item"><div class="nh-why-ico">⚡</div><div class="nh-why-txt"><strong>6 IA spécialisées</strong> — chacun expert dans son domaine.</div></div>
+      <div class="nh-why-item"><div class="nh-why-ico">🔒</div><div class="nh-why-txt"><strong>Confidentialité totale</strong> — vos données sont protégées et sécurisées.</div></div>
+      <div class="nh-why-item"><div class="nh-why-ico">⏱️</div><div class="nh-why-txt"><strong>Réponses instantanées</strong> — disponibles 24h/24, 7j/7.</div></div>
+      <div class="nh-why-item"><div class="nh-why-ico">🇫🇷</div><div class="nh-why-txt"><strong>100% adapté à la France</strong> — Livret A, URSSAF, Code du travail. Nos experts connaissent les règles françaises.</div></div>
+    </div>
+
+    <div class="nh-stats">
+      <div class="nh-stat"><div class="nh-stat-ico">💬</div><div class="nh-stat-val">1 200+</div><div class="nh-stat-lbl">Questions répondues</div></div>
+      <div class="nh-stat"><div class="nh-stat-ico">👥</div><div class="nh-stat-val">150+</div><div class="nh-stat-lbl">Utilisateurs actifs</div></div>
+      <div class="nh-stat"><div class="nh-stat-ico">🤖</div><div class="nh-stat-val">6</div><div class="nh-stat-lbl">Experts IA</div></div>
+      <div class="nh-stat"><div class="nh-stat-ico">⭐</div><div class="nh-stat-val">4.9/5</div><div class="nh-stat-lbl">Note moyenne</div></div>
+    </div>
+
+    <div class="nh-cta-block">
+      <div class="nh-cta-txt">Posez vos premières questions sans carte bancaire.</div>
+      <button class="nh-cta-btn" onclick="openChat('sofia')">Commencer maintenant 🚀</button>
+    </div>
+  </div>
+
+  <div style="height:32px"></div>
+
 </div>
 <div id="sec-discover" style="display:none">
   <div class="disc-hero">
@@ -2209,6 +2559,39 @@ window.addEventListener('load', initDiscOrbe);
   }
 })();
 
+
+// ════════ HOME HERO SPHERE ════════
+(function(){
+  function initHomeHeroSphere(){
+    var canvas=document.getElementById('homeHeroSphere');
+    if(!canvas||canvas._init)return;canvas._init=true;
+    var ctx=canvas.getContext('2d');
+    var W=220,H=220,CX=110,CY=110,R=78;
+    var cols=['#c084fc','#e879f9','#a855f7','#d946ef','#f0abfc'];
+    var acc=['#f4a261','#34d399','#60a5fa','#a78bfa','#fb923c'];
+    var pts=[];var N=100;
+    for(var i=0;i<N;i++){var phi=Math.acos(-1+(2*i)/N);var theta=Math.sqrt(N*Math.PI)*phi;pts.push({ox:Math.sin(phi)*Math.cos(theta),oy:Math.sin(phi)*Math.sin(theta),oz:Math.cos(phi),phase:Math.random()*Math.PI*2,spd:0.25+Math.random()*0.5,ci:Math.floor(Math.random()*cols.length)});}
+    var sparks=[];for(var j=0;j<8;j++){sparks.push({a:Math.random()*Math.PI*2,r:R+8+Math.random()*14,tilt:Math.random()*Math.PI,spd:(0.006+Math.random()*0.008)*(Math.random()>.5?1:-1),sz:0.8+Math.random()*1.6,ci:Math.floor(Math.random()*acc.length)});}
+    var rot=0,t=0;
+    function ha(hex,a){var h=hex.replace('#','');return 'rgba('+parseInt(h.substr(0,2),16)+','+parseInt(h.substr(2,2),16)+','+parseInt(h.substr(4,2),16)+','+a+')';}
+    function frame(){
+      if(!homeVisible()){requestAnimationFrame(frame);return;}
+      ctx.clearRect(0,0,W,H);rot+=0.006;t+=0.02;
+      var pulse=1+Math.sin(t*0.7)*0.04;
+      for(var ring=0;ring<3;ring++){var rg=ctx.createRadialGradient(CX,CY,R*pulse*(0.5+ring*.2),CX,CY,R*pulse*(0.85+ring*.25));rg.addColorStop(0,'rgba(168,85,247,'+[0.08,0.05,0.025][ring]+')');rg.addColorStop(1,'transparent');ctx.beginPath();ctx.arc(CX,CY,R*pulse*(0.85+ring*.25),0,Math.PI*2);ctx.fillStyle=rg;ctx.fill();}
+      var cosR=Math.cos(rot),sinR=Math.sin(rot);
+      var proj=pts.map(function(p){var x3=p.ox*cosR-p.oz*sinR,z3=p.ox*sinR+p.oz*cosR,y3=p.oy;var rp=R*pulse;return{sx:CX+x3*rp,sy:CY+y3*rp,depth:(z3+1)/2,glow:(Math.sin(t*p.spd+p.phase)+1)/2,ci:p.ci};});
+      proj.sort(function(a,b){return a.depth-b.depth;});
+      var front=proj.filter(function(p){return p.depth>0.45;});
+      for(var a=0;a<front.length;a++){for(var b=a+1;b<front.length;b++){var dx=front[a].sx-front[b].sx,dy=front[a].sy-front[b].sy;var dist=Math.sqrt(dx*dx+dy*dy);if(dist<18){var alp=(1-dist/18)*front[a].depth*0.28;ctx.beginPath();ctx.moveTo(front[a].sx,front[a].sy);ctx.lineTo(front[b].sx,front[b].sy);ctx.strokeStyle=ha(cols[front[a].ci],alp);ctx.lineWidth=0.5;ctx.stroke();}}}
+      proj.forEach(function(p){if(p.depth<0.08)return;var size=p.depth*1.8+p.glow*0.8;var alpha=p.depth*0.5+p.glow*0.5;var gr=ctx.createRadialGradient(p.sx,p.sy,0,p.sx,p.sy,size*2);gr.addColorStop(0,ha(cols[p.ci],alpha));gr.addColorStop(1,ha(cols[p.ci],0));ctx.beginPath();ctx.arc(p.sx,p.sy,size,0,Math.PI*2);ctx.fillStyle=gr;ctx.fill();});
+      sparks.forEach(function(s){s.a+=s.spd;var x=CX+Math.cos(s.a)*s.r*pulse;var y=CY+Math.sin(s.a)*s.r*Math.sin(s.tilt+t*0.08)*pulse;var sg=ctx.createRadialGradient(x,y,0,x,y,s.sz*2.5);sg.addColorStop(0,ha(acc[s.ci],0.9));sg.addColorStop(1,ha(acc[s.ci],0));ctx.beginPath();ctx.arc(x,y,s.sz,0,Math.PI*2);ctx.fillStyle=sg;ctx.fill();});
+      requestAnimationFrame(frame);
+    }
+    frame();
+  }
+  setTimeout(initHomeHeroSphere,800);
+})();
 
 // ════════ LANDING PAGE LOGIC ════════
 function showLanding(){
