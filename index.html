@@ -16,7 +16,7 @@
   --bg:#080810;--bg2:#0d0d18;--card:rgba(255,255,255,.04);
   --border:rgba(255,255,255,.08);--text:#f0f0f8;--muted:#5a5a78;
   --gold:#f4a261;--gold2:#e76f51;
-  --sofia:#34d399;--marcus:#60a5fa;--luna:#a78bfa;--alex:#fb923c;--max:#22d3ee;--nova:#f472b6;
+  --sofia:#34d399;--marcus:#60a5fa;--luna:#a78bfa;--alex:#fb923c;--max:#22d3ee;--nova:#f472b6;--koda:#38bdf8;
 }
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
 body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min-height:100vh;max-width:480px;margin:0 auto;overflow-x:hidden;}
@@ -134,6 +134,13 @@ header{position:sticky;top:0;z-index:200;background:rgba(8,8,16,.88);backdrop-fi
 .card-nova .status-dot{background:var(--nova);box-shadow:0 0 6px var(--nova);}
 .card-nova .ec-tag{background:rgba(244,114,182,.08);color:var(--nova);border-color:rgba(244,114,182,.15);}
 .card-nova .ec-cta{color:var(--nova);}
+.card-koda::before{background:var(--koda);}
+.card-koda::after{box-shadow:inset 0 0 0 1px rgba(56,189,248,.3),0 20px 60px rgba(56,189,248,.1);}
+.card-koda .avatar-halo{background:var(--koda);}
+.card-koda .ec-name{color:var(--koda);}
+.card-koda .status-dot{background:var(--koda);box-shadow:0 0 6px var(--koda);}
+.card-koda .ec-tag{background:rgba(56,189,248,.08);color:var(--koda);border-color:rgba(56,189,248,.15);}
+.card-koda .ec-cta{color:var(--koda);}
 .limit-bar.nova-bar{color:var(--nova);}
 .generated-image{width:100%;max-width:260px;border-radius:14px;display:block;margin-bottom:8px;border:1px solid var(--border);}
 .download-img-btn{display:inline-flex;align-items:center;gap:6px;margin-top:8px;padding:7px 10px;border-radius:10px;background:rgba(255,255,255,.06);border:1px solid var(--border);color:var(--text);font-size:.7rem;text-decoration:none;font-family:'JetBrains Mono',monospace;}
@@ -770,7 +777,7 @@ header{
       <div class="ld-sphere-wrap"><canvas id="ldSphere" width="160" height="160"></canvas></div>
       <div class="ld-eyebrow"><div class="live-dot"></div>Vos experts IA · 24h/24</div>
       <h1>Une IA <em>spécialisée</em> pour chaque besoin</h1>
-      <p class="ld-hero-sub">Épargnez plus vite, protégez vos droits, développez votre activité avec 6 experts IA spécialisés, toujours disponibles.</p>
+      <p class="ld-hero-sub">Épargnez plus vite, protégez vos droits, développez votre activité avec <span class="expert-count">7</span> experts IA spécialisés, toujours disponibles.</p>
       <button class="ld-cta-main" onclick="landingToAuth('signup')">
         🚀 Essayer gratuitement
         <span class="ld-cta-sub">Aucune carte bancaire</span>
@@ -842,7 +849,7 @@ header{
     <!-- CTA final -->
     <div class="ld-final">
       <div class="ld-final-t">Prêt à essayer ?</div>
-      <div class="ld-final-d">6 experts IA spécialisés vous attendent. Commencez gratuitement, sans carte bancaire.</div>
+      <div class="ld-final-d"><span class="expert-count">7</span> experts IA spécialisés vous attendent. Commencez gratuitement, sans carte bancaire.</div>
       <button class="ld-cta-main" onclick="landingToAuth('signup')">
         🚀 Créer mon compte gratuit
         <span class="ld-cta-sub">9,99€/mois pour le Premium illimité</span>
@@ -876,7 +883,7 @@ header{
     <div class="auth-top">
       <div class="auth-badge"><div class="live-dot"></div>v1.6 · Nouvelle génération</div>
       <div class="auth-logo"><span class="logo-nex">Nex</span><span class="logo-o">o</span></div>
-      <div class="auth-tagline"><strong>6 IA spécialisées</strong> · L'expertise IA pour tous, à 9,99€/mois</div>
+      <div class="auth-tagline"><strong><span class="expert-count">7</span> IA spécialisées</strong> · L'expertise IA pour tous, à 9,99€/mois</div>
       <div class="price-compare">
         <div class="pc-nexo">
           <div class="pc-badge">−50%</div>
@@ -1181,6 +1188,12 @@ header{
 .nh-dcard-nova .nh-dcard-status .status-dot{background:var(--nova);box-shadow:0 0 5px var(--nova);}
 .nh-eico-nova .nh-eico-name{color:var(--nova);}
 
+.nh-dcard-koda .nh-dcard-name{color:var(--koda);}
+.nh-dcard-koda .nh-dcard-tag{background:rgba(56,189,248,.08);color:var(--koda);border-color:rgba(56,189,248,.15);}
+.nh-dcard-koda .nh-dcard-cta{color:var(--koda);}
+.nh-dcard-koda .nh-dcard-status .status-dot{background:var(--koda);box-shadow:0 0 5px var(--koda);}
+.nh-eico-koda .nh-eico-name{color:var(--koda);}
+
 /* Bloc pourquoi + stats */
 .nh-why{
   margin:4px 16px 16px;
@@ -1248,8 +1261,8 @@ header{
       <div class="nh-hero-left">
         <div class="nh-eyebrow"><div class="live-dot"></div>Vos experts IA · 24h/24</div>
         <h2>Une IA <em>spécialisée</em> pour chaque besoin.</h2>
-        <p class="nh-hero-sub">Épargne plus vite, protège tes droits, développe ton activité avec 6 experts IA spécialisés, toujours disponibles.</p>
-        <div class="nh-hero-btns">
+        <p class="nh-hero-sub">Épargne plus vite, protège tes droits, développe ton activité avec <span class="expert-count">7</span> experts IA spécialisés, toujours disponibles.</p>
+        <div class="nh-hero-btns" id="nh-hero-btns">
           <button class="nh-btn-main" onclick="openChat('sofia')">🚀 Essayer gratuitement</button>
           <button class="nh-btn-sec" onclick="goSection('discover',null)">En savoir plus</button>
         </div>
@@ -1267,7 +1280,7 @@ header{
     </div>
 
     <!-- Testi hero -->
-    <div class="nh-testi-hero">
+    <div class="nh-testi-hero" id="nh-testi-hero">
       <div class="nh-testi-stars">★★★★★</div>
       <div class="nh-testi-txt">"Marcus m'a permis de récupérer 2400 € d'indemnités. Incroyable !"</div>
       <div class="nh-testi-auth">Thomas M. · Ouvrier en usine</div>
@@ -1275,7 +1288,7 @@ header{
   </div>
 
   <!-- EXPERT ICON SCROLL -->
-  <div class="nh-sec-lbl">Vos 6 experts IA</div>
+  <div class="nh-sec-lbl">Vos <span class="expert-count">7</span> experts IA</div>
   <div class="nh-expert-scroll">
     <div class="nh-eico nh-eico-sofia" onclick="openChat('sofia')">
       <div class="nh-eico-av"><canvas class="orbe-canvas" data-expert="sofia" width="108" height="108"></canvas></div>
@@ -1307,6 +1320,12 @@ header{
       <div class="nh-eico-av"><canvas class="orbe-canvas" data-expert="nova" width="108" height="108"></canvas></div>
       <div class="nh-eico-name">Nova</div>
       <div class="nh-eico-role">Images IA</div>
+    </div>
+    <div class="nh-eico nh-eico-koda" onclick="openChat('koda')" style="position:relative">
+      <div class="nh-new-badge" style="background:linear-gradient(135deg,var(--gold),var(--gold2));color:#000">⭐ PRO</div>
+      <div class="nh-eico-av"><canvas class="orbe-canvas" data-expert="koda" width="108" height="108"></canvas></div>
+      <div class="nh-eico-name">Koda</div>
+      <div class="nh-eico-role">Dev & Code</div>
     </div>
   </div>
 
@@ -1362,13 +1381,29 @@ header{
       </div>
     </div>
 
+    <div class="nh-dcard nh-dcard-koda" onclick="openChat('koda')">
+      <div class="nh-dcard-status" style="background:linear-gradient(135deg,rgba(244,162,97,.15),rgba(231,111,81,.08));border-color:rgba(244,162,97,.3);color:var(--gold)">⭐ Premium</div>
+      <div class="nh-dcard-inner">
+        <div class="nh-dcard-av"><canvas class="orbe-canvas" data-expert="koda" width="104" height="104"></canvas></div>
+        <div class="nh-dcard-info">
+          <div class="nh-dcard-name">Koda</div>
+          <div class="nh-dcard-role">Expert Développement</div>
+          <div class="nh-dcard-desc">Java, C++, Python, web, jeux vidéo — Koda code avec toi et débogue ton projet.</div>
+        </div>
+      </div>
+      <div class="nh-dcard-foot">
+        <div class="nh-dcard-tags"><span class="nh-dcard-tag">Java</span><span class="nh-dcard-tag">C++</span><span class="nh-dcard-tag">Web</span><span class="nh-dcard-tag">Jeux vidéo</span></div>
+        <div class="nh-dcard-cta">Coder →</div>
+      </div>
+    </div>
+
   </div>
 
   <!-- BLOC POURQUOI + STATS + CTA -->
   <div class="nh-why">
     <div class="nh-why-title">Pourquoi choisir Nexo ?</div>
     <div class="nh-why-list">
-      <div class="nh-why-item"><div class="nh-why-ico">⚡</div><div class="nh-why-txt"><strong>6 IA spécialisées</strong> — chacun expert dans son domaine.</div></div>
+      <div class="nh-why-item"><div class="nh-why-ico">⚡</div><div class="nh-why-txt"><strong><span class="expert-count">7</span> IA spécialisées</strong> — chacun expert dans son domaine.</div></div>
       <div class="nh-why-item"><div class="nh-why-ico">🔒</div><div class="nh-why-txt"><strong>Confidentialité totale</strong> — vos données sont protégées et sécurisées.</div></div>
       <div class="nh-why-item"><div class="nh-why-ico">⏱️</div><div class="nh-why-txt"><strong>Réponses instantanées</strong> — disponibles 24h/24, 7j/7.</div></div>
       <div class="nh-why-item"><div class="nh-why-ico">🇫🇷</div><div class="nh-why-txt"><strong>100% adapté à la France</strong> — Livret A, URSSAF, Code du travail. Nos experts connaissent les règles françaises.</div></div>
@@ -1377,11 +1412,11 @@ header{
     <div class="nh-stats">
       <div class="nh-stat"><div class="nh-stat-ico">💬</div><div class="nh-stat-val">1 200+</div><div class="nh-stat-lbl">Questions répondues</div></div>
       <div class="nh-stat"><div class="nh-stat-ico">👥</div><div class="nh-stat-val">150+</div><div class="nh-stat-lbl">Utilisateurs actifs</div></div>
-      <div class="nh-stat"><div class="nh-stat-ico">🤖</div><div class="nh-stat-val">6</div><div class="nh-stat-lbl">Experts IA</div></div>
+      <div class="nh-stat"><div class="nh-stat-ico">🤖</div><div class="nh-stat-val">7</div><div class="nh-stat-lbl">Experts IA</div></div>
       <div class="nh-stat"><div class="nh-stat-ico">⭐</div><div class="nh-stat-val">4.9/5</div><div class="nh-stat-lbl">Note moyenne</div></div>
     </div>
 
-    <div class="nh-cta-block">
+    <div class="nh-cta-block" id="nh-cta-block">
       <div class="nh-cta-txt">Posez vos premières questions sans carte bancaire.</div>
       <button class="nh-cta-btn" onclick="openChat('sofia')">Commencer maintenant 🚀</button>
     </div>
@@ -1395,13 +1430,13 @@ header{
     <div class="disc-orbe-wrap"><canvas id="discOrbe" width="180" height="180"></canvas></div>
     <div class="disc-eyebrow">La nouvelle génération d'IA</div>
     <h2 class="disc-title">Une IA <em>spécialisée</em><br>pour chaque besoin</h2>
-    <p class="disc-sub">Nexo réunit 6 experts IA de pointe. Au lieu d'un assistant généraliste, vous parlez à un spécialiste qui maîtrise vraiment son domaine.</p>
+    <p class="disc-sub">Nexo réunit <span class="expert-count">7</span> experts IA de pointe. Au lieu d'un assistant généraliste, vous parlez à un spécialiste qui maîtrise vraiment son domaine.</p>
     <button class="disc-share-btn" onclick="shareNexo()">↗ Partager Nexo à mes amis</button>
   </div>
 
   <div class="sec-label">Ce qui rend Nexo unique</div>
   <div class="disc-feats">
-    <div class="disc-feat"><div class="disc-feat-ico">🎯</div><div><div class="disc-feat-t">6 experts spécialisés</div><div class="disc-feat-d">Finance, droit, entreprise, impression 3D, images IA et une assistante polyvalente — chacun expert dans son domaine.</div></div></div>
+    <div class="disc-feat"><div class="disc-feat-ico">🎯</div><div><div class="disc-feat-t"><span class="expert-count">7</span> experts spécialisés</div><div class="disc-feat-d">Finance, droit, entreprise, développement, impression 3D, images IA et une assistante polyvalente — chacun expert dans son domaine.</div></div></div>
     <div class="disc-feat"><div class="disc-feat-ico">💸</div><div><div class="disc-feat-t">L'expertise IA pour tous, à 9,99€/mois</div><div class="disc-feat-d">9,99€/mois au lieu de 20€. Le même niveau d'intelligence, au meilleur prix du marché.</div></div></div>
     <div class="disc-feat"><div class="disc-feat-ico">⚡</div><div><div class="disc-feat-t">Réponses instantanées 24h/24</div><div class="disc-feat-d">Vos experts sont toujours disponibles, sans rendez-vous, sans attente.</div></div></div>
     <div class="disc-feat"><div class="disc-feat-ico">🇫🇷</div><div><div class="disc-feat-t">100% adapté à la France</div><div class="disc-feat-d">Livret A, URSSAF, Code du travail... Nos experts connaissent les règles françaises.</div></div></div>
@@ -1441,10 +1476,10 @@ header{
   <div style="padding:20px 16px 0">
     <div class="pricing-card">
       <div class="pr-eyebrow">✦ Nexo Premium</div>
-      <div class="pr-title">Accès illimité à vos 6 experts</div>
+      <div class="pr-title">Accès illimité à vos <span class="expert-count">7</span> experts</div>
       <div class="pr-price">9,99€ <span>/mois</span></div>
       <div class="pr-feats">
-        <div class="pr-feat"><span class="pr-feat-icon">✓</span>Messages illimités sur les 6 experts</div>
+        <div class="pr-feat"><span class="pr-feat-icon">✓</span>Messages illimités sur les <span class="expert-count">7</span> experts</div>
         <div class="pr-feat"><span class="pr-feat-icon">✓</span>Réponses prioritaires sans attente</div>
         <div class="pr-feat"><span class="pr-feat-icon">✓</span>Historique complet de vos consultations</div>
         <div class="pr-feat"><span class="pr-feat-icon">✓</span>Export PDF de vos conseils</div>
@@ -1822,7 +1857,7 @@ var LEGAL_CONTENT = {
     title: 'À propos de Nexo',
     html: `<h2>Nexo v1.6</h2>
 <p><strong>Nexo</strong> est une application française d'assistants IA spécialisés. Notre mission : rendre les conseils d'experts accessibles à tous, à un prix juste.</p>
-<h2>Nos 6 experts</h2>
+<h2>Nos <span class="expert-count">7</span> experts</h2>
 <p>• 💚 <strong>Sofia</strong> — Finance & épargne<br>
 • ⚖️ <strong>Marcus</strong> — Droit du travail<br>
 • ✨ <strong>Luna</strong> — Assistante polyvalente (connectée à internet)<br>
@@ -2033,13 +2068,26 @@ var EXPERTS={
     suggestions:["Quels réglages pour du PLA ?","Mon impression a des fils (stringing), pourquoi ?","Où trouver des modèles STL gratuits ?","PLA, PETG ou résine pour mon projet ?"],
     welcome:"Salut ! Je suis **Max**, ton expert en impression 3D 🖨️\n\nRéglages de slicer, choix du matériau, dépannage... et tu peux même **m'envoyer une photo** d'une impression ratée pour que je t'aide à corriger !\n\n_Petit point honnête : je ne crée pas les fichiers STL moi-même, mais je te guide pour les trouver, les régler et bien les imprimer._\n\nSur quoi je t'aide ?",
     system:"Tu es Max, expert français passionné en impression 3D (FDM et résine). TRÈS IMPORTANT : tu DISPOSES d'un outil de recherche web et tu as accès à Internet. Ne dis JAMAIS que tu n'as pas accès à Internet. Quand l'utilisateur cherche un modèle 3D ou un fichier STL, UTILISE la recherche web pour trouver des modèles réels et DONNE-LUI les liens directs que tu trouves (vers Printables, Thingiverse, MakerWorld, Cults3D, Thangs). Cite le nom du modèle et l'URL trouvée. Si tu ne trouves pas de lien précis, propose les termes de recherche exacts à taper sur ces sites. Tu maîtrises : les slicers (Cura, PrusaSlicer, OrcaSlicer, Bambu Studio), les réglages (température buse/plateau, vitesse, rétraction, remplissage, supports, adhérence, hauteur de couche), les matériaux (PLA, PETG, ABS, TPU, résine) et leurs cas d'usage, le dépannage des défauts d'impression (warping, stringing, under-extrusion, décollement, etc.), et les imprimantes courantes (Ender, Prusa, Bambu Lab). IMPORTANT : tu ne génères pas toi-même le fichier STL (tu n'es pas un logiciel de modélisation), mais tu trouves des modèles existants et tu donnes leurs liens ; pour des formes géométriques simples (boîte, support, entretoise, porte-clés avec texte), tu peux fournir du code OpenSCAD prêt à copier que l'utilisateur transformera en STL. Quand l'utilisateur envoie une PHOTO, analyse-la attentivement : identifie l'objet ou le défaut d'impression, explique la cause et donne les réglages précis à corriger. STYLE DE RÉPONSE OBLIGATOIRE : Réponds comme un ami expert — court, direct, sans pavé. 2-4 phrases pour les questions simples, une liste courte si vraiment utile. Développe seulement si on demande des détails. Pas d'intro inutile. Donne des valeurs précises (ex : buse 210°C) sans noyer l'info. Français parfait, **gras** uniquement pour les points vraiment clés."},
-  nova:{name:'Nova',role:"Créatrice d'images IA",limitClass:'nova-bar',color:'#f472b6',freeLimit:1,emoji:'🎨',bg:'linear-gradient(135deg,#500724,#9d174d)',imageGen:true,
-    suggestions:["Crée un logo moderne pour mon business","Fais une miniature TikTok accrocheuse","Crée une affiche publicitaire premium","Génère un mockup produit réaliste"],
-    welcome:"Salut ! Je suis **Nova**, ta créatrice d'images IA 🎨\n\nDécris-moi l'image que tu veux : logo, miniature TikTok, affiche, avatar, visuel produit...\n\nPlus tu donnes de détails, meilleur sera le rendu !\n\n⚠️ _La génération d'images est réservée aux membres **Premium**._",
-    system:"Tu es Nova, experte en création d'images IA. Quand un utilisateur décrit une image, reformule sa demande en prompt visuel précis en anglais (c'est ce que tu enverrais à DALL-E), et confirme-lui ce que tu vas créer. Style : sujet, ambiance, couleurs, cadrage, style artistique. Si l'utilisateur n'est pas Premium, explique gentiment que la génération d'images est réservée au Premium. STYLE DE RÉPONSE OBLIGATOIRE : Court et enthousiaste. Confirme ce que tu vas créer, génère, et propose des variantes si besoin."}
+  koda:{name:'Koda',role:'Expert Développement',limitClass:'koda-bar',color:'#38bdf8',freeLimit:0,premiumOnly:true,emoji:'💻',bg:'linear-gradient(135deg,#0c1a2e,#0369a1)',
+    suggestions:["Comment créer un jeu en C++ ?","Débogue mon code Java","Comment faire un site web de zéro ?","Quelle est la différence entre Python et JavaScript ?"],
+    welcome:"Salut ! Je suis **Koda**, ton expert développement 💻\n\nJava, C++, Python, web, jeux vidéo, sites... je code avec toi.\n\nColle ton code ou pose ta question — on règle ça ensemble.",
+    system:"Tu es Koda, expert français en développement informatique, polyvalent et passionné. Tu maîtrises : Java, C++, C, C#, Python, JavaScript, TypeScript, HTML/CSS, PHP, SQL, Kotlin, Swift. Tu es particulièrement fort en : développement de jeux vidéo (moteurs Unity/C#, Unreal/C++, SFML, SDL2, LibGDX), création de sites web (HTML/CSS/JS vanilla, React, Node.js, frameworks back-end), algorithmes et structures de données, débogage et optimisation de code. Tu ÉCRIS du code propre, commenté, prêt à copier-coller. Quand on te donne du code bugué, tu identifies l'erreur précisément et tu fournis la version corrigée. Pour les jeux vidéo, tu expliques les concepts (boucle de jeu, collisions, physique, rendu, gestion des entrées). Pour le web, tu crées des exemples fonctionnels complets. Tu rappelles les bonnes pratiques (nommage, structure, sécurité). STYLE DE RÉPONSE OBLIGATOIRE : Direct et technique. Pour les questions simples, 2-3 phrases + code si besoin. Pour le code, fournis TOUJOURS un exemple complet et fonctionnel dans un bloc de code formaté. Pas d'intro inutile. Va droit au but. Français parfait, **gras** uniquement pour les points vraiment clés."}
 };
 
 var isPremium=false,current=null,convos={};
+
+// ── Mise à jour automatique du nombre d'experts partout ──
+function syncExpertCount(){
+  var n=Object.keys(EXPERTS).length;
+  document.querySelectorAll('.expert-count').forEach(function(el){el.textContent=n;});
+  document.querySelectorAll('.nh-stat').forEach(function(s){
+    var ico=s.querySelector('.nh-stat-ico');
+    if(ico&&ico.textContent==='🤖') s.querySelector('.nh-stat-val').textContent=n;
+  });
+}
+// Appel immédiat ET au chargement du DOM pour couvrir tous les cas
+syncExpertCount();
+document.addEventListener('DOMContentLoaded', syncExpertCount);
 var usage=JSON.parse(localStorage.getItem('nx_usage')||'{}');
 var todayKey=new Date().toDateString();
 if(!usage[todayKey]) usage[todayKey]={};
@@ -2057,10 +2105,41 @@ function showPremium(){goSection('premium',document.querySelectorAll('.tab')[2])
 function showDiscover(){goSection('discover',document.querySelectorAll('.tab')[1]);document.getElementById('userMenu').classList.remove('open');}
 function getAvatarMini(id){var ex=EXPERTS[id];return '<div style="width:100%;height:100%;background:'+ex.bg+';display:flex;align-items:center;justify-content:center;font-size:1.2rem;">'+ex.emoji+'</div>';}
 function activatePremium(){window.open(STRIPE_LINK,'_blank');}
-function setPremiumActive(){isPremium=true;document.getElementById('planPill').textContent='PREMIUM';document.getElementById('planPill').className='plan-pill premium';document.getElementById('credFill').style.width='100%';document.getElementById('credTxt').textContent='Illimité ∞';document.getElementById('limitBar').style.display='none';localStorage.setItem('nexo_premium','true');}
+function setPremiumActive(){isPremium=true;document.getElementById('planPill').textContent='PREMIUM';document.getElementById('planPill').className='plan-pill premium';document.getElementById('credFill').style.width='100%';document.getElementById('credTxt').textContent='Illimité ∞';document.getElementById('limitBar').style.display='none';localStorage.setItem('nexo_premium','true');
+  // Masquer les éléments "essai gratuit" pour les Premium
+  var toHide=['nh-hero-btns','nh-testi-hero','nh-cta-block'];
+  toHide.forEach(function(id){var el=document.getElementById(id);if(el)el.style.display='none';});
+  // Changer le texte du hero pour les Premium
+  var heroSub=document.querySelector('.nh-hero-sub');
+  if(heroSub)heroSub.textContent='Bienvenue dans votre espace Premium. Vos '+Object.keys(EXPERTS).length+' experts sont disponibles sans limite, 24h/24.';
+  // Ajouter un badge premium dans le hero
+  var heroLeft=document.querySelector('.nh-hero-left');
+  if(heroLeft&&!heroLeft.querySelector('.nh-premium-badge')){
+    var badge=document.createElement('div');
+    badge.className='nh-premium-badge';
+    badge.innerHTML='⭐ Accès Premium actif — Illimité';
+    badge.style.cssText='display:inline-flex;align-items:center;gap:6px;background:linear-gradient(135deg,rgba(244,162,97,.15),rgba(231,111,81,.08));border:1px solid rgba(244,162,97,.3);border-radius:10px;padding:7px 12px;font-size:.72rem;font-weight:600;color:var(--gold);margin-top:8px;font-family:"DM Sans",sans-serif;';
+    heroLeft.appendChild(badge);
+  }
+}
 
 async function openChat(id){
   current=id;var ex=EXPERTS[id];
+  // Bloquer les experts premiumOnly pour les non-premium
+  if(ex.premiumOnly && !isPremium){
+    document.getElementById('home').style.display='none';
+    document.getElementById('chat-view').style.display='flex';
+    document.getElementById('chatHdrName').textContent=ex.name;
+    document.getElementById('chatHdrStatus').textContent=ex.role;
+    document.getElementById('chatAvatarMini').innerHTML=getAvatarMini(id);
+    document.getElementById('sendBtn').style.background='linear-gradient(135deg,'+ex.color+','+ex.color+'cc)';
+    document.getElementById('limitBar').style.display='none';
+    var area=document.getElementById('msgsArea');area.innerHTML='';
+    var ov=document.createElement('div');ov.className='locked-ov';
+    ov.innerHTML='<div class="locked-av">'+getAvatarMini(id)+'</div><div class="locked-title" style="color:'+ex.color+'">'+ex.name+' est réservé Premium ⭐</div><div class="locked-txt">Cet expert est exclusivement disponible pour les membres <strong>Premium</strong>.<br><br>Accédez à Koda et à tous les experts sans limite.</div><button class="btn-unlock" onclick="window.open(\''+STRIPE_LINK+'\',\'_blank\')">Passer Premium — 9,99€/mois</button><div class="later-btn" onclick="closeChat()">Retour aux experts gratuits</div>';
+    area.style.position='relative';area.appendChild(ov);
+    return;
+  }
   if(!convos[id]) convos[id]=[];
   document.getElementById('chatHdrName').textContent=ex.name;
   document.getElementById('chatHdrStatus').textContent=ex.role;
@@ -2485,8 +2564,8 @@ window.addEventListener('load', initOrbes);
 function shareNexo(){
   var url='https://nexo-eight-theta.vercel.app';
   var shareData={
-    title:'Nexo — 6 experts IA spécialisés',
-    text:'Découvre Nexo : 6 experts IA spécialisés pour 9,99€/mois. Finance, droit, entreprise, impression 3D et plus. Inscris-toi :',
+    title:'Nexo — '+Object.keys(EXPERTS).length+' experts IA spécialisés',
+    text:'Découvre Nexo : '+Object.keys(EXPERTS).length+' experts IA spécialisés pour 9,99€/mois. Finance, droit, entreprise, impression 3D et plus. Inscris-toi :',
     url:url
   };
   if(navigator.share){
