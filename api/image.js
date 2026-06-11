@@ -14,12 +14,23 @@ export default async function handler(req, res) {
 
     const SUPABASE_URL = process.env.SUPABASE_URL;
     const SUPABASE_ANON = process.env.SUPABASE_ANON_KEY;
+    // Clé service pour bypass RLS (à ajouter dans Vercel env vars)
+    const SUPABASE_SERVICE = process.env.SUPABASE_SERVICE_KEY || SUPABASE_ANON;
     const MONTHLY_LIMIT = 20;
 
-    // Récupère le profil par email
+    // Vérifie d'abord que le token est valide via Supabase Auth
+    const authRes = await fetch(`${SUPABASE_URL}/auth/v1/user`, {
+      headers: { apikey: SUPABASE_ANON, Authorization: `Bearer ${userToken}` }
+    });
+    const authData = await authRes.json();
+    if (!authData.email || authData.email !== userEmail) {
+      return res.status(401).json({ error: 'Token invalide' });
+    }
+
+    // Récupère le profil avec la clé service (bypass RLS)
     const profileRes = await fetch(
       `${SUPABASE_URL}/rest/v1/profiles?email=eq.${encodeURIComponent(userEmail)}&select=is_premium,images_this_month,images_month_key`,
-      { headers: { apikey: SUPABASE_ANON, Authorization: `Bearer ${userToken}` } }
+      { headers: { apikey: SUPABASE_SERVICE, Authorization: `Bearer ${SUPABASE_SERVICE}` } }
     );
     const profiles = await profileRes.json();
     const profile = profiles[0];
@@ -27,7 +38,6 @@ export default async function handler(req, res) {
     if (!profile) return res.status(404).json({ error: 'Profil introuvable' });
     if (!profile.is_premium) return res.status(403).json({ error: 'Réservé aux membres Premium' });
 
-    // Clé du mois courant ex: "2025-06"
     const monthKey = new Date().toISOString().slice(0, 7);
     let count = (profile.images_month_key === monthKey) ? (profile.images_this_month || 0) : 0;
 
@@ -59,7 +69,6 @@ export default async function handler(req, res) {
     });
 
     const prediction = await replicateRes.json();
-
     if (!replicateRes.ok || prediction.error) {
       return res.status(500).json({ error: prediction.error || 'Erreur Replicate' });
     }
@@ -87,12 +96,12 @@ export default async function handler(req, res) {
 
     if (!imageUrl) return res.status(500).json({ error: 'Image non disponible' });
 
-    // Incrémente le compteur
+    // Incrémente le compteur avec clé service
     await fetch(`${SUPABASE_URL}/rest/v1/profiles?email=eq.${encodeURIComponent(userEmail)}`, {
       method: 'PATCH',
       headers: {
-        apikey: SUPABASE_ANON,
-        Authorization: `Bearer ${userToken}`,
+        apikey: SUPABASE_SERVICE,
+        Authorization: `Bearer ${SUPABASE_SERVICE}`,
         'Content-Type': 'application/json',
         Prefer: 'return=minimal'
       },
