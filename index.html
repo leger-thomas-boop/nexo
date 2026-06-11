@@ -2365,7 +2365,7 @@ async function sendText(txt){
     try{
       var gr=await fetch('/api/image',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({
         prompt:txt,
-        userId:currentUser&&currentUser.id,
+        userEmail:currentUser&&currentUser.email,
         userToken:userSession&&userSession.access_token
       })});
       var gd=await gr.json();
