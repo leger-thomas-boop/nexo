@@ -2305,15 +2305,30 @@ var _attachedImage=null; // {media_type, data(base64 no prefix), dataUrl}
 function onPhotoPicked(e){
   var file=e.target.files&&e.target.files[0];
   if(!file)return;
-  if(file.size>4*1024*1024){alert('La photo est trop lourde (max 4 Mo). Choisissez une image plus petite.');e.target.value='';return;}
+  if(file.size>20*1024*1024){alert('La photo est trop lourde (max 20 Mo).');e.target.value='';return;}
   var reader=new FileReader();
   reader.onload=function(){
     var dataUrl=reader.result;
-    var comma=dataUrl.indexOf(',');
-    var meta=dataUrl.substring(5,dataUrl.indexOf(';'));
-    _attachedImage={media_type:meta||'image/jpeg',data:dataUrl.substring(comma+1),dataUrl:dataUrl};
-    document.getElementById('imgPreviewThumb').src=dataUrl;
-    document.getElementById('imgPreview').style.display='flex';
+    // Compression via canvas pour réduire la taille
+    var img=new Image();
+    img.onload=function(){
+      var canvas=document.createElement('canvas');
+      var maxSize=1024;
+      var w=img.width,h=img.height;
+      if(w>maxSize||h>maxSize){
+        if(w>h){h=Math.round(h*maxSize/w);w=maxSize;}
+        else{w=Math.round(w*maxSize/h);h=maxSize;}
+      }
+      canvas.width=w;canvas.height=h;
+      var ctx=canvas.getContext('2d');
+      ctx.drawImage(img,0,0,w,h);
+      var compressed=canvas.toDataURL('image/jpeg',0.85);
+      var comma=compressed.indexOf(',');
+      _attachedImage={media_type:'image/jpeg',data:compressed.substring(comma+1),dataUrl:compressed};
+      document.getElementById('imgPreviewThumb').src=compressed;
+      document.getElementById('imgPreview').style.display='flex';
+    };
+    img.src=dataUrl;
   };
   reader.readAsDataURL(file);
   e.target.value='';
