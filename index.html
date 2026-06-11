@@ -2365,8 +2365,7 @@ async function sendText(txt){
     try{
       var gr=await fetch('/api/image',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({
         prompt:txt,
-        userEmail:currentUser&&currentUser.email,
-        userToken:userSession&&userSession.access_token
+        userEmail:currentUser&&currentUser.email
       })});
       var gd=await gr.json();
       document.getElementById('typing')&&document.getElementById('typing').remove();
