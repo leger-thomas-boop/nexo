@@ -16,7 +16,7 @@ export default async function handler(req, res) {
     const SUPABASE_SERVICE = process.env.SUPABASE_SERVICE_KEY;
     const MONTHLY_LIMIT = 20;
 
-    // Récupère le profil avec la clé service
+    // Récupère le profil
     const profileRes = await fetch(
       `${SUPABASE_URL}/rest/v1/profiles?email=eq.${encodeURIComponent(userEmail)}&select=is_premium,images_this_month,images_month_key`,
       { headers: { apikey: SUPABASE_SERVICE, Authorization: `Bearer ${SUPABASE_SERVICE}` } }
@@ -31,13 +31,11 @@ export default async function handler(req, res) {
     let count = (profile.images_month_key === monthKey) ? (profile.images_this_month || 0) : 0;
 
     if (count >= MONTHLY_LIMIT) {
-      return res.status(429).json({
-        error: `Limite de ${MONTHLY_LIMIT} images par mois atteinte. Renouvellement le 1er du mois.`
-      });
+      return res.status(429).json({ error: `Limite de ${MONTHLY_LIMIT} images par mois atteinte.` });
     }
 
-    // Génération avec Replicate (Flux 1.1 Pro)
-    const replicateRes = await fetch('https://api.replicate.com/v1/models/black-forest-labs/flux-1.1-pro/predictions', {
+    // Génération avec Replicate - flux-schnell (rapide et gratuit)
+    const replicateRes = await fetch('https://api.replicate.com/v1/models/black-forest-labs/flux-schnell/predictions', {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${process.env.REPLICATE_API_TOKEN}`,
@@ -47,27 +45,26 @@ export default async function handler(req, res) {
       body: JSON.stringify({
         input: {
           prompt: prompt,
-          width: 1024,
-          height: 1024,
+          num_outputs: 1,
+          aspect_ratio: '1:1',
           output_format: 'webp',
-          output_quality: 80,
-          safety_tolerance: 2,
-          prompt_upsampling: true
+          output_quality: 80
         }
       })
     });
 
     const prediction = await replicateRes.json();
-    if (!replicateRes.ok || prediction.error) {
-      return res.status(500).json({ error: prediction.error || 'Erreur Replicate' });
+    
+    if (!replicateRes.ok) {
+      return res.status(500).json({ error: JSON.stringify(prediction) });
     }
 
-    // Récupère l'URL avec polling si besoin
+    // Récupère l'URL avec polling
     let imageUrl = null;
     if (prediction.output) {
       imageUrl = Array.isArray(prediction.output) ? prediction.output[0] : prediction.output;
     } else if (prediction.id) {
-      for (let i = 0; i < 15; i++) {
+      for (let i = 0; i < 20; i++) {
         await new Promise(r => setTimeout(r, 2000));
         const poll = await fetch(`https://api.replicate.com/v1/predictions/${prediction.id}`, {
           headers: { Authorization: `Bearer ${process.env.REPLICATE_API_TOKEN}` }
@@ -78,7 +75,7 @@ export default async function handler(req, res) {
           break;
         }
         if (pollData.status === 'failed') {
-          return res.status(500).json({ error: 'Génération échouée' });
+          return res.status(500).json({ error: pollData.error || 'Génération échouée' });
         }
       }
     }
@@ -94,16 +91,10 @@ export default async function handler(req, res) {
         'Content-Type': 'application/json',
         Prefer: 'return=minimal'
       },
-      body: JSON.stringify({
-        images_this_month: count + 1,
-        images_month_key: monthKey
-      })
+      body: JSON.stringify({ images_this_month: count + 1, images_month_key: monthKey })
     });
 
-    return res.status(200).json({
-      image: imageUrl,
-      remaining: MONTHLY_LIMIT - count - 1
-    });
+    return res.status(200).json({ image: imageUrl, remaining: MONTHLY_LIMIT - count - 1 });
 
   } catch (error) {
     return res.status(500).json({ error: error.message });
