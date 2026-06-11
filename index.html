@@ -1080,6 +1080,8 @@ header{
   display:flex;flex-direction:column;align-items:center;gap:5px;
   flex-shrink:0;cursor:pointer;
   transition:.2s;
+  position:relative;
+  padding-top:12px;
 }
 .nh-eico:hover{transform:translateY(-3px);}
 .nh-eico-av{
@@ -1246,12 +1248,13 @@ header{
 
 /* NOUVEAU badge */
 .nh-new-badge{
-  position:absolute;top:-6px;right:-6px;
+  position:absolute;top:0;left:50%;transform:translateX(-50%);
   background:linear-gradient(135deg,var(--nova),#ec4899);
-  color:#fff;font-size:.45rem;font-weight:700;
-  padding:2px 5px;border-radius:6px;letter-spacing:.06em;
+  color:#fff;font-size:.42rem;font-weight:700;
+  padding:2px 8px;border-radius:20px;letter-spacing:.06em;
   font-family:'JetBrains Mono',monospace;
   box-shadow:0 2px 8px rgba(244,114,182,.4);
+  white-space:nowrap;z-index:2;
 }
 </style>
 
@@ -2085,8 +2088,7 @@ function syncExpertCount(){
     if(ico&&ico.textContent==='🤖') s.querySelector('.nh-stat-val').textContent=n;
   });
 }
-// Appel immédiat ET au chargement du DOM pour couvrir tous les cas
-syncExpertCount();
+// Appel au chargement complet du DOM
 document.addEventListener('DOMContentLoaded', syncExpertCount);
 var usage=JSON.parse(localStorage.getItem('nx_usage')||'{}');
 var todayKey=new Date().toDateString();
