@@ -7,27 +7,16 @@ export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
   try {
-    const { prompt, userEmail, userToken } = req.body;
+    const { prompt, userEmail } = req.body;
 
     if (!prompt) return res.status(400).json({ error: 'Prompt manquant' });
-    if (!userEmail || !userToken) return res.status(401).json({ error: 'Non autorisé' });
+    if (!userEmail) return res.status(401).json({ error: 'Non autorisé' });
 
     const SUPABASE_URL = process.env.SUPABASE_URL;
-    const SUPABASE_ANON = process.env.SUPABASE_ANON_KEY;
-    // Clé service pour bypass RLS (à ajouter dans Vercel env vars)
-    const SUPABASE_SERVICE = process.env.SUPABASE_SERVICE_KEY || SUPABASE_ANON;
+    const SUPABASE_SERVICE = process.env.SUPABASE_SERVICE_KEY;
     const MONTHLY_LIMIT = 20;
 
-    // Vérifie d'abord que le token est valide via Supabase Auth
-    const authRes = await fetch(`${SUPABASE_URL}/auth/v1/user`, {
-      headers: { apikey: SUPABASE_ANON, Authorization: `Bearer ${userToken}` }
-    });
-    const authData = await authRes.json();
-    if (!authData.email || authData.email !== userEmail) {
-      return res.status(401).json({ error: 'Token invalide' });
-    }
-
-    // Récupère le profil avec la clé service (bypass RLS)
+    // Récupère le profil avec la clé service
     const profileRes = await fetch(
       `${SUPABASE_URL}/rest/v1/profiles?email=eq.${encodeURIComponent(userEmail)}&select=is_premium,images_this_month,images_month_key`,
       { headers: { apikey: SUPABASE_SERVICE, Authorization: `Bearer ${SUPABASE_SERVICE}` } }
@@ -73,7 +62,7 @@ export default async function handler(req, res) {
       return res.status(500).json({ error: prediction.error || 'Erreur Replicate' });
     }
 
-    // Récupère l'URL (avec polling si pas encore prête)
+    // Récupère l'URL avec polling si besoin
     let imageUrl = null;
     if (prediction.output) {
       imageUrl = Array.isArray(prediction.output) ? prediction.output[0] : prediction.output;
@@ -96,7 +85,7 @@ export default async function handler(req, res) {
 
     if (!imageUrl) return res.status(500).json({ error: 'Image non disponible' });
 
-    // Incrémente le compteur avec clé service
+    // Incrémente le compteur
     await fetch(`${SUPABASE_URL}/rest/v1/profiles?email=eq.${encodeURIComponent(userEmail)}`, {
       method: 'PATCH',
       headers: {
