@@ -15,9 +15,10 @@ export default async function handler(req, res) {
     const SUPABASE_URL = 'https://zoycmayrynkisgiybqij.supabase.co';
     const SUPABASE_SERVICE = process.env.SUPABASE_SERVICE_KEY;
     const REPLICATE_TOKEN = process.env.REPLICATE_API_TOKEN;
+    const ANTHROPIC_KEY = process.env.ANTHROPIC_API_KEY;
     const MONTHLY_LIMIT = 20;
 
-    if (!SUPABASE_SERVICE) return res.status(500).json({ error: 'Config serveur manquante: SUPABASE_SERVICE_KEY vide' });
+    if (!SUPABASE_SERVICE) return res.status(500).json({ error: 'Config serveur manquante' });
 
     // Vérifie le profil
     const profileRes = await fetch(
@@ -34,14 +35,55 @@ export default async function handler(req, res) {
     let count = (profile.images_month_key === monthKey) ? (profile.images_this_month || 0) : 0;
     if (count >= MONTHLY_LIMIT) return res.status(429).json({ error: `Limite de ${MONTHLY_LIMIT} images par mois atteinte.` });
 
+    let finalPrompt = prompt;
     let imageUrl = null;
     let predictionId = null;
 
     if (imageBase64) {
-      // ── MODE ÉDITION : Flux Kontext Pro avec image en data URI ───────────
+      // ── MODE ÉDITION ─────────────────────────────────────────────────────
+      // 1. Claude analyse la photo et construit un prompt précis en anglais
       const mediaType = imageMediaType || 'image/jpeg';
-      const dataUri = `data:${mediaType};base64,${imageBase64}`;
+      const claudeRes = await fetch('https://api.anthropic.com/v1/messages', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-api-key': ANTHROPIC_KEY,
+          'anthropic-version': '2023-06-01'
+        },
+        body: JSON.stringify({
+          model: 'claude-haiku-4-5-20251001',
+          max_tokens: 300,
+          messages: [{
+            role: 'user',
+            content: [
+              {
+                type: 'image',
+                source: { type: 'base64', media_type: mediaType, data: imageBase64 }
+              },
+              {
+                type: 'text',
+                text: `You are an expert at writing image editing prompts for Flux Kontext AI. 
+The user wants to modify this image with the following instruction: "${prompt}"
 
+Write a precise English prompt for Flux Kontext that:
+1. Starts by describing the key elements of the original image to preserve
+2. Then clearly describes the modification to apply
+3. Keeps the subject/person/object from the original photo intact
+4. Is specific and detailed
+
+Reply with ONLY the prompt, nothing else. No explanation, no quotes.`
+              }
+            ]
+          }]
+        })
+      });
+      const claudeData = await claudeRes.json();
+      if (claudeData.content && claudeData.content[0]) {
+        finalPrompt = claudeData.content[0].text.trim();
+      }
+
+      // 2. Flux Kontext Pro avec la photo + prompt amélioré
+      const dataUri = `data:${mediaType};base64,${imageBase64}`;
       const kontextRes = await fetch('https://api.replicate.com/v1/models/black-forest-labs/flux-kontext-pro/predictions', {
         method: 'POST',
         headers: {
@@ -51,7 +93,7 @@ export default async function handler(req, res) {
         },
         body: JSON.stringify({
           input: {
-            prompt: prompt,
+            prompt: finalPrompt,
             input_image: dataUri,
             output_format: 'webp',
             output_quality: 90,
@@ -70,7 +112,7 @@ export default async function handler(req, res) {
       }
 
     } else {
-      // ── MODE GÉNÉRATION : Flux 1.1 Pro texte seul ───────────────────────
+      // ── MODE GÉNÉRATION : Flux 1.1 Pro ───────────────────────────────────
       const genRes = await fetch('https://api.replicate.com/v1/models/black-forest-labs/flux-1.1-pro/predictions', {
         method: 'POST',
         headers: {
@@ -101,7 +143,7 @@ export default async function handler(req, res) {
       }
     }
 
-    // Polling si pas encore prête
+    // Polling
     if (!imageUrl && predictionId) {
       for (let i = 0; i < 30; i++) {
         await new Promise(r => setTimeout(r, 2000));
@@ -119,7 +161,7 @@ export default async function handler(req, res) {
       }
     }
 
-    if (!imageUrl) return res.status(500).json({ error: 'Image non disponible après timeout' });
+    if (!imageUrl) return res.status(500).json({ error: 'Image non disponible' });
 
     // Incrémente le compteur
     await fetch(`${SUPABASE_URL}/rest/v1/profiles?email=eq.${encodeURIComponent(userEmail)}`, {
