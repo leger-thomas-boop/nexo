@@ -12,7 +12,7 @@ export default async function handler(req, res) {
     if (!prompt) return res.status(400).json({ error: 'Prompt manquant' });
     if (!userEmail) return res.status(401).json({ error: 'Non autorisé' });
 
-    const SUPABASE_URL = process.env.SUPABASE_URL;
+    const SUPABASE_URL = 'https://zoycmayrynkisgiybqij.supabase.co';
     const SUPABASE_SERVICE = process.env.SUPABASE_SERVICE_KEY;
     const MONTHLY_LIMIT = 20;
 
