@@ -2366,6 +2366,8 @@ async function sendText(txt){
   convos[id].push({role:'user',content:apiContent});
   saveMessage(id,'user',displayTxt);
   incUsage(id);updateLimitBar(id);
+  // Sauvegarde l'image AVANT de vider (Nova en a besoin après)
+  var savedImg=_attachedImage?{data:_attachedImage.data,media_type:_attachedImage.media_type}:null;
   clearAttachedImage();
   var area=document.getElementById('msgsArea');
   var ty=document.createElement('div');ty.className='msg bot typing';ty.id='typing';
@@ -2380,9 +2382,9 @@ async function sendText(txt){
     try{
       var novaPayload={prompt:txt,userEmail:currentUser&&currentUser.email};
       // Si une photo est jointe → mode édition avec Flux Kontext
-      if(_attachedImage){
-        novaPayload.imageBase64=_attachedImage.data;
-        novaPayload.imageMediaType=_attachedImage.media_type;
+      if(savedImg){
+        novaPayload.imageBase64=savedImg.data;
+        novaPayload.imageMediaType=savedImg.media_type;
       }
       var gr=await fetch('/api/image',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(novaPayload)});
       var gd=await gr.json();
