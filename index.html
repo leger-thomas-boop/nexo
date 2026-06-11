@@ -2041,7 +2041,7 @@ async function enterApp(){
     var r=await fetch(SUPABASE_URL+'/rest/v1/profiles?email=eq.'+currentUser.email+'&select=is_premium',{headers:{'apikey':SUPABASE_ANON,'Authorization':'Bearer '+userSession.access_token}});
     var data=await r.json();
     if(data[0]&&data[0].is_premium) setPremiumActive();
-  }catch(e){if(localStorage.getItem('nexo_premium')==='true') setPremiumActive();}
+  }catch(e){console.warn('Vérification premium échouée',e);}
 }
 function toggleUserMenu(){document.getElementById('userMenu').classList.toggle('open');}
 document.addEventListener('click',function(e){
@@ -2100,7 +2100,7 @@ function showPremium(){goSection('premium',document.querySelectorAll('.tab')[2])
 function showDiscover(){goSection('discover',document.querySelectorAll('.tab')[1]);document.getElementById('userMenu').classList.remove('open');}
 function getAvatarMini(id){var ex=EXPERTS[id];return '<div style="width:100%;height:100%;background:'+ex.bg+';display:flex;align-items:center;justify-content:center;font-size:1.2rem;">'+ex.emoji+'</div>';}
 function activatePremium(){window.open(STRIPE_LINK,'_blank');}
-function setPremiumActive(){isPremium=true;document.getElementById('planPill').textContent='PREMIUM';document.getElementById('planPill').className='plan-pill premium';document.getElementById('credFill').style.width='100%';document.getElementById('credTxt').textContent='Illimité ∞';document.getElementById('limitBar').style.display='none';localStorage.setItem('nexo_premium','true');
+function setPremiumActive(){isPremium=true;document.getElementById('planPill').textContent='PREMIUM';document.getElementById('planPill').className='plan-pill premium';document.getElementById('credFill').style.width='100%';document.getElementById('credTxt').textContent='Illimité ∞';document.getElementById('limitBar').style.display='none';
   // Masquer les éléments "essai gratuit" pour les Premium
   var toHide=['nh-hero-btns','nh-testi-hero','nh-cta-block'];
   toHide.forEach(function(id){var el=document.getElementById(id);if(el)el.style.display='none';});
