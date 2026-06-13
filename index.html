@@ -753,6 +753,67 @@ header{
 .ld-final-d{font-size:.8rem;color:var(--muted);line-height:1.5;margin-bottom:18px;font-weight:300;}
 .ld-final .ld-cta-main{max-width:100%;}
 
+/* Genesis spotlight banner */
+.nh-genesis-banner{
+  margin:8px 16px 4px;position:relative;overflow:hidden;
+  border-radius:20px;cursor:pointer;
+  background:linear-gradient(135deg,rgba(251,191,36,.12),rgba(245,158,11,.04));
+  border:1px solid rgba(251,191,36,.25);
+  padding:18px;transition:.25s;
+}
+.nh-genesis-banner:hover{transform:translateY(-2px);border-color:rgba(251,191,36,.4);}
+.nh-genesis-glow{
+  position:absolute;top:-40%;right:-20%;width:200px;height:200px;
+  background:radial-gradient(circle,rgba(251,191,36,.35),transparent 70%);
+  filter:blur(20px);pointer-events:none;
+}
+.nh-genesis-content{position:relative;z-index:1;}
+.nh-genesis-badge{
+  display:inline-flex;align-items:center;gap:5px;
+  background:linear-gradient(135deg,var(--genesis),#f59e0b);
+  color:#000;font-size:.55rem;font-weight:800;letter-spacing:.1em;
+  padding:3px 10px;border-radius:20px;margin-bottom:10px;
+  font-family:'JetBrains Mono',monospace;
+}
+.nh-genesis-title{
+  font-family:'Syne',sans-serif;font-weight:800;font-size:1.5rem;
+  letter-spacing:-.03em;margin-bottom:6px;
+  background:linear-gradient(90deg,var(--genesis),#fff,var(--genesis));
+  background-size:200% auto;-webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  animation:gth-shine 4s linear infinite;
+}
+.nh-genesis-sub{font-size:.78rem;color:rgba(240,240,248,.6);line-height:1.55;font-weight:300;margin-bottom:12px;}
+.nh-genesis-tags{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px;}
+.nh-genesis-tag{
+  font-size:.6rem;padding:4px 10px;border-radius:20px;
+  background:rgba(251,191,36,.1);border:1px solid rgba(251,191,36,.2);
+  color:var(--genesis);font-weight:600;font-family:'JetBrains Mono',monospace;
+}
+.nh-genesis-cta{
+  font-size:.82rem;font-weight:700;color:var(--genesis);
+  display:inline-flex;align-items:center;gap:4px;
+}
+
+/* Full expert list */
+.nh-full-list{padding:0 16px;display:flex;flex-direction:column;gap:8px;margin-bottom:6px;}
+.nh-full-item{
+  display:flex;align-items:center;gap:12px;
+  background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);
+  border-radius:14px;padding:10px 14px;cursor:pointer;transition:.2s;
+}
+.nh-full-item:hover{background:rgba(255,255,255,.07);transform:translateX(2px);}
+.nh-full-genesis{border-color:rgba(251,191,36,.25);background:rgba(251,191,36,.05);}
+.nh-full-av{width:42px;height:42px;border-radius:12px;overflow:hidden;flex-shrink:0;}
+.nh-full-av canvas{width:42px;height:42px;display:block;}
+.nh-full-info{flex:1;min-width:0;}
+.nh-full-name{font-family:'Syne',sans-serif;font-weight:800;font-size:.9rem;letter-spacing:-.02em;}
+.nh-full-role{font-size:.65rem;color:var(--muted);font-weight:300;}
+.nh-full-arrow{font-size:.85rem;color:var(--muted);flex-shrink:0;}
+.nh-full-badge{
+  font-size:.5rem;font-weight:700;padding:3px 8px;border-radius:20px;
+  font-family:'JetBrains Mono',monospace;letter-spacing:.05em;flex-shrink:0;white-space:nowrap;
+}
+
 /* Footer landing */
 .ld-foot{text-align:center;padding:24px 20px 8px;display:flex;justify-content:center;gap:18px;}
 .ld-foot a{font-size:.66rem;color:var(--muted);text-decoration:underline;cursor:pointer;font-family:'JetBrains Mono',monospace;}
@@ -1451,6 +1512,67 @@ header{
       </div>
     </div>
 
+  </div>
+
+  <!-- GENESIS SPOTLIGHT BANNER -->
+  <div class="nh-genesis-banner" onclick="openChat('genesis')">
+    <div class="nh-genesis-glow"></div>
+    <div class="nh-genesis-content">
+      <div class="nh-genesis-badge">✨ NOUVEAU · FLAGSHIP</div>
+      <div class="nh-genesis-title">Genesis</div>
+      <div class="nh-genesis-sub">L'IA la plus puissante de Nexo. Claude, GPT et Gemini combinés selon ta question — pour la meilleure réponse possible, à chaque fois.</div>
+      <div class="nh-genesis-tags">
+        <span class="nh-genesis-tag">🧠 Multi-IA</span>
+        <span class="nh-genesis-tag">🌐 Internet</span>
+        <span class="nh-genesis-tag">📎 Photos & documents</span>
+      </div>
+      <div class="nh-genesis-cta">Découvrir Genesis →</div>
+    </div>
+  </div>
+
+  <!-- LISTE COMPLÈTE DES EXPERTS -->
+  <div class="nh-sec-lbl">La liste complète de vos <span style="color:var(--text)">8 experts</span></div>
+  <div class="nh-full-list">
+    <div class="nh-full-item nh-full-genesis" onclick="openChat('genesis')">
+      <div class="nh-full-av"><canvas class="orbe-canvas" data-expert="genesis" width="80" height="80"></canvas></div>
+      <div class="nh-full-info"><div class="nh-full-name" style="color:var(--genesis)">Genesis</div><div class="nh-full-role">IA Flagship — Multi-modèles</div></div>
+      <div class="nh-full-badge" style="background:linear-gradient(135deg,var(--genesis),var(--gold2));color:#000">✨ Flagship</div>
+    </div>
+    <div class="nh-full-item" onclick="openChat('sofia')">
+      <div class="nh-full-av"><canvas class="orbe-canvas" data-expert="sofia" width="80" height="80"></canvas></div>
+      <div class="nh-full-info"><div class="nh-full-name" style="color:var(--sofia)">Sofia</div><div class="nh-full-role">Conseillère Financière</div></div>
+      <div class="nh-full-arrow">→</div>
+    </div>
+    <div class="nh-full-item" onclick="openChat('marcus')">
+      <div class="nh-full-av"><canvas class="orbe-canvas" data-expert="marcus" width="80" height="80"></canvas></div>
+      <div class="nh-full-info"><div class="nh-full-name" style="color:var(--marcus)">Marcus</div><div class="nh-full-role">Expert Droit du Travail</div></div>
+      <div class="nh-full-arrow">→</div>
+    </div>
+    <div class="nh-full-item" onclick="openChat('luna')">
+      <div class="nh-full-av"><canvas class="orbe-canvas" data-expert="luna" width="80" height="80"></canvas></div>
+      <div class="nh-full-info"><div class="nh-full-name" style="color:var(--luna)">Luna</div><div class="nh-full-role">Assistante Polyvalente</div></div>
+      <div class="nh-full-arrow">→</div>
+    </div>
+    <div class="nh-full-item" onclick="openChat('alex')">
+      <div class="nh-full-av"><canvas class="orbe-canvas" data-expert="alex" width="80" height="80"></canvas></div>
+      <div class="nh-full-info"><div class="nh-full-name" style="color:var(--alex)">Alex</div><div class="nh-full-role">Expert Entreprise & AE</div></div>
+      <div class="nh-full-arrow">→</div>
+    </div>
+    <div class="nh-full-item" onclick="openChat('max')">
+      <div class="nh-full-av"><canvas class="orbe-canvas" data-expert="max" width="80" height="80"></canvas></div>
+      <div class="nh-full-info"><div class="nh-full-name" style="color:var(--max)">Max</div><div class="nh-full-role">Expert Impression 3D</div></div>
+      <div class="nh-full-arrow">→</div>
+    </div>
+    <div class="nh-full-item" onclick="openChat('koda')">
+      <div class="nh-full-av"><canvas class="orbe-canvas" data-expert="koda" width="80" height="80"></canvas></div>
+      <div class="nh-full-info"><div class="nh-full-name" style="color:var(--koda)">Koda</div><div class="nh-full-role">Expert Développement</div></div>
+      <div class="nh-full-badge" style="background:linear-gradient(135deg,var(--gold),var(--gold2));color:#000">⭐ Premium</div>
+    </div>
+    <div class="nh-full-item" onclick="openChat('nova')">
+      <div class="nh-full-av"><canvas class="orbe-canvas" data-expert="nova" width="80" height="80"></canvas></div>
+      <div class="nh-full-info"><div class="nh-full-name" style="color:var(--nova)">Nova</div><div class="nh-full-role">Créatrice d'images IA</div></div>
+      <div class="nh-full-badge" style="background:linear-gradient(135deg,var(--gold),var(--gold2));color:#000">⭐ Premium</div>
+    </div>
   </div>
 
   <!-- BLOC POURQUOI + STATS + CTA -->
@@ -2360,11 +2482,44 @@ var _attachedImage=null; // {media_type, data(base64 no prefix), dataUrl}
 function onPhotoPicked(e){
   var file=e.target.files&&e.target.files[0];
   if(!file)return;
-  if(file.size>20*1024*1024){alert('La photo est trop lourde (max 20 Mo).');e.target.value='';return;}
+  if(file.size>20*1024*1024){alert('Le fichier est trop lourd (max 20 Mo).');e.target.value='';return;}
+
+  // ── Documents (PDF, doc, txt) : pas de compression, envoi direct en base64 ──
+  if(file.type!=='' && !file.type.startsWith('image/')){
+    var docReader=new FileReader();
+    docReader.onload=function(){
+      var dataUrl=docReader.result;
+      var comma=dataUrl.indexOf(',');
+      var mt=file.type||'application/pdf';
+      _attachedImage={
+        media_type:mt,
+        data:dataUrl.substring(comma+1),
+        dataUrl:dataUrl,
+        isDocument:true,
+        fileName:file.name
+      };
+      document.getElementById('imgPreviewThumb').style.display='none';
+      var ip=document.getElementById('imgPreview');
+      var nameEl=ip.querySelector('.doc-filename');
+      if(!nameEl){
+        nameEl=document.createElement('div');
+        nameEl.className='doc-filename';
+        nameEl.style.cssText='font-size:.7rem;color:var(--text);padding:0 8px;display:flex;align-items:center;gap:4px;';
+        ip.insertBefore(nameEl,ip.firstChild);
+      }
+      nameEl.style.display='flex';
+      nameEl.textContent='📄 '+file.name;
+      ip.style.display='flex';
+    };
+    docReader.readAsDataURL(file);
+    e.target.value='';
+    return;
+  }
+
+  // ── Images : compression via canvas ──────────────────────────────────────
   var reader=new FileReader();
   reader.onload=function(){
     var dataUrl=reader.result;
-    // Compression via canvas pour réduire la taille
     var img=new Image();
     img.onload=function(){
       var canvas=document.createElement('canvas');
@@ -2379,9 +2534,13 @@ function onPhotoPicked(e){
       ctx.drawImage(img,0,0,w,h);
       var compressed=canvas.toDataURL('image/jpeg',0.85);
       var comma=compressed.indexOf(',');
-      _attachedImage={media_type:'image/jpeg',data:compressed.substring(comma+1),dataUrl:compressed};
+      _attachedImage={media_type:'image/jpeg',data:compressed.substring(comma+1),dataUrl:compressed,isDocument:false};
+      document.getElementById('imgPreviewThumb').style.display='block';
       document.getElementById('imgPreviewThumb').src=compressed;
-      document.getElementById('imgPreview').style.display='flex';
+      var ip=document.getElementById('imgPreview');
+      var nameEl=ip.querySelector('.doc-filename');
+      if(nameEl)nameEl.style.display='none';
+      ip.style.display='flex';
     };
     img.src=dataUrl;
   };
@@ -2392,6 +2551,9 @@ function clearAttachedImage(){
   _attachedImage=null;
   document.getElementById('imgPreview').style.display='none';
   document.getElementById('imgPreviewThumb').src='';
+  document.getElementById('imgPreviewThumb').style.display='block';
+  var nameEl=document.querySelector('#imgPreview .doc-filename');
+  if(nameEl)nameEl.style.display='none';
 }
 
 function sendMsg(){
@@ -2406,14 +2568,20 @@ async function sendText(txt){
   if(!isPremium&&getUsage(id)>=ex.freeLimit){showLocked(id);return;}
   // image jointe (uniquement pour experts avec vision)
   var img=(ex.vision && _attachedImage)?_attachedImage:null;
-  var displayTxt=txt||(img?'(photo envoyée)':'');
-  appendUser(displayTxt,img?img.dataUrl:null);
+  var displayTxt=txt||(img?(img.isDocument?('(document envoyé : '+img.fileName+')'):'(photo envoyée)'):'');
+  appendUser(displayTxt,(img&&!img.isDocument)?img.dataUrl:null);
   // contenu pour l'API : tableau multimodal si image, sinon texte simple
   var apiContent;
   if(img){
-    apiContent=[{type:'image',source:{type:'base64',media_type:img.media_type,data:img.data}}];
-    if(txt)apiContent.push({type:'text',text:txt});
-    else apiContent.push({type:'text',text:'Analyse cette photo liée à l\'impression 3D et donne-moi ton diagnostic et tes conseils.'});
+    if(img.isDocument){
+      apiContent=[{type:'document',source:{type:'base64',media_type:img.media_type,data:img.data}}];
+      if(txt)apiContent.push({type:'text',text:txt});
+      else apiContent.push({type:'text',text:'Analyse ce document et donne-moi un résumé clair ainsi que tes conseils.'});
+    }else{
+      apiContent=[{type:'image',source:{type:'base64',media_type:img.media_type,data:img.data}}];
+      if(txt)apiContent.push({type:'text',text:txt});
+      else apiContent.push({type:'text',text:'Analyse cette photo liée à l\'impression 3D et donne-moi ton diagnostic et tes conseils.'});
+    }
   }else{
     apiContent=txt;
   }
