@@ -857,6 +857,76 @@ header{
 .nh-dcard-genesis .nh-dcard-tag{background:rgba(251,191,36,.1);color:var(--genesis);border-color:rgba(251,191,36,.25);}
 .nh-dcard-genesis .nh-dcard-cta{color:var(--genesis);font-weight:700;}
 
+
+
+/* ════════════════════════════════════════════
+   PATCH NEXO — Accueil premium Genesis + orbite
+   Ajout visuel uniquement : ne modifie pas Supabase, Premium, Nova, Genesis ni les appels API.
+   ════════════════════════════════════════════ */
+.ld-showcase{position:relative;display:grid;grid-template-columns:1fr;gap:18px;padding:28px 18px 8px;overflow:hidden}
+.ld-showcase::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 78% 34%,rgba(251,191,36,.12),transparent 34%),radial-gradient(circle at 48% 62%,rgba(168,85,247,.13),transparent 38%);pointer-events:none}
+.ld-showcase-left,.ld-showcase-right{position:relative;z-index:1}
+.ld-showcase-left{text-align:left}
+.ld-showcase-left .ld-eyebrow{margin-bottom:12px}
+.ld-showcase-left h1{font-family:'Syne',sans-serif;font-weight:800;font-size:2.45rem;line-height:1.06;letter-spacing:-.065em;margin-bottom:12px;max-width:390px}
+.ld-showcase-left h1 em{font-style:normal;color:var(--gold)}
+.ld-showcase-left .ld-hero-sub{padding:0;margin-bottom:18px;max-width:350px}
+.ld-showcase-left .ld-cta-main{max-width:300px;margin-bottom:14px}
+.ld-genesis-mini{max-width:330px;background:rgba(255,255,255,.045);border:1px solid rgba(244,162,97,.18);border-radius:18px;padding:16px;box-shadow:0 18px 60px rgba(0,0,0,.28), inset 0 0 0 1px rgba(255,255,255,.025);cursor:pointer;transition:.25s}
+.ld-genesis-mini:hover{transform:translateY(-2px);border-color:rgba(244,162,97,.38)}
+.ld-genesis-mini-title{font-family:'Syne',sans-serif;font-weight:800;font-size:1.05rem;color:var(--gold);margin-bottom:3px}
+.ld-genesis-mini-sub{font-size:.78rem;color:rgba(240,240,248,.72);margin-bottom:12px}
+.ld-genesis-mini-list{display:flex;flex-direction:column;gap:7px;margin-bottom:14px}
+.ld-genesis-mini-list span{font-size:.78rem;color:rgba(240,240,248,.66);line-height:1.25}
+.ld-genesis-mini-cta{border:1px solid rgba(244,162,97,.28);border-radius:13px;padding:9px 12px;text-align:center;color:var(--gold);font-family:'Syne',sans-serif;font-weight:700;font-size:.82rem;background:rgba(244,162,97,.055)}
+.ld-showcase-right{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:360px;margin-top:4px}
+.ld-orbit-map{position:relative;width:min(390px,92vw);height:min(390px,92vw);max-width:390px;max-height:390px;margin:0 auto}
+.ld-orbit-ring{position:absolute;inset:14%;border:1px solid rgba(167,139,250,.32);border-radius:50%;box-shadow:0 0 45px rgba(167,139,250,.08) inset,0 0 24px rgba(244,162,97,.05);animation:orbitGlow 4s ease-in-out infinite}
+@keyframes orbitGlow{0%,100%{opacity:.78;transform:scale(1)}50%{opacity:1;transform:scale(1.015)}}
+.ld-orbit-core{position:absolute;left:50%;top:50%;width:138px;height:138px;transform:translate(-50%,-50%);border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;background:radial-gradient(circle,rgba(244,162,97,.25),rgba(244,162,97,.08) 55%,rgba(0,0,0,.12));border:1px solid rgba(244,162,97,.55);box-shadow:0 0 60px rgba(244,162,97,.28),inset 0 0 32px rgba(244,162,97,.15);cursor:pointer}
+.ld-orbit-core strong{font-family:'Syne',sans-serif;font-size:1.35rem;font-weight:800;color:var(--gold);letter-spacing:-.04em}
+.ld-orbit-core span{font-size:.72rem;color:rgba(240,240,248,.75);margin-top:4px}
+.ld-orbit-core small{font-size:.62rem;color:rgba(240,240,248,.55);margin-top:3px}
+.ld-orbit-node{position:absolute;display:flex;flex-direction:column;align-items:center;gap:5px;transform:translate(-50%,-50%);background:none;border:0;color:var(--text);font-family:'DM Sans',sans-serif;cursor:pointer;min-width:78px}
+.ld-orbit-node b{width:58px;height:58px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.45rem;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);box-shadow:0 0 28px rgba(255,255,255,.08);backdrop-filter:blur(10px)}
+.ld-orbit-node span{font-family:'Syne',sans-serif;font-size:.83rem;font-weight:800;line-height:1;text-shadow:0 2px 12px rgba(0,0,0,.7)}
+.ld-orbit-node small{display:block;font-family:'DM Sans',sans-serif;font-weight:400;font-size:.63rem;color:rgba(240,240,248,.62);margin-top:4px;white-space:nowrap}
+.node-sofia{left:50%;top:5%}.node-sofia b{color:var(--sofia);border-color:rgba(52,211,153,.36);box-shadow:0 0 34px rgba(52,211,153,.24)}.node-sofia span{color:var(--sofia)}
+.node-alex{left:86%;top:23%}.node-alex b{color:var(--alex);border-color:rgba(251,146,60,.38);box-shadow:0 0 34px rgba(251,146,60,.24)}.node-alex span{color:var(--alex)}
+.node-nova{left:92%;top:53%}.node-nova b{color:var(--nova);border-color:rgba(244,114,182,.38);box-shadow:0 0 34px rgba(244,114,182,.24)}.node-nova span{color:var(--nova)}
+.node-max{left:77%;top:80%}.node-max b{color:var(--max);border-color:rgba(34,211,238,.38);box-shadow:0 0 34px rgba(34,211,238,.22)}.node-max span{color:var(--max)}
+.node-koda{left:50%;top:95%}.node-koda b{color:var(--koda);border-color:rgba(56,189,248,.38);box-shadow:0 0 34px rgba(56,189,248,.2)}.node-koda span{color:var(--luna)}
+.node-luna{left:18%;top:80%}.node-luna b{color:var(--luna);border-color:rgba(167,139,250,.38);box-shadow:0 0 34px rgba(167,139,250,.22)}.node-luna span{color:var(--luna)}
+.node-marcus{left:14%;top:24%}.node-marcus b{color:var(--marcus);border-color:rgba(96,165,250,.38);box-shadow:0 0 34px rgba(96,165,250,.22)}.node-marcus span{color:var(--marcus)}
+.ld-orbit-hint{font-size:.72rem;color:rgba(240,240,248,.5);text-align:center;margin-top:8px;font-family:'JetBrains Mono',monospace}
+.ld-example-strip{position:relative;margin:10px 16px 0;padding:14px;border-radius:18px;background:rgba(255,255,255,.045);border:1px solid rgba(255,255,255,.09);backdrop-filter:blur(16px)}
+.ld-example-title{font-family:'Syne',sans-serif;font-weight:700;font-size:.95rem;margin-bottom:10px}
+.ld-example-row{display:grid;grid-template-columns:1fr;gap:8px}
+.ld-example-row button{display:flex;align-items:center;gap:10px;text-align:left;border:1px solid rgba(255,255,255,.08);background:rgba(8,8,16,.72);border-radius:14px;padding:10px 12px;color:var(--text);font-family:'DM Sans',sans-serif;cursor:pointer}
+.ld-example-row button strong{font-family:'Syne',sans-serif;color:var(--gold);min-width:48px}
+.ld-example-row button span{flex:1;font-size:.72rem;color:rgba(240,240,248,.7);line-height:1.35}
+.ld-reassure-card{margin:14px 16px 0;padding:12px;background:rgba(255,255,255,.045);border:1px solid rgba(255,255,255,.09);border-radius:18px}
+.ld-hero{padding-top:18px}
+#landing .nh-full-list{gap:10px}
+#landing .nh-full-item{padding:14px;border-radius:18px;background:rgba(255,255,255,.045)}
+#landing .ld-sec-title{font-size:1.65rem;line-height:1.05;margin-top:4px}
+#landing .ld-demo{background:rgba(96,165,250,.035);border-color:rgba(96,165,250,.22)}
+#landing .ld-testis{display:grid;grid-template-columns:1fr;gap:10px;margin:8px 16px 0}
+@media (min-width:430px){
+  .ld-showcase{grid-template-columns:1fr 1.12fr;align-items:center;padding:30px 26px 10px}
+  .ld-showcase-left h1{font-size:2.05rem}
+  .ld-orbit-map{width:310px;height:310px}
+  .ld-orbit-core{width:118px;height:118px}
+  .ld-orbit-node b{width:48px;height:48px;font-size:1.22rem}
+  .ld-example-row{grid-template-columns:1fr 1fr}
+}
+@media (max-width:390px){
+  .ld-showcase-left h1{font-size:2.15rem}
+  .ld-orbit-node b{width:50px;height:50px;font-size:1.18rem}
+  .ld-orbit-node span{font-size:.72rem}.ld-orbit-node small{font-size:.55rem}
+  .ld-orbit-core{width:118px;height:118px}.ld-orbit-core strong{font-size:1.15rem}
+}
+
 </style>
 </head>
 <body>
@@ -872,39 +942,66 @@ header{
       <button class="ld-hdr-btn" onclick="landingToAuth('login')">Se connecter</button>
     </div>
 
-    <!-- Hero -->
-    <div class="ld-hero">
-      <div class="ld-sphere-wrap"><canvas id="ldSphere" width="120" height="120"></canvas></div>
-      <div class="ld-eyebrow"><div class="live-dot"></div>Vos experts IA · 24h/24</div>
-      <h1>Une IA <em>spécialisée</em> pour chaque besoin</h1>
-      <p class="ld-hero-sub">Genesis combine Claude, ChatGPT et Gemini dans une seule IA, accompagné de 8 experts spécialisés en finance, droit, entreprise, impression 3D, images IA et plus.</p>
-      <button class="ld-cta-main" onclick="landingToAuth('signup')">
-        🚀 Essayer gratuitement
-        <span class="ld-cta-sub">Aucune carte bancaire requise</span>
-      </button>
-      <div class="ld-reassure">
-        <div class="ld-re"><div class="ld-re-ico">⚡</div><div class="ld-re-t">Réponses 24h/24</div><div class="ld-re-d">Sans rendez-vous</div></div>
-        <div class="ld-re"><div class="ld-re-ico">🔒</div><div class="ld-re-t">Confidentiel</div><div class="ld-re-d">Sécurisé à 100%</div></div>
-        <div class="ld-re"><div class="ld-re-ico">🇫🇷</div><div class="ld-re-t">Adapté France</div><div class="ld-re-d">URSSAF, Code du travail</div></div>
+    <!-- Hero premium avec Genesis + orbite experts -->
+    <div class="ld-showcase">
+      <div class="ld-showcase-left">
+        <div class="ld-eyebrow"><div class="live-dot"></div>Vos experts IA · 24h/24</div>
+        <h1>Une IA <em>spécialisée</em> pour chaque besoin.</h1>
+        <p class="ld-hero-sub">Genesis combine Claude, ChatGPT et Gemini dans une seule IA, accompagné de 8 experts spécialisés.</p>
+        <button class="ld-cta-main" onclick="landingToAuth('signup')">
+          🚀 Nouvelle conversation
+          <span class="ld-cta-sub">Aucune carte bancaire requise</span>
+        </button>
+
+        <div class="ld-genesis-mini" onclick="landingToAuth('signup')">
+          <div class="ld-genesis-mini-title">✨ Genesis</div>
+          <div class="ld-genesis-mini-sub">Claude + ChatGPT + Gemini</div>
+          <div class="ld-genesis-mini-list">
+            <span>🧠 Choisit le meilleur modèle</span>
+            <span>🌐 Recherche Internet</span>
+            <span>📄 Analyse de documents</span>
+            <span>📷 Analyse de photos</span>
+            <span>⚡ Réponses optimisées</span>
+          </div>
+          <div class="ld-genesis-mini-cta">Essayer Genesis →</div>
+        </div>
+      </div>
+
+      <div class="ld-showcase-right">
+        <div class="ld-orbit-map" aria-label="Genesis entouré des experts Nexo">
+          <div class="ld-orbit-ring"></div>
+          <div class="ld-orbit-core" onclick="landingToAuth('signup')">
+            <strong>Genesis</strong>
+            <span>IA Flagship</span>
+            <small>Claude + GPT + Gemini</small>
+          </div>
+          <button class="ld-orbit-node node-sofia" onclick="landingToAuth('signup')"><b>🐷</b><span>Sofia<small>Finance</small></span></button>
+          <button class="ld-orbit-node node-alex" onclick="landingToAuth('signup')"><b>💼</b><span>Alex<small>Entreprise</small></span></button>
+          <button class="ld-orbit-node node-nova" onclick="landingToAuth('signup')"><b>🖼️</b><span>Nova<small>Images IA</small></span></button>
+          <button class="ld-orbit-node node-max" onclick="landingToAuth('signup')"><b>🧊</b><span>Max<small>Impression 3D</small></span></button>
+          <button class="ld-orbit-node node-koda" onclick="landingToAuth('signup')"><b>⌨️</b><span>Koda<small>Développement</small></span></button>
+          <button class="ld-orbit-node node-luna" onclick="landingToAuth('signup')"><b>💬</b><span>Luna<small>Assistante IA</small></span></button>
+          <button class="ld-orbit-node node-marcus" onclick="landingToAuth('signup')"><b>⚖️</b><span>Marcus<small>Droit du travail</small></span></button>
+        </div>
+        <div class="ld-orbit-hint">← faites glisser pour découvrir vos experts IA →</div>
       </div>
     </div>
 
-    <!-- GENESIS — carte premium en vedette -->
-    <div class="nh-genesis-banner" onclick="landingToAuth('signup')" style="margin:8px 16px 0;">
-      <div class="nh-genesis-glow"></div>
-      <div class="nh-genesis-content">
-        <div class="nh-genesis-badge">✨ GENESIS</div>
-        <div class="nh-genesis-title">Genesis</div>
-        <div class="nh-genesis-sub2">Claude + ChatGPT + Gemini réunis</div>
-        <div class="nh-genesis-tags">
-          <span class="nh-genesis-tag">🧠 Multi-IA</span>
-          <span class="nh-genesis-tag">🌐 Internet</span>
-          <span class="nh-genesis-tag">📄 Documents</span>
-          <span class="nh-genesis-tag">📷 Photos</span>
-        </div>
-        <div class="nh-genesis-sub">Pose une question et Genesis choisit automatiquement le meilleur modèle pour te répondre.</div>
-        <div class="nh-genesis-cta">🚀 Essayer Genesis</div>
+    <div class="ld-example-strip">
+      <div class="ld-example-title">✨ Essayez un exemple</div>
+      <div class="ld-example-row">
+        <button onclick="landingToAuth('signup')"><strong>Marcus</strong><span>Mon patron peut-il me licencier pendant un arrêt maladie ?</span>→</button>
+        <button onclick="landingToAuth('signup')"><strong>Sofia</strong><span>Comment épargner 500€ par mois avec mon budget ?</span>→</button>
+        <button onclick="landingToAuth('signup')"><strong>Alex</strong><span>Comment créer mon auto-entreprise en ligne ?</span>→</button>
+        <button onclick="landingToAuth('signup')"><strong>Nova</strong><span>Transforme cette photo en style cartoon</span>→</button>
       </div>
+    </div>
+
+    <div class="ld-reassure ld-reassure-card">
+      <div class="ld-re"><div class="ld-re-ico">⚡</div><div class="ld-re-t">Réponses 24h/24</div><div class="ld-re-d">Sans rendez-vous</div></div>
+      <div class="ld-re"><div class="ld-re-ico">🔒</div><div class="ld-re-t">Confidentiel</div><div class="ld-re-d">Sécurisé à 100%</div></div>
+      <div class="ld-re"><div class="ld-re-ico">🇫🇷</div><div class="ld-re-t">Adapté France</div><div class="ld-re-d">Règles françaises</div></div>
+      <div class="ld-re"><div class="ld-re-ico">⭐</div><div class="ld-re-t">+1200 questions</div><div class="ld-re-d">Déjà répondues</div></div>
     </div>
 
     <!-- Démo Marcus -->
