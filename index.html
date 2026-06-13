@@ -2337,7 +2337,13 @@ function goSection(name,el){
 function showPremium(){goSection('premium',document.querySelectorAll('.tab')[2]);document.getElementById('userMenu').classList.remove('open');}
 function showDiscover(){goSection('discover',document.querySelectorAll('.tab')[1]);document.getElementById('userMenu').classList.remove('open');}
 function getAvatarMini(id){var ex=EXPERTS[id];return '<div style="width:100%;height:100%;background:'+ex.bg+';display:flex;align-items:center;justify-content:center;font-size:1.2rem;">'+ex.emoji+'</div>';}
-function activatePremium(){window.open(STRIPE_LINK,'_blank');}
+function stripeLinkWithEmail(){
+  if(currentUser&&currentUser.email){
+    return STRIPE_LINK+'?prefilled_email='+encodeURIComponent(currentUser.email)+'&client_reference_id='+encodeURIComponent(currentUser.email);
+  }
+  return STRIPE_LINK;
+}
+function activatePremium(){window.open(stripeLinkWithEmail(),'_blank');}
 function setPremiumActive(){isPremium=true;document.getElementById('planPill').textContent='PREMIUM';document.getElementById('planPill').className='plan-pill premium';document.getElementById('credFill').style.width='100%';document.getElementById('credTxt').textContent='Illimité ∞';document.getElementById('limitBar').style.display='none';
   // Masquer les éléments "essai gratuit" pour les Premium
   var toHide=['nh-hero-btns','nh-testi-hero','nh-cta-block'];
@@ -2369,7 +2375,7 @@ async function openChat(id){
     document.getElementById('limitBar').style.display='none';
     var area=document.getElementById('msgsArea');area.innerHTML='';
     var ov=document.createElement('div');ov.className='locked-ov';
-    ov.innerHTML='<div class="locked-av">'+getAvatarMini(id)+'</div><div class="locked-title" style="color:'+ex.color+'">'+ex.name+' est réservé Premium ⭐</div><div class="locked-txt">Cet expert est exclusivement disponible pour les membres <strong>Premium</strong>.<br><br>Accédez à Koda et à tous les experts sans limite.</div><button class="btn-unlock" onclick="window.open(\''+STRIPE_LINK+'\',\'_blank\')">Passer Premium — 9,99€/mois</button><div class="later-btn" onclick="closeChat()">Retour aux experts gratuits</div>';
+    ov.innerHTML='<div class="locked-av">'+getAvatarMini(id)+'</div><div class="locked-title" style="color:'+ex.color+'">'+ex.name+' est réservé Premium ⭐</div><div class="locked-txt">Cet expert est exclusivement disponible pour les membres <strong>Premium</strong>.<br><br>Accédez à Koda et à tous les experts sans limite.</div><button class="btn-unlock" onclick="window.open(stripeLinkWithEmail(),\'_blank\')">Passer Premium — 9,99€/mois</button><div class="later-btn" onclick="closeChat()">Retour aux experts gratuits</div>';
     area.style.position='relative';area.appendChild(ov);
     return;
   }
@@ -2727,7 +2733,7 @@ async function saveMessage(expert,role,content){
 function showLocked(id){
   var ex=EXPERTS[id];var area=document.getElementById('msgsArea');
   var ov=document.createElement('div');ov.className='locked-ov';
-  ov.innerHTML='<div class="locked-av">'+getAvatarMini(id)+'</div><div class="locked-title">'+ex.name+' vous attend !</div><div class="locked-txt">Vous avez utilisé vos '+ex.freeLimit+' messages gratuits.<br><br>Passez <strong>Premium</strong> pour des consultations illimitées.</div><button class="btn-unlock" onclick="window.open(\''+STRIPE_LINK+'\',\'_blank\')">Passer Premium — 9,99€/mois</button><div class="later-btn" onclick="this.parentElement.remove()">Revenir demain (gratuit)</div>';
+  ov.innerHTML='<div class="locked-av">'+getAvatarMini(id)+'</div><div class="locked-title">'+ex.name+' vous attend !</div><div class="locked-txt">Vous avez utilisé vos '+ex.freeLimit+' messages gratuits.<br><br>Passez <strong>Premium</strong> pour des consultations illimitées.</div><button class="btn-unlock" onclick="window.open(stripeLinkWithEmail(),\'_blank\')">Passer Premium — 9,99€/mois</button><div class="later-btn" onclick="this.parentElement.remove()">Revenir demain (gratuit)</div>';
   area.style.position='relative';area.appendChild(ov);
 }
 function autoGrow(el){el.style.height='auto';el.style.height=Math.min(el.scrollHeight,100)+'px';}
