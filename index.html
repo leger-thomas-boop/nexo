@@ -16,7 +16,7 @@
   --bg:#080810;--bg2:#0d0d18;--card:rgba(255,255,255,.04);
   --border:rgba(255,255,255,.08);--text:#f0f0f8;--muted:#5a5a78;
   --gold:#f4a261;--gold2:#e76f51;
-  --sofia:#34d399;--marcus:#60a5fa;--luna:#a78bfa;--alex:#fb923c;--max:#22d3ee;--nova:#f472b6;--koda:#38bdf8;
+  --sofia:#34d399;--marcus:#60a5fa;--luna:#a78bfa;--alex:#fb923c;--max:#22d3ee;--nova:#f472b6;--koda:#38bdf8;--genesis:#fbbf24;
 }
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
 body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min-height:100vh;max-width:480px;margin:0 auto;overflow-x:hidden;}
@@ -757,6 +757,35 @@ header{
 .ld-foot{text-align:center;padding:24px 20px 8px;display:flex;justify-content:center;gap:18px;}
 .ld-foot a{font-size:.66rem;color:var(--muted);text-decoration:underline;cursor:pointer;font-family:'JetBrains Mono',monospace;}
 
+/* Genesis "réfléchit" indicator */
+.genesis-thinking{display:flex;align-items:center;gap:8px;}
+.gth-icon{font-size:1rem;animation:gth-spin 1.8s linear infinite;display:inline-block;}
+@keyframes gth-spin{0%{transform:rotate(0deg) scale(1);}50%{transform:rotate(180deg) scale(1.2);}100%{transform:rotate(360deg) scale(1);}}
+.gth-text{font-size:.78rem;color:var(--genesis);font-weight:600;background:linear-gradient(90deg,var(--genesis),#fff,var(--genesis));background-size:200% auto;-webkit-background-clip:text;-webkit-text-fill-color:transparent;animation:gth-shine 2s linear infinite;}
+@keyframes gth-shine{to{background-position:200% center;}}
+.gth-dots{display:flex;gap:3px;}
+.gth-dots span{width:5px;height:5px;border-radius:50%;background:var(--genesis);animation:gth-bounce 1.2s infinite ease-in-out;}
+.gth-dots span:nth-child(2){animation-delay:.15s;}
+.gth-dots span:nth-child(3){animation-delay:.3s;}
+@keyframes gth-bounce{0%,80%,100%{transform:translateY(0);opacity:.4;}40%{transform:translateY(-4px);opacity:1;}}
+
+/* Genesis flagship badge */
+.nh-flagship-badge{
+  position:absolute;top:0;left:50%;transform:translateX(-50%);
+  background:linear-gradient(135deg,var(--genesis),#f59e0b);
+  color:#000;font-size:.42rem;font-weight:800;
+  padding:2px 8px;border-radius:20px;letter-spacing:.08em;
+  font-family:'JetBrains Mono',monospace;
+  box-shadow:0 2px 10px rgba(251,191,36,.5);
+  white-space:nowrap;z-index:2;
+}
+.nh-eico-genesis .nh-eico-name{color:var(--genesis);background:linear-gradient(90deg,var(--genesis),#fff,var(--genesis));background-size:200% auto;-webkit-background-clip:text;-webkit-text-fill-color:transparent;animation:gth-shine 3s linear infinite;}
+.nh-eico-genesis .nh-eico-av{border-color:rgba(251,191,36,.4);box-shadow:0 0 16px rgba(251,191,36,.3);}
+.nh-dcard-genesis{border-color:rgba(251,191,36,.3)!important;background:linear-gradient(135deg,rgba(251,191,36,.06),rgba(255,255,255,.04))!important;}
+.nh-dcard-genesis .nh-dcard-name{color:var(--genesis);background:linear-gradient(90deg,var(--genesis),#fff,var(--genesis));background-size:200% auto;-webkit-background-clip:text;-webkit-text-fill-color:transparent;animation:gth-shine 3s linear infinite;}
+.nh-dcard-genesis .nh-dcard-tag{background:rgba(251,191,36,.1);color:var(--genesis);border-color:rgba(251,191,36,.25);}
+.nh-dcard-genesis .nh-dcard-cta{color:var(--genesis);font-weight:700;}
+
 </style>
 </head>
 <body>
@@ -777,7 +806,7 @@ header{
       <div class="ld-sphere-wrap"><canvas id="ldSphere" width="160" height="160"></canvas></div>
       <div class="ld-eyebrow"><div class="live-dot"></div>Vos experts IA · 24h/24</div>
       <h1>Une IA <em>spécialisée</em> pour chaque besoin</h1>
-      <p class="ld-hero-sub">Épargnez plus vite, protégez vos droits, développez votre activité avec 7 experts IA spécialisés, toujours disponibles.</p>
+      <p class="ld-hero-sub">Épargnez plus vite, protégez vos droits, développez votre activité avec 8 experts IA spécialisés, toujours disponibles.</p>
       <button class="ld-cta-main" onclick="landingToAuth('signup')">
         🚀 Essayer gratuitement
         <span class="ld-cta-sub">Aucune carte bancaire</span>
@@ -849,7 +878,7 @@ header{
     <!-- CTA final -->
     <div class="ld-final">
       <div class="ld-final-t">Prêt à essayer ?</div>
-      <div class="ld-final-d">7 experts IA spécialisés vous attendent. Commencez gratuitement, sans carte bancaire.</div>
+      <div class="ld-final-d">8 experts IA spécialisés vous attendent. Commencez gratuitement, sans carte bancaire.</div>
       <button class="ld-cta-main" onclick="landingToAuth('signup')">
         🚀 Créer mon compte gratuit
         <span class="ld-cta-sub">9,99€/mois pour le Premium illimité</span>
@@ -883,7 +912,7 @@ header{
     <div class="auth-top">
       <div class="auth-badge"><div class="live-dot"></div>v1.6 · Nouvelle génération</div>
       <div class="auth-logo"><span class="logo-nex">Nex</span><span class="logo-o">o</span></div>
-      <div class="auth-tagline"><strong>7 IA spécialisées</strong> · L'expertise IA pour tous, à 9,99€/mois</div>
+      <div class="auth-tagline"><strong>8 IA spécialisées</strong> · L'expertise IA pour tous, à 9,99€/mois</div>
       <div class="price-compare">
         <div class="pc-nexo">
           <div class="pc-badge">−50%</div>
@@ -1264,7 +1293,7 @@ header{
       <div class="nh-hero-left">
         <div class="nh-eyebrow"><div class="live-dot"></div>Vos experts IA · 24h/24</div>
         <h2>Une IA <em>spécialisée</em> pour chaque besoin.</h2>
-        <p class="nh-hero-sub">Épargne plus vite, protège tes droits, développe ton activité avec 7 experts IA spécialisés, toujours disponibles.</p>
+        <p class="nh-hero-sub">Épargne plus vite, protège tes droits, développe ton activité avec 8 experts IA spécialisés, toujours disponibles.</p>
         <div class="nh-hero-btns" id="nh-hero-btns">
           <button class="nh-btn-main" onclick="openChat('sofia')">🚀 Essayer gratuitement</button>
           <button class="nh-btn-sec" onclick="goSection('discover',null)">En savoir plus</button>
@@ -1291,8 +1320,14 @@ header{
   </div>
 
   <!-- EXPERT ICON SCROLL -->
-  <div class="nh-sec-lbl">Vos 7 experts IA</div>
+  <div class="nh-sec-lbl">Vos 8 experts IA</div>
   <div class="nh-expert-scroll">
+    <div class="nh-eico nh-eico-genesis" onclick="openChat('genesis')" style="position:relative">
+      <div class="nh-flagship-badge">✨ FLAGSHIP</div>
+      <div class="nh-eico-av"><canvas class="orbe-canvas" data-expert="genesis" width="108" height="108"></canvas></div>
+      <div class="nh-eico-name">Genesis</div>
+      <div class="nh-eico-role">IA Flagship</div>
+    </div>
     <div class="nh-eico nh-eico-sofia" onclick="openChat('sofia')">
       <div class="nh-eico-av"><canvas class="orbe-canvas" data-expert="sofia" width="108" height="108"></canvas></div>
       <div class="nh-eico-name">Sofia</div>
@@ -1335,6 +1370,22 @@ header{
   <!-- EXPERT DETAIL CARDS -->
   <div class="nh-sec-lbl" style="cursor:pointer" onclick="openChat('sofia')">Découvrez vos experts en détail</div>
   <div class="nh-detail-list">
+
+    <div class="nh-dcard nh-dcard-genesis" onclick="openChat('genesis')">
+      <div class="nh-dcard-status" style="background:linear-gradient(135deg,rgba(251,191,36,.15),rgba(245,158,11,.08));border-color:rgba(251,191,36,.3);color:var(--genesis)">✨ Flagship</div>
+      <div class="nh-dcard-inner">
+        <div class="nh-dcard-av"><canvas class="orbe-canvas" data-expert="genesis" width="104" height="104"></canvas></div>
+        <div class="nh-dcard-info">
+          <div class="nh-dcard-name">Genesis</div>
+          <div class="nh-dcard-role">IA Flagship — Multi-modèles</div>
+          <div class="nh-dcard-desc">Claude, GPT et Gemini combinés selon ta question — la réponse la plus performante possible.</div>
+        </div>
+      </div>
+      <div class="nh-dcard-foot">
+        <div class="nh-dcard-tags"><span class="nh-dcard-tag">Multi-IA</span><span class="nh-dcard-tag">Internet</span><span class="nh-dcard-tag">Photos & docs</span></div>
+        <div class="nh-dcard-cta">Découvrir →</div>
+      </div>
+    </div>
 
     <div class="nh-dcard nh-dcard-sofia" onclick="openChat('sofia')">
       <div class="nh-dcard-status"><div class="status-dot"></div>En ligne</div>
@@ -1406,7 +1457,7 @@ header{
   <div class="nh-why">
     <div class="nh-why-title">Pourquoi choisir Nexo ?</div>
     <div class="nh-why-list">
-      <div class="nh-why-item"><div class="nh-why-ico">⚡</div><div class="nh-why-txt"><strong>7 IA spécialisées</strong> — chacun expert dans son domaine.</div></div>
+      <div class="nh-why-item"><div class="nh-why-ico">⚡</div><div class="nh-why-txt"><strong>8 IA spécialisées</strong> — chacun expert dans son domaine.</div></div>
       <div class="nh-why-item"><div class="nh-why-ico">🔒</div><div class="nh-why-txt"><strong>Confidentialité totale</strong> — vos données sont protégées et sécurisées.</div></div>
       <div class="nh-why-item"><div class="nh-why-ico">⏱️</div><div class="nh-why-txt"><strong>Réponses instantanées</strong> — disponibles 24h/24, 7j/7.</div></div>
       <div class="nh-why-item"><div class="nh-why-ico">🇫🇷</div><div class="nh-why-txt"><strong>100% adapté à la France</strong> — Livret A, URSSAF, Code du travail. Nos experts connaissent les règles françaises.</div></div>
@@ -1415,7 +1466,7 @@ header{
     <div class="nh-stats">
       <div class="nh-stat"><div class="nh-stat-ico">💬</div><div class="nh-stat-val">1 200+</div><div class="nh-stat-lbl">Questions répondues</div></div>
       <div class="nh-stat"><div class="nh-stat-ico">👥</div><div class="nh-stat-val">150+</div><div class="nh-stat-lbl">Utilisateurs actifs</div></div>
-      <div class="nh-stat"><div class="nh-stat-ico">🤖</div><div class="nh-stat-val">7</div><div class="nh-stat-lbl">Experts IA</div></div>
+      <div class="nh-stat"><div class="nh-stat-ico">🤖</div><div class="nh-stat-val">8</div><div class="nh-stat-lbl">Experts IA</div></div>
       <div class="nh-stat"><div class="nh-stat-ico">⭐</div><div class="nh-stat-val">4.9/5</div><div class="nh-stat-lbl">Note moyenne</div></div>
     </div>
 
@@ -1433,13 +1484,13 @@ header{
     <div class="disc-orbe-wrap"><canvas id="discOrbe" width="180" height="180"></canvas></div>
     <div class="disc-eyebrow">La nouvelle génération d'IA</div>
     <h2 class="disc-title">Une IA <em>spécialisée</em><br>pour chaque besoin</h2>
-    <p class="disc-sub">Nexo réunit 7 experts IA de pointe. Au lieu d'un assistant généraliste, vous parlez à un spécialiste qui maîtrise vraiment son domaine.</p>
+    <p class="disc-sub">Nexo réunit 8 experts IA de pointe. Au lieu d'un assistant généraliste, vous parlez à un spécialiste qui maîtrise vraiment son domaine.</p>
     <button class="disc-share-btn" onclick="shareNexo()">↗ Partager Nexo à mes amis</button>
   </div>
 
   <div class="sec-label">Ce qui rend Nexo unique</div>
   <div class="disc-feats">
-    <div class="disc-feat"><div class="disc-feat-ico">🎯</div><div><div class="disc-feat-t">7 experts spécialisés</div><div class="disc-feat-d">Finance, droit, entreprise, développement, impression 3D, images IA et une assistante polyvalente — chacun expert dans son domaine.</div></div></div>
+    <div class="disc-feat"><div class="disc-feat-ico">🎯</div><div><div class="disc-feat-t">8 experts spécialisés</div><div class="disc-feat-d">Finance, droit, entreprise, développement, impression 3D, images IA et une assistante polyvalente — chacun expert dans son domaine.</div></div></div>
     <div class="disc-feat"><div class="disc-feat-ico">💸</div><div><div class="disc-feat-t">L'expertise IA pour tous, à 9,99€/mois</div><div class="disc-feat-d">9,99€/mois au lieu de 20€. Le même niveau d'intelligence, au meilleur prix du marché.</div></div></div>
     <div class="disc-feat"><div class="disc-feat-ico">⚡</div><div><div class="disc-feat-t">Réponses instantanées 24h/24</div><div class="disc-feat-d">Vos experts sont toujours disponibles, sans rendez-vous, sans attente.</div></div></div>
     <div class="disc-feat"><div class="disc-feat-ico">🇫🇷</div><div><div class="disc-feat-t">100% adapté à la France</div><div class="disc-feat-d">Livret A, URSSAF, Code du travail... Nos experts connaissent les règles françaises.</div></div></div>
@@ -1479,10 +1530,10 @@ header{
   <div style="padding:20px 16px 0">
     <div class="pricing-card">
       <div class="pr-eyebrow">✦ Nexo Premium</div>
-      <div class="pr-title">Accès illimité à vos 7 experts</div>
+      <div class="pr-title">Accès illimité à vos 8 experts</div>
       <div class="pr-price">9,99€ <span>/mois</span></div>
       <div class="pr-feats">
-        <div class="pr-feat"><span class="pr-feat-icon">✓</span>Messages illimités sur les 7 experts</div>
+        <div class="pr-feat"><span class="pr-feat-icon">✓</span>Messages illimités sur les 8 experts</div>
         <div class="pr-feat"><span class="pr-feat-icon">✓</span>Réponses prioritaires sans attente</div>
         <div class="pr-feat"><span class="pr-feat-icon">✓</span>Historique complet de vos consultations</div>
         <div class="pr-feat"><span class="pr-feat-icon">✓</span>Export PDF de vos conseils</div>
@@ -1860,7 +1911,7 @@ var LEGAL_CONTENT = {
     title: 'À propos de Nexo',
     html: `<h2>Nexo v1.6</h2>
 <p><strong>Nexo</strong> est une application française d'assistants IA spécialisés. Notre mission : rendre les conseils d'experts accessibles à tous, à un prix juste.</p>
-<h2>Nos 7 experts</h2>
+<h2>Nos 8 experts</h2>
 <p>• 💚 <strong>Sofia</strong> — Finance & épargne<br>
 • ⚖️ <strong>Marcus</strong> — Droit du travail<br>
 • ✨ <strong>Luna</strong> — Assistante polyvalente (connectée à internet)<br>
@@ -2078,7 +2129,11 @@ var EXPERTS={
   nova:{name:'Nova',role:"Créatrice d'images IA",limitClass:'nova-bar',color:'#f472b6',freeLimit:0,premiumOnly:true,emoji:'🎨',bg:'linear-gradient(135deg,#500724,#9d174d)',imageGen:true,vision:true,
     suggestions:["Crée un logo moderne pour mon business","Fais une miniature TikTok accrocheuse","Crée une affiche publicitaire premium","Génère un mockup produit réaliste"],
     welcome:"Salut ! Je suis **Nova**, ta créatrice d'images IA 🎨\n\nJe peux faire deux choses :\n\n🖼️ **Générer** une image depuis ta description\n✏️ **Modifier** une photo que tu m'envoies\n\nExemples : logo, affiche, miniature TikTok, ou envoie-moi une photo et dis-moi ce que tu veux changer !\n\n⚠️ _Réservé aux membres **Premium** — 20 images/mois._",
-    system:"Tu es Nova, experte en création et modification d'images IA. Tu as deux modes :\n\n1. GÉNÉRATION (sans photo) : l'utilisateur décrit une image. Tu reformules sa demande en prompt anglais très détaillé et précis (sujet, style, couleurs, cadrage, ambiance) et tu génères.\n\n2. ÉDITION (avec photo) : l'utilisateur envoie une photo et décrit ce qu'il veut modifier. TRÈS IMPORTANT pour l'édition : ton prompt doit TOUJOURS commencer par décrire fidèlement ce qui est dans la photo originale, puis décrire la modification. Exemple : si la photo montre un homme avec une barbe et qu'il demande 'fais-moi en cartoon', le prompt doit être : 'Transform this photo of a bearded man into a cartoon character, keeping his facial features, beard and expression, cartoon animation style, colorful, detailed face'. Ne JAMAIS inventer un nouveau sujet. TOUJOURS garder le sujet original de la photo et juste appliquer la modification demandée. STYLE DE RÉPONSE : Court et enthousiaste. Confirme ce que tu vas faire, génère, et propose des variantes si besoin."}
+    system:"Tu es Nova, experte en création et modification d'images IA. Tu as deux modes :\n\n1. GÉNÉRATION (sans photo) : l'utilisateur décrit une image. Tu reformules sa demande en prompt anglais très détaillé et précis (sujet, style, couleurs, cadrage, ambiance) et tu génères.\n\n2. ÉDITION (avec photo) : l'utilisateur envoie une photo et décrit ce qu'il veut modifier. TRÈS IMPORTANT pour l'édition : ton prompt doit TOUJOURS commencer par décrire fidèlement ce qui est dans la photo originale, puis décrire la modification. Exemple : si la photo montre un homme avec une barbe et qu'il demande 'fais-moi en cartoon', le prompt doit être : 'Transform this photo of a bearded man into a cartoon character, keeping his facial features, beard and expression, cartoon animation style, colorful, detailed face'. Ne JAMAIS inventer un nouveau sujet. TOUJOURS garder le sujet original de la photo et juste appliquer la modification demandée. STYLE DE RÉPONSE : Court et enthousiaste. Confirme ce que tu vas faire, génère, et propose des variantes si besoin."},
+  genesis:{name:'Genesis',role:'IA Flagship — Multi-modèles',limitClass:'genesis-bar',color:'#fbbf24',freeLimit:0,premiumOnly:true,emoji:'✨',bg:'linear-gradient(135deg,#451a03,#92400e)',vision:true,webSearch:true,isGenesis:true,
+    suggestions:["Quelle est la meilleure stratégie pour mon business ?","Analyse ce document en profondeur","Compare plusieurs approches pour ce problème","Recherche les dernières infos sur ce sujet"],
+    welcome:"Bienvenue sur **Genesis** ✨\n\nJe suis l'IA flagship de Nexo : selon ta question, je mobilise **Claude, GPT et/ou Gemini** — seul ou combinés — pour te donner la meilleure réponse possible.\n\nTu peux m'envoyer du texte, une photo, un document, et je cherche sur Internet si besoin.\n\nPose-moi n'importe quelle question, même complexe.",
+    system:"Tu es Genesis, l'IA flagship de Nexo. Tu es exigeante, précise, et tu fournis toujours la meilleure réponse possible en combinant plusieurs perspectives si besoin. Réponds de façon claire, structurée et directe, sans jamais mentionner que tu es composée de plusieurs IA. Français parfait, **gras** pour les points clés."}
 };
 
 var isPremium=false,current=null,convos={};
@@ -2418,6 +2473,17 @@ async function sendText(txt){
   extractMemory(displayTxt);
   var _sysWithDate=buildSystemWithMemory(ex.system)+" CONTEXTE TEMPOREL : nous sommes aujourd'hui le "+_dateStr+". Utilise systématiquement cette date comme référence pour toute question liée au temps (aujourd'hui, demain, ce week-end, cette semaine, etc.). Ne te base jamais sur une autre date.";
   try{
+    if(ex.isGenesis){
+      // Indicateur "réflexion/recherche" animé pour Genesis
+      var tyEl=document.getElementById('typing');
+      if(tyEl)tyEl.innerHTML='<div class="msg-mini-avatar">'+getAvatarMini(id)+'</div><div class="bubble genesis-thinking"><span class="gth-icon">✨</span><span class="gth-text">Genesis réfléchit</span><span class="gth-dots"><span></span><span></span><span></span></span></div>';
+      var gr2=await fetch('/api/genesis',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({system:_sysWithDate,messages:msgs,userEmail:currentUser&&currentUser.email})});
+      var gd2=await gr2.json();
+      document.getElementById('typing')&&document.getElementById('typing').remove();
+      if(!gr2.ok||!gd2.text){addBotBubble(gd2.error||"❌ Genesis n'a pas pu répondre, réessayez.",id);return;}
+      streamBotBubble(gd2.text,id);saveMessage(id,'assistant',gd2.text);
+      return;
+    }
     var r=await fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({system:_sysWithDate,messages:msgs,webSearch:(id==='luna'||id==='max'||id==='koda'||ex.webSearch)})});
     var d=await r.json();
     var reply=d.content?d.content.map(function(b){return b.text||'';}).join(''):"Je n'ai pas pu répondre, réessayez.";
@@ -2503,7 +2569,9 @@ var ORBE_COLORS={
   luna:['#a78bfa','#c084fc','#d8b4fe','#e9d5ff'],
   alex:['#fb923c','#f97316','#fdba74','#fed7aa'],
   max:['#22d3ee','#06b6d4','#67e8f9','#a5f3fc'],
-  nova:['#f472b6','#ec4899','#f9a8d4','#fce7f3']
+  nova:['#f472b6','#ec4899','#f9a8d4','#fce7f3'],
+  koda:['#38bdf8','#0ea5e9','#7dd3fc','#bae6fd'],
+  genesis:['#fbbf24','#f59e0b','#fde68a','#fef3c7']
 };
 function initOrbes(){
   var canvases=document.querySelectorAll('.orbe-canvas');
