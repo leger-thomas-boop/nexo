@@ -857,76 +857,6 @@ header{
 .nh-dcard-genesis .nh-dcard-tag{background:rgba(251,191,36,.1);color:var(--genesis);border-color:rgba(251,191,36,.25);}
 .nh-dcard-genesis .nh-dcard-cta{color:var(--genesis);font-weight:700;}
 
-
-
-/* ════════════════════════════════════════════
-   PATCH NEXO — Accueil premium Genesis + orbite
-   Ajout visuel uniquement : ne modifie pas Supabase, Premium, Nova, Genesis ni les appels API.
-   ════════════════════════════════════════════ */
-.ld-showcase{position:relative;display:grid;grid-template-columns:1fr;gap:18px;padding:28px 18px 8px;overflow:hidden}
-.ld-showcase::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 78% 34%,rgba(251,191,36,.12),transparent 34%),radial-gradient(circle at 48% 62%,rgba(168,85,247,.13),transparent 38%);pointer-events:none}
-.ld-showcase-left,.ld-showcase-right{position:relative;z-index:1}
-.ld-showcase-left{text-align:left}
-.ld-showcase-left .ld-eyebrow{margin-bottom:12px}
-.ld-showcase-left h1{font-family:'Syne',sans-serif;font-weight:800;font-size:2.45rem;line-height:1.06;letter-spacing:-.065em;margin-bottom:12px;max-width:390px}
-.ld-showcase-left h1 em{font-style:normal;color:var(--gold)}
-.ld-showcase-left .ld-hero-sub{padding:0;margin-bottom:18px;max-width:350px}
-.ld-showcase-left .ld-cta-main{max-width:300px;margin-bottom:14px}
-.ld-genesis-mini{max-width:330px;background:rgba(255,255,255,.045);border:1px solid rgba(244,162,97,.18);border-radius:18px;padding:16px;box-shadow:0 18px 60px rgba(0,0,0,.28), inset 0 0 0 1px rgba(255,255,255,.025);cursor:pointer;transition:.25s}
-.ld-genesis-mini:hover{transform:translateY(-2px);border-color:rgba(244,162,97,.38)}
-.ld-genesis-mini-title{font-family:'Syne',sans-serif;font-weight:800;font-size:1.05rem;color:var(--gold);margin-bottom:3px}
-.ld-genesis-mini-sub{font-size:.78rem;color:rgba(240,240,248,.72);margin-bottom:12px}
-.ld-genesis-mini-list{display:flex;flex-direction:column;gap:7px;margin-bottom:14px}
-.ld-genesis-mini-list span{font-size:.78rem;color:rgba(240,240,248,.66);line-height:1.25}
-.ld-genesis-mini-cta{border:1px solid rgba(244,162,97,.28);border-radius:13px;padding:9px 12px;text-align:center;color:var(--gold);font-family:'Syne',sans-serif;font-weight:700;font-size:.82rem;background:rgba(244,162,97,.055)}
-.ld-showcase-right{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:360px;margin-top:4px}
-.ld-orbit-map{position:relative;width:min(390px,92vw);height:min(390px,92vw);max-width:390px;max-height:390px;margin:0 auto}
-.ld-orbit-ring{position:absolute;inset:14%;border:1px solid rgba(167,139,250,.32);border-radius:50%;box-shadow:0 0 45px rgba(167,139,250,.08) inset,0 0 24px rgba(244,162,97,.05);animation:orbitGlow 4s ease-in-out infinite}
-@keyframes orbitGlow{0%,100%{opacity:.78;transform:scale(1)}50%{opacity:1;transform:scale(1.015)}}
-.ld-orbit-core{position:absolute;left:50%;top:50%;width:138px;height:138px;transform:translate(-50%,-50%);border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;background:radial-gradient(circle,rgba(244,162,97,.25),rgba(244,162,97,.08) 55%,rgba(0,0,0,.12));border:1px solid rgba(244,162,97,.55);box-shadow:0 0 60px rgba(244,162,97,.28),inset 0 0 32px rgba(244,162,97,.15);cursor:pointer}
-.ld-orbit-core strong{font-family:'Syne',sans-serif;font-size:1.35rem;font-weight:800;color:var(--gold);letter-spacing:-.04em}
-.ld-orbit-core span{font-size:.72rem;color:rgba(240,240,248,.75);margin-top:4px}
-.ld-orbit-core small{font-size:.62rem;color:rgba(240,240,248,.55);margin-top:3px}
-.ld-orbit-node{position:absolute;display:flex;flex-direction:column;align-items:center;gap:5px;transform:translate(-50%,-50%);background:none;border:0;color:var(--text);font-family:'DM Sans',sans-serif;cursor:pointer;min-width:78px}
-.ld-orbit-node b{width:58px;height:58px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.45rem;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);box-shadow:0 0 28px rgba(255,255,255,.08);backdrop-filter:blur(10px)}
-.ld-orbit-node span{font-family:'Syne',sans-serif;font-size:.83rem;font-weight:800;line-height:1;text-shadow:0 2px 12px rgba(0,0,0,.7)}
-.ld-orbit-node small{display:block;font-family:'DM Sans',sans-serif;font-weight:400;font-size:.63rem;color:rgba(240,240,248,.62);margin-top:4px;white-space:nowrap}
-.node-sofia{left:50%;top:5%}.node-sofia b{color:var(--sofia);border-color:rgba(52,211,153,.36);box-shadow:0 0 34px rgba(52,211,153,.24)}.node-sofia span{color:var(--sofia)}
-.node-alex{left:86%;top:23%}.node-alex b{color:var(--alex);border-color:rgba(251,146,60,.38);box-shadow:0 0 34px rgba(251,146,60,.24)}.node-alex span{color:var(--alex)}
-.node-nova{left:92%;top:53%}.node-nova b{color:var(--nova);border-color:rgba(244,114,182,.38);box-shadow:0 0 34px rgba(244,114,182,.24)}.node-nova span{color:var(--nova)}
-.node-max{left:77%;top:80%}.node-max b{color:var(--max);border-color:rgba(34,211,238,.38);box-shadow:0 0 34px rgba(34,211,238,.22)}.node-max span{color:var(--max)}
-.node-koda{left:50%;top:95%}.node-koda b{color:var(--koda);border-color:rgba(56,189,248,.38);box-shadow:0 0 34px rgba(56,189,248,.2)}.node-koda span{color:var(--luna)}
-.node-luna{left:18%;top:80%}.node-luna b{color:var(--luna);border-color:rgba(167,139,250,.38);box-shadow:0 0 34px rgba(167,139,250,.22)}.node-luna span{color:var(--luna)}
-.node-marcus{left:14%;top:24%}.node-marcus b{color:var(--marcus);border-color:rgba(96,165,250,.38);box-shadow:0 0 34px rgba(96,165,250,.22)}.node-marcus span{color:var(--marcus)}
-.ld-orbit-hint{font-size:.72rem;color:rgba(240,240,248,.5);text-align:center;margin-top:8px;font-family:'JetBrains Mono',monospace}
-.ld-example-strip{position:relative;margin:10px 16px 0;padding:14px;border-radius:18px;background:rgba(255,255,255,.045);border:1px solid rgba(255,255,255,.09);backdrop-filter:blur(16px)}
-.ld-example-title{font-family:'Syne',sans-serif;font-weight:700;font-size:.95rem;margin-bottom:10px}
-.ld-example-row{display:grid;grid-template-columns:1fr;gap:8px}
-.ld-example-row button{display:flex;align-items:center;gap:10px;text-align:left;border:1px solid rgba(255,255,255,.08);background:rgba(8,8,16,.72);border-radius:14px;padding:10px 12px;color:var(--text);font-family:'DM Sans',sans-serif;cursor:pointer}
-.ld-example-row button strong{font-family:'Syne',sans-serif;color:var(--gold);min-width:48px}
-.ld-example-row button span{flex:1;font-size:.72rem;color:rgba(240,240,248,.7);line-height:1.35}
-.ld-reassure-card{margin:14px 16px 0;padding:12px;background:rgba(255,255,255,.045);border:1px solid rgba(255,255,255,.09);border-radius:18px}
-.ld-hero{padding-top:18px}
-#landing .nh-full-list{gap:10px}
-#landing .nh-full-item{padding:14px;border-radius:18px;background:rgba(255,255,255,.045)}
-#landing .ld-sec-title{font-size:1.65rem;line-height:1.05;margin-top:4px}
-#landing .ld-demo{background:rgba(96,165,250,.035);border-color:rgba(96,165,250,.22)}
-#landing .ld-testis{display:grid;grid-template-columns:1fr;gap:10px;margin:8px 16px 0}
-@media (min-width:430px){
-  .ld-showcase{grid-template-columns:1fr 1.12fr;align-items:center;padding:30px 26px 10px}
-  .ld-showcase-left h1{font-size:2.05rem}
-  .ld-orbit-map{width:310px;height:310px}
-  .ld-orbit-core{width:118px;height:118px}
-  .ld-orbit-node b{width:48px;height:48px;font-size:1.22rem}
-  .ld-example-row{grid-template-columns:1fr 1fr}
-}
-@media (max-width:390px){
-  .ld-showcase-left h1{font-size:2.15rem}
-  .ld-orbit-node b{width:50px;height:50px;font-size:1.18rem}
-  .ld-orbit-node span{font-size:.72rem}.ld-orbit-node small{font-size:.55rem}
-  .ld-orbit-core{width:118px;height:118px}.ld-orbit-core strong{font-size:1.15rem}
-}
-
 </style>
 </head>
 <body>
@@ -942,66 +872,39 @@ header{
       <button class="ld-hdr-btn" onclick="landingToAuth('login')">Se connecter</button>
     </div>
 
-    <!-- Hero premium avec Genesis + orbite experts -->
-    <div class="ld-showcase">
-      <div class="ld-showcase-left">
-        <div class="ld-eyebrow"><div class="live-dot"></div>Vos experts IA · 24h/24</div>
-        <h1>Une IA <em>spécialisée</em> pour chaque besoin.</h1>
-        <p class="ld-hero-sub">Genesis combine Claude, ChatGPT et Gemini dans une seule IA, accompagné de 8 experts spécialisés.</p>
-        <button class="ld-cta-main" onclick="landingToAuth('signup')">
-          🚀 Nouvelle conversation
-          <span class="ld-cta-sub">Aucune carte bancaire requise</span>
-        </button>
-
-        <div class="ld-genesis-mini" onclick="landingToAuth('signup')">
-          <div class="ld-genesis-mini-title">✨ Genesis</div>
-          <div class="ld-genesis-mini-sub">Claude + ChatGPT + Gemini</div>
-          <div class="ld-genesis-mini-list">
-            <span>🧠 Choisit le meilleur modèle</span>
-            <span>🌐 Recherche Internet</span>
-            <span>📄 Analyse de documents</span>
-            <span>📷 Analyse de photos</span>
-            <span>⚡ Réponses optimisées</span>
-          </div>
-          <div class="ld-genesis-mini-cta">Essayer Genesis →</div>
-        </div>
-      </div>
-
-      <div class="ld-showcase-right">
-        <div class="ld-orbit-map" aria-label="Genesis entouré des experts Nexo">
-          <div class="ld-orbit-ring"></div>
-          <div class="ld-orbit-core" onclick="landingToAuth('signup')">
-            <strong>Genesis</strong>
-            <span>IA Flagship</span>
-            <small>Claude + GPT + Gemini</small>
-          </div>
-          <button class="ld-orbit-node node-sofia" onclick="landingToAuth('signup')"><b>🐷</b><span>Sofia<small>Finance</small></span></button>
-          <button class="ld-orbit-node node-alex" onclick="landingToAuth('signup')"><b>💼</b><span>Alex<small>Entreprise</small></span></button>
-          <button class="ld-orbit-node node-nova" onclick="landingToAuth('signup')"><b>🖼️</b><span>Nova<small>Images IA</small></span></button>
-          <button class="ld-orbit-node node-max" onclick="landingToAuth('signup')"><b>🧊</b><span>Max<small>Impression 3D</small></span></button>
-          <button class="ld-orbit-node node-koda" onclick="landingToAuth('signup')"><b>⌨️</b><span>Koda<small>Développement</small></span></button>
-          <button class="ld-orbit-node node-luna" onclick="landingToAuth('signup')"><b>💬</b><span>Luna<small>Assistante IA</small></span></button>
-          <button class="ld-orbit-node node-marcus" onclick="landingToAuth('signup')"><b>⚖️</b><span>Marcus<small>Droit du travail</small></span></button>
-        </div>
-        <div class="ld-orbit-hint">← faites glisser pour découvrir vos experts IA →</div>
+    <!-- Hero -->
+    <div class="ld-hero">
+      <div class="ld-sphere-wrap"><canvas id="ldSphere" width="120" height="120"></canvas></div>
+      <div class="ld-eyebrow"><div class="live-dot"></div>Vos experts IA · 24h/24</div>
+      <h1>Une IA <em>spécialisée</em> pour chaque besoin</h1>
+      <p class="ld-hero-sub">Genesis combine Claude, ChatGPT et Gemini dans une seule IA, accompagné de 8 experts spécialisés en finance, droit, entreprise, impression 3D, images IA et plus.</p>
+      <button class="ld-cta-main" onclick="landingToAuth('signup')">
+        🚀 Essayer gratuitement
+        <span class="ld-cta-sub">Aucune carte bancaire requise</span>
+      </button>
+      <div class="ld-reassure">
+        <div class="ld-re"><div class="ld-re-ico">⚡</div><div class="ld-re-t">Réponses 24h/24</div><div class="ld-re-d">Sans rendez-vous</div></div>
+        <div class="ld-re"><div class="ld-re-ico">🔒</div><div class="ld-re-t">Confidentiel</div><div class="ld-re-d">Sécurisé à 100%</div></div>
+        <div class="ld-re"><div class="ld-re-ico">🇫🇷</div><div class="ld-re-t">Adapté France</div><div class="ld-re-d">URSSAF, Code du travail</div></div>
       </div>
     </div>
 
-    <div class="ld-example-strip">
-      <div class="ld-example-title">✨ Essayez un exemple</div>
-      <div class="ld-example-row">
-        <button onclick="landingToAuth('signup')"><strong>Marcus</strong><span>Mon patron peut-il me licencier pendant un arrêt maladie ?</span>→</button>
-        <button onclick="landingToAuth('signup')"><strong>Sofia</strong><span>Comment épargner 500€ par mois avec mon budget ?</span>→</button>
-        <button onclick="landingToAuth('signup')"><strong>Alex</strong><span>Comment créer mon auto-entreprise en ligne ?</span>→</button>
-        <button onclick="landingToAuth('signup')"><strong>Nova</strong><span>Transforme cette photo en style cartoon</span>→</button>
+    <!-- GENESIS — carte premium en vedette -->
+    <div class="nh-genesis-banner" onclick="landingToAuth('signup')" style="margin:8px 16px 0;">
+      <div class="nh-genesis-glow"></div>
+      <div class="nh-genesis-content">
+        <div class="nh-genesis-badge">✨ GENESIS</div>
+        <div class="nh-genesis-title">Genesis</div>
+        <div class="nh-genesis-sub2">Claude + ChatGPT + Gemini réunis</div>
+        <div class="nh-genesis-tags">
+          <span class="nh-genesis-tag">🧠 Multi-IA</span>
+          <span class="nh-genesis-tag">🌐 Internet</span>
+          <span class="nh-genesis-tag">📄 Documents</span>
+          <span class="nh-genesis-tag">📷 Photos</span>
+        </div>
+        <div class="nh-genesis-sub">Pose une question et Genesis choisit automatiquement le meilleur modèle pour te répondre.</div>
+        <div class="nh-genesis-cta">🚀 Essayer Genesis</div>
       </div>
-    </div>
-
-    <div class="ld-reassure ld-reassure-card">
-      <div class="ld-re"><div class="ld-re-ico">⚡</div><div class="ld-re-t">Réponses 24h/24</div><div class="ld-re-d">Sans rendez-vous</div></div>
-      <div class="ld-re"><div class="ld-re-ico">🔒</div><div class="ld-re-t">Confidentiel</div><div class="ld-re-d">Sécurisé à 100%</div></div>
-      <div class="ld-re"><div class="ld-re-ico">🇫🇷</div><div class="ld-re-t">Adapté France</div><div class="ld-re-d">Règles françaises</div></div>
-      <div class="ld-re"><div class="ld-re-ico">⭐</div><div class="ld-re-t">+1200 questions</div><div class="ld-re-d">Déjà répondues</div></div>
     </div>
 
     <!-- Démo Marcus -->
@@ -1232,442 +1135,143 @@ header{
 </div>
 <div id="sec-home">
 
-<!-- STYLES pour le nouveau home -->
+<!-- CONNECTED HOME REDESIGN ONLY — ne touche pas aux API / Supabase / Premium / Nova -->
 <style>
-/* ── HERO NEXO STYLE ── */
-.nh-hero{
-  padding:22px 20px 0;
-  position:relative;
-  display:flex;
-  flex-direction:column;
-}
-.nh-hero-row{
-  display:flex;
-  align-items:flex-start;
-  justify-content:space-between;
-  gap:12px;
-  margin-bottom:16px;
-}
-.nh-hero-left{flex:1;min-width:0;}
-.nh-eyebrow{
-  font-size:.55rem;letter-spacing:.2em;text-transform:uppercase;
-  color:var(--gold);font-family:'JetBrains Mono',monospace;
-  margin-bottom:8px;opacity:.8;
-  display:flex;align-items:center;gap:6px;
-}
-.nh-eyebrow .live-dot{width:4px;height:4px;}
-.nh-hero h2{
-  font-family:'Syne',sans-serif;font-weight:800;
-  font-size:1.75rem;line-height:1.08;letter-spacing:-.05em;
-  margin-bottom:8px;color:var(--text);
-}
-.nh-hero h2 em{font-style:normal;color:var(--gold);}
-.nh-hero-sub{
-  font-size:.75rem;color:rgba(240,240,248,.45);
-  line-height:1.6;font-weight:300;margin-bottom:14px;
-}
-.nh-hero-btns{display:flex;gap:8px;flex-wrap:wrap;}
-.nh-btn-main{
-  padding:10px 16px;
-  background:linear-gradient(135deg,var(--gold),var(--gold2));
-  border:none;border-radius:12px;
-  font-family:'Syne',sans-serif;font-weight:700;font-size:.78rem;
-  color:#000;cursor:pointer;
-  display:flex;align-items:center;gap:6px;
-  box-shadow:0 6px 20px rgba(244,162,97,.3);
-  transition:.2s;
-}
-.nh-btn-main:hover{opacity:.9;transform:translateY(-1px);}
-.nh-btn-sec{
-  padding:10px 16px;
-  background:rgba(255,255,255,.06);
-  border:1px solid rgba(255,255,255,.1);border-radius:12px;
-  font-family:'DM Sans',sans-serif;font-weight:500;font-size:.78rem;
-  color:var(--text);cursor:pointer;transition:.2s;
-}
-.nh-btn-sec:hover{background:rgba(255,255,255,.1);}
-.nh-sphere-wrap{
-  width:110px;height:110px;flex-shrink:0;position:relative;
-}
-#homeHeroSphere{
-  width:110px;height:110px;display:block;
-  filter:drop-shadow(0 0 20px rgba(168,85,247,.5)) drop-shadow(0 0 40px rgba(168,85,247,.25));
-}
-
-/* Réassurance */
-.nh-reassure{
-  display:flex;gap:16px;
-  padding:10px 0 14px;
-  border-top:1px solid rgba(255,255,255,.06);
-  border-bottom:1px solid rgba(255,255,255,.06);
-  margin-bottom:16px;
-}
-.nh-re{display:flex;align-items:center;gap:6px;flex:1;}
-.nh-re-ico{font-size:.9rem;}
-.nh-re-t{font-size:.6rem;color:rgba(240,240,248,.5);font-weight:400;line-height:1.3;}
-
-/* Testi hero */
-.nh-testi-hero{
-  background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);
-  border-radius:14px;padding:12px 14px;margin-bottom:6px;
-}
-.nh-testi-stars{color:var(--gold);font-size:.7rem;margin-bottom:4px;}
-.nh-testi-txt{font-size:.75rem;color:rgba(240,240,248,.6);line-height:1.55;font-style:italic;margin-bottom:6px;font-weight:300;}
-.nh-testi-auth{font-size:.6rem;color:var(--muted);font-family:'JetBrains Mono',monospace;}
-
-/* Section label */
-.nh-sec-lbl{
-  padding:18px 20px 8px;
-  font-size:.58rem;font-weight:500;letter-spacing:.2em;text-transform:uppercase;
-  color:var(--muted);font-family:'JetBrains Mono',monospace;
-}
-
-/* Expert icon scroll row */
-.nh-expert-scroll{
-  display:flex;gap:10px;overflow-x:auto;
-  padding:0 20px 12px;
-  scrollbar-width:none;-ms-overflow-style:none;
-}
-.nh-expert-scroll::-webkit-scrollbar{display:none;}
-.nh-eico{
-  display:flex;flex-direction:column;align-items:center;gap:5px;
-  flex-shrink:0;cursor:pointer;
-  transition:.2s;
-  position:relative;
-  padding-top:12px;
-}
-.nh-eico:hover{transform:translateY(-3px);}
-.nh-eico-av{
-  width:54px;height:54px;border-radius:16px;
-  overflow:hidden;position:relative;
-  border:2px solid rgba(255,255,255,.1);
-  transition:.25s;
-}
-.nh-eico:hover .nh-eico-av{border-color:rgba(255,255,255,.25);}
-.nh-eico-av canvas{width:54px;height:54px;display:block;}
-.nh-eico-name{
-  font-family:'Syne',sans-serif;font-weight:700;
-  font-size:.65rem;letter-spacing:-.01em;
-}
-.nh-eico-role{font-size:.52rem;color:var(--muted);font-weight:300;text-align:center;max-width:60px;line-height:1.2;}
-.nh-eico-badge{
-  position:absolute;top:2px;right:2px;
-  background:rgba(10,10,20,.8);border-radius:6px;
-  padding:1px 5px;font-size:.42rem;font-weight:600;
-  letter-spacing:.06em;font-family:'JetBrains Mono',monospace;
-  border:1px solid rgba(255,255,255,.1);
-}
-
-/* Expert detail cards */
-.nh-detail-list{
-  padding:0 16px;display:flex;flex-direction:column;gap:10px;margin-bottom:16px;
-}
-.nh-dcard{
-  border-radius:18px;overflow:hidden;cursor:pointer;
-  transition:.25s cubic-bezier(.34,1.56,.64,1);
-  background:rgba(255,255,255,.04);
-  backdrop-filter:blur(16px);
-  border:1px solid rgba(255,255,255,.08);
-  position:relative;
-}
-.nh-dcard:hover{transform:translateY(-4px);}
-.nh-dcard-inner{display:flex;align-items:center;gap:12px;padding:14px 16px 10px;}
-.nh-dcard-av{width:52px;height:52px;border-radius:14px;overflow:hidden;flex-shrink:0;}
-.nh-dcard-av canvas{width:52px;height:52px;display:block;}
-.nh-dcard-info{flex:1;min-width:0;}
-.nh-dcard-name{
-  font-family:'Syne',sans-serif;font-weight:800;
-  font-size:1rem;letter-spacing:-.03em;margin-bottom:1px;
-}
-.nh-dcard-role{
-  font-size:.58rem;font-weight:500;letter-spacing:.08em;
-  text-transform:uppercase;color:var(--muted);
-  font-family:'JetBrains Mono',monospace;margin-bottom:5px;
-}
-.nh-dcard-desc{font-size:.76rem;color:rgba(240,240,248,.45);line-height:1.5;font-weight:300;}
-.nh-dcard-status{
-  position:absolute;top:12px;right:12px;
-  display:flex;align-items:center;gap:4px;
-  font-size:.56rem;color:var(--muted);
-  font-family:'JetBrains Mono',monospace;
-  background:rgba(255,255,255,.06);
-  border:1px solid rgba(255,255,255,.08);
-  border-radius:20px;padding:2px 7px;
-}
-.nh-dcard-foot{
-  display:flex;align-items:center;justify-content:space-between;
-  padding:8px 16px 12px;
-  border-top:1px solid rgba(255,255,255,.06);
-}
-.nh-dcard-tags{display:flex;gap:5px;flex-wrap:wrap;}
-.nh-dcard-tag{
-  font-size:.55rem;padding:2px 8px;border-radius:20px;
-  font-weight:500;font-family:'JetBrains Mono',monospace;border:1px solid;
-}
-.nh-dcard-cta{font-size:.7rem;font-weight:600;flex-shrink:0;}
-
-/* Colors per expert */
-.nh-dcard-sofia .nh-dcard-name{color:var(--sofia);}
-.nh-dcard-sofia .nh-dcard-tag{background:rgba(52,211,153,.08);color:var(--sofia);border-color:rgba(52,211,153,.15);}
-.nh-dcard-sofia .nh-dcard-cta{color:var(--sofia);}
-.nh-dcard-sofia .nh-dcard-status .status-dot{background:var(--sofia);box-shadow:0 0 5px var(--sofia);}
-.nh-eico-sofia .nh-eico-name{color:var(--sofia);}
-
-.nh-dcard-marcus .nh-dcard-name{color:var(--marcus);}
-.nh-dcard-marcus .nh-dcard-tag{background:rgba(96,165,250,.08);color:var(--marcus);border-color:rgba(96,165,250,.15);}
-.nh-dcard-marcus .nh-dcard-cta{color:var(--marcus);}
-.nh-dcard-marcus .nh-dcard-status .status-dot{background:var(--marcus);box-shadow:0 0 5px var(--marcus);}
-.nh-eico-marcus .nh-eico-name{color:var(--marcus);}
-
-.nh-dcard-luna .nh-dcard-name{color:var(--luna);}
-.nh-dcard-luna .nh-dcard-tag{background:rgba(167,139,250,.08);color:var(--luna);border-color:rgba(167,139,250,.15);}
-.nh-dcard-luna .nh-dcard-cta{color:var(--luna);}
-.nh-dcard-luna .nh-dcard-status .status-dot{background:var(--luna);box-shadow:0 0 5px var(--luna);}
-.nh-eico-luna .nh-eico-name{color:var(--luna);}
-
-.nh-dcard-alex .nh-dcard-name{color:var(--alex);}
-.nh-dcard-alex .nh-dcard-tag{background:rgba(251,146,60,.08);color:var(--alex);border-color:rgba(251,146,60,.15);}
-.nh-dcard-alex .nh-dcard-cta{color:var(--alex);}
-.nh-dcard-alex .nh-dcard-status .status-dot{background:var(--alex);box-shadow:0 0 5px var(--alex);}
-.nh-eico-alex .nh-eico-name{color:var(--alex);}
-
-.nh-dcard-max .nh-dcard-name{color:var(--max);}
-.nh-dcard-max .nh-dcard-tag{background:rgba(34,211,238,.08);color:var(--max);border-color:rgba(34,211,238,.15);}
-.nh-dcard-max .nh-dcard-cta{color:var(--max);}
-.nh-dcard-max .nh-dcard-status .status-dot{background:var(--max);box-shadow:0 0 5px var(--max);}
-.nh-eico-max .nh-eico-name{color:var(--max);}
-
-.nh-dcard-nova .nh-dcard-name{color:var(--nova);}
-.nh-dcard-nova .nh-dcard-tag{background:rgba(244,114,182,.08);color:var(--nova);border-color:rgba(244,114,182,.15);}
-.nh-dcard-nova .nh-dcard-cta{color:var(--nova);}
-.nh-dcard-nova .nh-dcard-status .status-dot{background:var(--nova);box-shadow:0 0 5px var(--nova);}
-.nh-eico-nova .nh-eico-name{color:var(--nova);}
-
-.nh-dcard-koda .nh-dcard-name{color:var(--koda);}
-.nh-dcard-koda .nh-dcard-tag{background:rgba(56,189,248,.08);color:var(--koda);border-color:rgba(56,189,248,.15);}
-.nh-dcard-koda .nh-dcard-cta{color:var(--koda);}
-.nh-dcard-koda .nh-dcard-status .status-dot{background:var(--koda);box-shadow:0 0 5px var(--koda);}
-.nh-eico-koda .nh-eico-name{color:var(--koda);}
-
-/* Bloc pourquoi + stats */
-.nh-why{
-  margin:4px 16px 16px;
-  background:rgba(255,255,255,.04);
-  backdrop-filter:blur(16px);
-  border:1px solid rgba(255,255,255,.08);
-  border-radius:18px;padding:16px;
-}
-.nh-why-title{
-  font-family:'Syne',sans-serif;font-weight:800;
-  font-size:.85rem;letter-spacing:-.02em;
-  margin-bottom:12px;color:var(--text);
-}
-.nh-why-list{display:flex;flex-direction:column;gap:8px;margin-bottom:14px;}
-.nh-why-item{display:flex;align-items:flex-start;gap:8px;}
-.nh-why-ico{font-size:.85rem;flex-shrink:0;margin-top:1px;}
-.nh-why-txt{font-size:.73rem;color:rgba(240,240,248,.55);line-height:1.45;font-weight:300;}
-.nh-why-txt strong{color:var(--text);font-weight:600;}
-
-.nh-stats{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:14px;}
-.nh-stat{
-  background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);
-  border-radius:12px;padding:10px 12px;text-align:center;
-}
-.nh-stat-ico{font-size:.9rem;margin-bottom:3px;}
-.nh-stat-val{
-  font-family:'Syne',sans-serif;font-weight:800;font-size:1rem;
-  letter-spacing:-.04em;
-  background:linear-gradient(135deg,var(--gold),var(--gold2));
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
-}
-.nh-stat-lbl{font-size:.55rem;color:var(--muted);margin-top:1px;font-weight:300;}
-
-.nh-cta-block{
-  background:linear-gradient(135deg,rgba(244,162,97,.1),rgba(231,111,81,.05));
-  border:1px solid rgba(244,162,97,.18);
-  border-radius:14px;padding:14px 16px;
-  display:flex;flex-direction:column;align-items:center;gap:8px;text-align:center;
-}
-.nh-cta-txt{font-size:.72rem;color:rgba(240,240,248,.5);font-weight:300;}
-.nh-cta-btn{
-  width:100%;padding:11px;
-  background:linear-gradient(135deg,var(--gold),var(--gold2));
-  border:none;border-radius:11px;
-  font-family:'Syne',sans-serif;font-weight:700;font-size:.82rem;
-  color:#000;cursor:pointer;transition:.2s;
-  box-shadow:0 6px 20px rgba(244,162,97,.25);
-}
-.nh-cta-btn:hover{opacity:.9;}
-
-/* ── ORBITAL EXPERTS INTERFACE ── */
-.orbit-section{padding:0 0 6px;}
-.orbit-stage{
-  position:relative;width:100%;
-  height:min(82vw,330px);
-  margin:0 auto;
-  touch-action:none;
-  user-select:none;-webkit-user-select:none;
-}
-.gc-particles{position:absolute;inset:0;pointer-events:none;z-index:1;}
-.gc-particle{
-  position:absolute;border-radius:50%;
-  background:var(--genesis);opacity:.5;
-  box-shadow:0 0 6px var(--genesis);
-  animation:gc-float 6s ease-in-out infinite;
-}
-@keyframes gc-float{
-  0%,100%{transform:translate(0,0) scale(1);opacity:.25;}
-  50%{transform:translate(var(--fx,8px),var(--fy,-8px)) scale(1.4);opacity:.75;}
-}
-.genesis-core{
-  position:absolute;left:50%;top:50%;
-  width:30%;aspect-ratio:1/1;min-width:108px;max-width:140px;
-  margin-left:calc(-15%);margin-top:calc(-15% - 0px);
-  border-radius:50%;
-  background:radial-gradient(circle at 35% 28%,#fef3c7,var(--genesis) 55%,#92400e 100%);
-  display:flex;align-items:center;justify-content:center;
-  box-shadow:0 0 30px rgba(251,191,36,.5),0 0 70px rgba(251,191,36,.22),inset 0 0 24px rgba(255,255,255,.18);
-  cursor:pointer;z-index:5;
-  animation:genesis-pulse 4s ease-in-out infinite;
-}
-.genesis-core:active{transform:translate(-50%,-50%) scale(.96);}
-@keyframes genesis-pulse{
-  0%,100%{box-shadow:0 0 30px rgba(251,191,36,.5),0 0 70px rgba(251,191,36,.22),inset 0 0 24px rgba(255,255,255,.18);}
-  50%{box-shadow:0 0 42px rgba(251,191,36,.7),0 0 90px rgba(251,191,36,.32),inset 0 0 30px rgba(255,255,255,.24);}
-}
-.gc-content{text-align:center;color:#1c0a00;}
-.gc-title{font-family:'Syne',sans-serif;font-weight:800;font-size:1.05rem;letter-spacing:-.03em;}
-.gc-sub{font-size:.46rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;opacity:.65;margin-top:2px;}
-.gc-sub2{font-size:.42rem;font-weight:700;opacity:.55;margin-top:1px;}
-
-.orbit-ring{position:absolute;inset:0;z-index:3;}
-.orbit-node{
-  position:absolute;left:50%;top:50%;
-  width:58px;height:58px;margin:-29px 0 0 -29px;
-  border-radius:50%;
-  display:flex;align-items:center;justify-content:center;
-  cursor:pointer;border:2px solid rgba(255,255,255,.12);
-  transition:box-shadow .25s,border-color .25s;
-}
-.orbit-node-emoji{font-size:1.3rem;line-height:1;}
-.orbit-node-label{
-  position:absolute;bottom:-17px;left:50%;transform:translateX(-50%);
-  font-size:.58rem;font-weight:800;font-family:'Syne',sans-serif;
-  white-space:nowrap;opacity:0;transition:opacity .25s;
-}
-.orbit-node.active{border-width:2px;}
-.orbit-node.active .orbit-node-label{opacity:1;}
-
-.orbit-hint{
-  text-align:center;font-size:.6rem;color:var(--muted);
-  font-family:'JetBrains Mono',monospace;letter-spacing:.05em;
-  margin:6px 0 14px;display:flex;align-items:center;justify-content:center;gap:6px;
-}
-.orbit-hint .arrow{display:inline-block;animation:orbit-hint-move 1.6s ease-in-out infinite;}
-@keyframes orbit-hint-move{0%,100%{transform:translateX(-3px);opacity:.4;}50%{transform:translateX(3px);opacity:1;}}
-
-#orbitDetailCard{margin:0 16px;}
-
+/* HOME CONNECTÉE — style dashboard Genesis */
+.cx-home{padding:18px 16px 86px;position:relative;overflow:hidden;}
+.cx-hero-card{position:relative;border:1px solid rgba(255,255,255,.08);background:linear-gradient(180deg,rgba(255,255,255,.045),rgba(255,255,255,.018));border-radius:28px;padding:22px 16px 18px;box-shadow:0 18px 60px rgba(0,0,0,.28);overflow:hidden;}
+.cx-hero-card::before{content:'';position:absolute;inset:-120px -80px auto auto;width:260px;height:260px;background:radial-gradient(circle,rgba(251,191,36,.14),transparent 68%);pointer-events:none;}
+.cx-eyebrow{display:inline-flex;align-items:center;gap:7px;border:1px solid rgba(244,162,97,.24);background:rgba(244,162,97,.08);color:var(--gold);font-family:'JetBrains Mono',monospace;font-size:.56rem;letter-spacing:.16em;text-transform:uppercase;border-radius:999px;padding:6px 11px;margin-bottom:14px;}
+.cx-eyebrow::before{content:'';width:5px;height:5px;border-radius:50%;background:var(--gold);box-shadow:0 0 10px var(--gold);}
+.cx-title{font-family:'Syne',sans-serif;font-weight:800;font-size:2.05rem;line-height:1.02;letter-spacing:-.06em;margin:0 0 10px;}
+.cx-title em{font-style:normal;color:var(--gold);}
+.cx-sub{font-size:.83rem;color:rgba(240,240,248,.56);line-height:1.65;font-weight:300;max-width:390px;margin:0 0 16px;}
+.cx-main-cta{width:100%;padding:15px 18px;border:0;border-radius:17px;background:linear-gradient(135deg,var(--gold),var(--gold2));color:#000;font-family:'Syne',sans-serif;font-weight:800;font-size:.98rem;cursor:pointer;box-shadow:0 14px 34px rgba(244,162,97,.28);}
+.cx-cta-note{text-align:center;color:var(--muted);font-size:.68rem;margin-top:8px;}
+.cx-orbit-wrap{margin:18px -4px 0;position:relative;}
+.cx-orbit-title{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);text-align:center;pointer-events:none;z-index:4;}
+.cx-orbit-mini{font-family:'Syne',sans-serif;font-size:.62rem;font-weight:800;letter-spacing:.12em;color:rgba(255,255,255,.42);text-transform:uppercase;}
+.cx-example-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:16px;}
+.cx-example{border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.045);border-radius:16px;padding:11px;cursor:pointer;min-height:82px;}
+.cx-example-top{display:flex;align-items:center;gap:7px;font-family:'Syne',sans-serif;font-weight:800;font-size:.75rem;margin-bottom:6px;}
+.cx-example-q{font-size:.66rem;line-height:1.35;color:rgba(240,240,248,.62);}
+.cx-strip{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:14px 0;}
+.cx-re{border:1px solid rgba(255,255,255,.07);background:rgba(255,255,255,.035);border-radius:16px;padding:12px 8px;text-align:center;}
+.cx-re-ico{font-size:1.15rem;margin-bottom:4px;}.cx-re-t{font-weight:700;font-size:.72rem}.cx-re-d{font-size:.6rem;color:var(--muted);margin-top:2px;}
+.cx-section-title{font-family:'Syne',sans-serif;font-size:1.35rem;line-height:1.1;font-weight:800;letter-spacing:-.045em;margin:24px 2px 12px;}
+.cx-section-title em{font-style:normal;color:var(--gold);}
+.cx-genesis-card{position:relative;border:1px solid rgba(251,191,36,.22);background:linear-gradient(135deg,rgba(251,191,36,.12),rgba(255,255,255,.03));border-radius:24px;padding:18px;margin-bottom:14px;overflow:hidden;cursor:pointer;}
+.cx-genesis-card::after{content:'';position:absolute;right:-60px;top:-80px;width:190px;height:190px;background:radial-gradient(circle,rgba(251,191,36,.22),transparent 68%);pointer-events:none;}
+.cx-pill{display:inline-flex;align-items:center;gap:6px;background:linear-gradient(135deg,var(--genesis),var(--gold2));color:#000;font-family:'JetBrains Mono',monospace;font-size:.58rem;font-weight:800;letter-spacing:.09em;border-radius:999px;padding:6px 10px;margin-bottom:12px;}
+.cx-genesis-name{font-family:'Syne',sans-serif;font-weight:800;font-size:1.7rem;letter-spacing:-.05em;color:var(--genesis);margin-bottom:6px;}
+.cx-genesis-desc{font-size:.82rem;color:rgba(240,240,248,.64);line-height:1.55;margin-bottom:12px;}
+.cx-tags{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px;}.cx-tag{font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--genesis);border:1px solid rgba(251,191,36,.18);background:rgba(251,191,36,.08);border-radius:999px;padding:6px 10px;}
+.cx-link{font-weight:800;color:var(--genesis);font-size:.88rem;}
+.cx-list{display:flex;flex-direction:column;gap:10px;}
+.cx-expert{display:flex;align-items:center;gap:13px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.04);border-radius:20px;padding:13px 14px;cursor:pointer;transition:.2s;}
+.cx-expert:active{transform:scale(.985);}.cx-expert-av{width:48px;height:48px;border-radius:15px;display:flex;align-items:center;justify-content:center;font-size:1.35rem;box-shadow:0 0 24px rgba(255,255,255,.06);flex-shrink:0;}
+.cx-expert-info{flex:1;min-width:0;}.cx-expert-name{font-family:'Syne',sans-serif;font-weight:800;font-size:1.05rem;letter-spacing:-.03em;}.cx-expert-role{font-size:.76rem;color:var(--muted);margin-top:2px;}.cx-expert-arrow{color:var(--muted);font-size:1rem;}.cx-premium-badge{background:linear-gradient(135deg,var(--gold),var(--gold2));color:#000;border-radius:999px;padding:6px 10px;font-family:'JetBrains Mono',monospace;font-size:.58rem;font-weight:800;}
+.cx-demo-card{border:1px solid rgba(96,165,250,.16);background:rgba(96,165,250,.045);border-radius:24px;padding:16px;margin-top:12px;}
+.cx-demo-head{font-family:'Syne',sans-serif;font-weight:800;font-size:1.15rem;margin-bottom:6px;}.cx-demo-head em{font-style:normal;color:var(--luna);}.cx-demo-sub{font-size:.78rem;color:var(--muted);line-height:1.5;margin-bottom:12px;}
+.cx-demo-q{margin-left:auto;max-width:86%;background:rgba(167,139,250,.13);border:1px solid rgba(167,139,250,.22);border-radius:17px 17px 5px 17px;padding:12px 14px;font-size:.82rem;line-height:1.45;margin-bottom:10px;}
+.cx-demo-a{display:flex;gap:9px;align-items:flex-start;}.cx-demo-av{width:34px;height:34px;border-radius:10px;background:linear-gradient(135deg,#172554,#1e3a8a);display:flex;align-items:center;justify-content:center;flex-shrink:0;}.cx-demo-b{background:rgba(255,255,255,.052);border:1px solid rgba(255,255,255,.08);border-radius:17px 17px 17px 5px;padding:12px 14px;}.cx-demo-name{font-size:.72rem;color:var(--marcus);font-weight:800;margin-bottom:4px;}.cx-demo-txt{font-size:.82rem;line-height:1.52;color:rgba(240,240,248,.84);}.cx-demo-foot{text-align:right;color:var(--luna);font-weight:800;font-size:.8rem;margin-top:12px;cursor:pointer;}
+.cx-stats{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.08);border-radius:20px;overflow:hidden;margin-top:16px;}.cx-stat{background:rgba(13,13,24,.82);padding:17px 10px;text-align:center;}.cx-stat-ico{font-size:1.1rem}.cx-stat-val{font-family:'Syne',sans-serif;font-weight:800;font-size:1.45rem;letter-spacing:-.05em;color:var(--gold);margin-top:5px;}.cx-stat-lbl{font-size:.68rem;color:var(--muted);margin-top:2px;}
+.cx-testis{display:flex;flex-direction:column;gap:10px;margin-top:12px;}.cx-testi{border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.04);border-radius:20px;padding:15px;}.cx-stars{color:var(--gold);letter-spacing:2px;font-size:.76rem;margin-bottom:8px;}.cx-quote{font-size:.83rem;line-height:1.55;color:rgba(240,240,248,.68);margin-bottom:10px;}.cx-author{display:flex;align-items:center;gap:9px;}.cx-author-dot{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#000;font-family:'Syne',sans-serif;font-weight:800;}.cx-author-t{font-weight:800;font-size:.78rem}.cx-author-r{font-size:.64rem;color:var(--muted);}
+.cx-final{margin-top:18px;border:1px solid rgba(244,162,97,.2);background:linear-gradient(135deg,rgba(244,162,97,.12),rgba(231,111,81,.06));border-radius:24px;padding:22px 16px;text-align:center;}.cx-final h3{font-family:'Syne',sans-serif;font-size:1.55rem;letter-spacing:-.05em;margin-bottom:8px;}.cx-final p{font-size:.82rem;color:var(--muted);line-height:1.5;margin-bottom:14px;}
+/* Réutilise l'orbit existant dans le nouvel accueil */
+.cx-orbit-wrap .orbit-stage{height:min(82vw,330px);margin:0 auto;}
+.cx-orbit-wrap .orbit-hint{margin-top:4px;margin-bottom:0;}
+.cx-orbit-wrap #orbitDetailCard{display:none;}
+@media(max-width:380px){.cx-title{font-size:1.82rem}.cx-example-row{grid-template-columns:1fr}.cx-strip{gap:6px}.cx-re-t{font-size:.66rem}.cx-re-d{font-size:.55rem}}
 </style>
 
-  <!-- HERO -->
-  <div class="nh-hero" style="padding:22px 20px 16px">
-    <div class="nh-hero-row">
-      <div class="nh-hero-left">
-        <div class="nh-eyebrow"><div class="live-dot"></div>Vos experts IA · 24h/24</div>
-        <h2>Une IA <em>spécialisée</em> pour chaque besoin.</h2>
-        <p class="nh-hero-sub">Épargne plus vite, protège tes droits, développe ton activité avec 8 experts IA spécialisés, toujours disponibles.</p>
-        <div class="nh-hero-btns" id="nh-hero-btns">
-          <button class="nh-btn-main" onclick="openChat('sofia')">🚀 Essayer gratuitement</button>
-          <button class="nh-btn-sec" onclick="goSection('discover',null)">En savoir plus</button>
+<div class="cx-home">
+  <section class="cx-hero-card">
+    <div class="cx-eyebrow">Vos experts IA · 24h/24</div>
+    <h1 class="cx-title">Une IA <em>spécialisée</em> pour chaque besoin.</h1>
+    <p class="cx-sub nh-hero-sub">Genesis combine Claude, ChatGPT et Gemini dans une seule IA, accompagné de 8 experts spécialisés.</p>
+    <button class="cx-main-cta" id="nh-hero-btns" onclick="openChat('genesis')">🚀 Nouvelle conversation</button>
+    <div class="cx-cta-note">Aucune carte bancaire requise</div>
+
+    <div class="cx-orbit-wrap">
+      <div class="orbit-stage" id="orbitStage">
+        <div class="gc-particles">
+          <div class="gc-particle" style="--fx:14px;--fy:-18px;width:4px;height:4px;top:10%;left:20%;animation-delay:0s;"></div>
+          <div class="gc-particle" style="--fx:-16px;--fy:-10px;width:3px;height:3px;top:18%;left:78%;animation-delay:.8s;"></div>
+          <div class="gc-particle" style="--fx:10px;--fy:16px;width:5px;height:5px;top:80%;left:25%;animation-delay:1.6s;"></div>
+          <div class="gc-particle" style="--fx:-12px;--fy:14px;width:3px;height:3px;top:85%;left:75%;animation-delay:2.4s;"></div>
+        </div>
+        <div class="orbit-ring" id="orbitRing"></div>
+        <div class="genesis-core" id="genesisCore" onclick="if(!_orbitDragMoved)openChat('genesis')">
+          <div class="gc-content"><div class="gc-title">Genesis</div><div class="gc-sub">IA Flagship</div><div class="gc-sub2">Claude + GPT + Gemini</div></div>
         </div>
       </div>
-      <div class="nh-sphere-wrap">
-        <canvas id="homeHeroSphere" width="220" height="220"></canvas>
-      </div>
+      <div class="orbit-hint"><span class="arrow">↔</span> Faites glisser pour découvrir vos experts IA</div>
+      <div class="nh-dcard" id="orbitDetailCard" onclick="openChat(_orbitSelected)"></div>
     </div>
 
-    <!-- Réassurance -->
-    <div class="nh-reassure">
-      <div class="nh-re"><div class="nh-re-ico">⚡</div><div class="nh-re-t">Réponses 24h/24<br><span style="font-size:.5rem;color:var(--muted)">Sans rendez-vous</span></div></div>
-      <div class="nh-re"><div class="nh-re-ico">🔒</div><div class="nh-re-t">Confidentiel<br><span style="font-size:.5rem;color:var(--muted)">Sécurisé à 100%</span></div></div>
-      <div class="nh-re"><div class="nh-re-ico">⭐</div><div class="nh-re-t">+1 200 questions<br><span style="font-size:.5rem;color:var(--muted)">déjà répondues</span></div></div>
+    <div class="cx-example-row">
+      <div class="cx-example" onclick="openChat('marcus')"><div class="cx-example-top" style="color:var(--marcus)">⚖️ Marcus</div><div class="cx-example-q">Mon patron peut-il me licencier pendant un arrêt maladie ?</div></div>
+      <div class="cx-example" onclick="openChat('sofia')"><div class="cx-example-top" style="color:var(--sofia)">🐷 Sofia</div><div class="cx-example-q">Comment épargner 500€ par mois avec mon budget ?</div></div>
+      <div class="cx-example" onclick="openChat('alex')"><div class="cx-example-top" style="color:var(--alex)">💼 Alex</div><div class="cx-example-q">Comment créer mon auto-entreprise en ligne ?</div></div>
+      <div class="cx-example" onclick="openChat('nova')"><div class="cx-example-top" style="color:var(--nova)">🖼️ Nova</div><div class="cx-example-q">Transforme cette photo en style cartoon.</div></div>
     </div>
+  </section>
 
-    <!-- Testi hero -->
-    <div class="nh-testi-hero" id="nh-testi-hero">
-      <div class="nh-testi-stars">★★★★★</div>
-      <div class="nh-testi-txt">"Marcus m'a permis de récupérer 2400 € d'indemnités. Incroyable !"</div>
-      <div class="nh-testi-auth">Thomas M. · Ouvrier en usine</div>
-    </div>
+  <div class="cx-strip">
+    <div class="cx-re"><div class="cx-re-ico">⚡</div><div class="cx-re-t">Réponses 24h/24</div><div class="cx-re-d">Sans rendez-vous</div></div>
+    <div class="cx-re"><div class="cx-re-ico">🔒</div><div class="cx-re-t">Confidentiel</div><div class="cx-re-d">Sécurisé à 100%</div></div>
+    <div class="cx-re"><div class="cx-re-ico">🇫🇷</div><div class="cx-re-t">Adapté France</div><div class="cx-re-d">Règles françaises</div></div>
   </div>
 
-  <!-- ORBITAL EXPERTS INTERFACE -->
-  <div class="nh-sec-lbl">Vos 8 experts IA</div>
-  <div class="orbit-section">
-    <div class="orbit-stage" id="orbitStage">
-      <div class="gc-particles">
-        <div class="gc-particle" style="--fx:14px;--fy:-18px;width:4px;height:4px;top:10%;left:20%;animation-delay:0s;"></div>
-        <div class="gc-particle" style="--fx:-16px;--fy:-10px;width:3px;height:3px;top:18%;left:78%;animation-delay:.8s;"></div>
-        <div class="gc-particle" style="--fx:10px;--fy:16px;width:5px;height:5px;top:80%;left:25%;animation-delay:1.6s;"></div>
-        <div class="gc-particle" style="--fx:-12px;--fy:14px;width:3px;height:3px;top:85%;left:75%;animation-delay:2.4s;"></div>
-        <div class="gc-particle" style="--fx:18px;--fy:6px;width:4px;height:4px;top:50%;left:6%;animation-delay:1.2s;"></div>
-        <div class="gc-particle" style="--fx:-18px;--fy:-6px;width:4px;height:4px;top:45%;left:94%;animation-delay:.4s;"></div>
-      </div>
-      <div class="orbit-ring" id="orbitRing"></div>
-      <div class="genesis-core" id="genesisCore" onclick="if(!_orbitDragMoved)openChat('genesis')">
-        <div class="gc-content">
-          <div class="gc-title">Genesis</div>
-          <div class="gc-sub">IA Flagship</div>
-          <div class="gc-sub2">Claude + GPT + Gemini</div>
-        </div>
-      </div>
-    </div>
-    <div class="orbit-hint"><span class="arrow">↔</span> Faites glisser pour découvrir vos experts IA</div>
-    <div class="nh-dcard" id="orbitDetailCard" onclick="openChat(_orbitSelected)"></div>
+  <section class="cx-genesis-card" onclick="openChat('genesis')">
+    <div class="cx-pill">✨ NOUVEAU · FLAGSHIP</div>
+    <div class="cx-genesis-name">Genesis</div>
+    <div class="cx-genesis-desc">L'IA la plus puissante de Nexo. Claude, GPT et Gemini combinés selon ta question pour obtenir la meilleure réponse possible.</div>
+    <div class="cx-tags"><span class="cx-tag">🧠 Multi-IA</span><span class="cx-tag">🌐 Internet</span><span class="cx-tag">📎 Photos & documents</span></div>
+    <div class="cx-link">Essayer Genesis →</div>
+  </section>
+
+  <h2 class="cx-section-title">Vos <em>8 experts</em> IA ✦</h2>
+  <div class="cx-list">
+    <div class="cx-expert" onclick="openChat('genesis')"><div class="cx-expert-av" style="background:radial-gradient(circle,var(--genesis),#5b3b00)">✨</div><div class="cx-expert-info"><div class="cx-expert-name" style="color:var(--genesis)">Genesis</div><div class="cx-expert-role">IA Flagship — Multi-modèles</div></div><div class="cx-premium-badge">Flagship</div></div>
+    <div class="cx-expert" onclick="openChat('sofia')"><div class="cx-expert-av" style="background:linear-gradient(135deg,#022c22,#065f46)">🐷</div><div class="cx-expert-info"><div class="cx-expert-name" style="color:var(--sofia)">Sofia</div><div class="cx-expert-role">Conseillère Financière</div></div><div class="cx-expert-arrow">→</div></div>
+    <div class="cx-expert" onclick="openChat('marcus')"><div class="cx-expert-av" style="background:linear-gradient(135deg,#172554,#1d4ed8)">⚖️</div><div class="cx-expert-info"><div class="cx-expert-name" style="color:var(--marcus)">Marcus</div><div class="cx-expert-role">Expert Droit du Travail</div></div><div class="cx-expert-arrow">→</div></div>
+    <div class="cx-expert" onclick="openChat('luna')"><div class="cx-expert-av" style="background:linear-gradient(135deg,#2e1065,#6d28d9)">💬</div><div class="cx-expert-info"><div class="cx-expert-name" style="color:var(--luna)">Luna</div><div class="cx-expert-role">Assistante Polyvalente</div></div><div class="cx-expert-arrow">→</div></div>
+    <div class="cx-expert" onclick="openChat('alex')"><div class="cx-expert-av" style="background:linear-gradient(135deg,#431407,#c2410c)">💼</div><div class="cx-expert-info"><div class="cx-expert-name" style="color:var(--alex)">Alex</div><div class="cx-expert-role">Expert Entreprise & AE</div></div><div class="cx-expert-arrow">→</div></div>
+    <div class="cx-expert" onclick="openChat('max')"><div class="cx-expert-av" style="background:linear-gradient(135deg,#083344,#0891b2)">🧊</div><div class="cx-expert-info"><div class="cx-expert-name" style="color:var(--max)">Max</div><div class="cx-expert-role">Expert Impression 3D</div></div><div class="cx-expert-arrow">→</div></div>
+    <div class="cx-expert" onclick="openChat('koda')"><div class="cx-expert-av" style="background:linear-gradient(135deg,#082f49,#0284c7)">⌨️</div><div class="cx-expert-info"><div class="cx-expert-name" style="color:var(--koda)">Koda</div><div class="cx-expert-role">Expert Développement</div></div><div class="cx-premium-badge">⭐ Premium</div></div>
+    <div class="cx-expert" onclick="openChat('nova')"><div class="cx-expert-av" style="background:linear-gradient(135deg,#500724,#9d174d)">🎨</div><div class="cx-expert-info"><div class="cx-expert-name" style="color:var(--nova)">Nova</div><div class="cx-expert-role">Créatrice d'images IA</div></div><div class="cx-premium-badge">⭐ Premium</div></div>
   </div>
 
-  <!-- GENESIS SPOTLIGHT BANNER -->
-  <div class="nh-genesis-banner" onclick="openChat('genesis')">
-    <div class="nh-genesis-glow"></div>
-    <div class="nh-genesis-content">
-      <div class="nh-genesis-badge">✨ GENESIS</div>
-      <div class="nh-genesis-title">Genesis</div>
-      <div class="nh-genesis-sub2">Claude + ChatGPT + Gemini réunis dans une seule IA.</div>
-      <div class="nh-genesis-tags">
-        <span class="nh-genesis-tag">🧠 Multi-IA</span>
-        <span class="nh-genesis-tag">🌐 Internet</span>
-        <span class="nh-genesis-tag">📄 Documents</span>
-        <span class="nh-genesis-tag">📷 Photos</span>
-      </div>
-      <div class="nh-genesis-cta">Découvrir Genesis →</div>
-    </div>
+  <section class="cx-demo-card">
+    <div class="cx-demo-head">Essayez une question <em>gratuitement</em> ✦</div>
+    <div class="cx-demo-sub">Exemple avec Marcus, expert droit du travail.</div>
+    <div class="cx-demo-q">Mon patron peut-il me licencier pendant un arrêt maladie ?</div>
+    <div class="cx-demo-a"><div class="cx-demo-av">⚖️</div><div class="cx-demo-b"><div class="cx-demo-name">Marcus</div><div class="cx-demo-txt">Non, votre employeur ne peut pas vous licencier pendant un arrêt maladie, sauf cas particuliers prévus par la loi.</div></div></div>
+    <div class="cx-demo-foot" onclick="openChat('marcus')">Posez votre propre question →</div>
+  </section>
+
+  <div class="cx-stats">
+    <div class="cx-stat"><div class="cx-stat-ico">💬</div><div class="cx-stat-val">1 200+</div><div class="cx-stat-lbl">Questions répondues</div></div>
+    <div class="cx-stat"><div class="cx-stat-ico">👥</div><div class="cx-stat-val">150+</div><div class="cx-stat-lbl">Utilisateurs satisfaits</div></div>
+    <div class="cx-stat"><div class="cx-stat-ico">⭐</div><div class="cx-stat-val">8</div><div class="cx-stat-lbl">Experts IA</div></div>
+    <div class="cx-stat"><div class="cx-stat-ico">🔒</div><div class="cx-stat-val">100%</div><div class="cx-stat-lbl">Sécurisé</div></div>
   </div>
 
-  <!-- BLOC POURQUOI + STATS + CTA -->
-  <div class="nh-why">
-    <div class="nh-why-title">Pourquoi choisir Nexo ?</div>
-    <div class="nh-why-list">
-      <div class="nh-why-item"><div class="nh-why-ico">⚡</div><div class="nh-why-txt"><strong>8 IA spécialisées</strong> — chacun expert dans son domaine.</div></div>
-      <div class="nh-why-item"><div class="nh-why-ico">🔒</div><div class="nh-why-txt"><strong>Confidentialité totale</strong> — vos données sont protégées et sécurisées.</div></div>
-      <div class="nh-why-item"><div class="nh-why-ico">⏱️</div><div class="nh-why-txt"><strong>Réponses instantanées</strong> — disponibles 24h/24, 7j/7.</div></div>
-      <div class="nh-why-item"><div class="nh-why-ico">🇫🇷</div><div class="nh-why-txt"><strong>100% adapté à la France</strong> — Livret A, URSSAF, Code du travail. Nos experts connaissent les règles françaises.</div></div>
-    </div>
-
-    <div class="nh-stats">
-      <div class="nh-stat"><div class="nh-stat-ico">💬</div><div class="nh-stat-val">1 200+</div><div class="nh-stat-lbl">Questions répondues</div></div>
-      <div class="nh-stat"><div class="nh-stat-ico">👥</div><div class="nh-stat-val">150+</div><div class="nh-stat-lbl">Utilisateurs actifs</div></div>
-      <div class="nh-stat"><div class="nh-stat-ico">🤖</div><div class="nh-stat-val">8</div><div class="nh-stat-lbl">Experts IA</div></div>
-      <div class="nh-stat"><div class="nh-stat-ico">⭐</div><div class="nh-stat-val">4.9/5</div><div class="nh-stat-lbl">Note moyenne</div></div>
-    </div>
-
-    <div class="nh-cta-block" id="nh-cta-block">
-      <div class="nh-cta-txt">Posez vos premières questions sans carte bancaire.</div>
-      <button class="nh-cta-btn" onclick="openChat('sofia')">Commencer maintenant 🚀</button>
-    </div>
+  <h2 class="cx-section-title">Ils utilisent <em>Nexo</em> au quotidien</h2>
+  <div class="cx-testis">
+    <div class="cx-testi"><div class="cx-stars">★★★★★</div><div class="cx-quote">"Marcus m'a aidé à comprendre mes droits et préparer mon dossier."</div><div class="cx-author"><div class="cx-author-dot" style="background:var(--marcus)">T</div><div><div class="cx-author-t">Thomas M.</div><div class="cx-author-r">Ouvrier en usine</div></div></div></div>
+    <div class="cx-testi"><div class="cx-stars">★★★★★</div><div class="cx-quote">"Sofia m'aide chaque mois à mieux organiser mon budget."</div><div class="cx-author"><div class="cx-author-dot" style="background:var(--sofia)">J</div><div><div class="cx-author-t">Julie D.</div><div class="cx-author-r">Infirmière</div></div></div></div>
+    <div class="cx-testi"><div class="cx-stars">★★★★★</div><div class="cx-quote">"Nova me permet de créer des visuels propres en quelques secondes."</div><div class="cx-author"><div class="cx-author-dot" style="background:var(--nova)">L</div><div><div class="cx-author-t">Lucas R.</div><div class="cx-author-r">Graphiste freelance</div></div></div></div>
   </div>
 
-  <div style="height:32px"></div>
+  <section class="cx-final" id="nh-cta-block">
+    <h3>Prêt à essayer ?</h3>
+    <p>8 experts IA spécialisés vous attendent. Commencez gratuitement.</p>
+    <button class="cx-main-cta" onclick="openChat('genesis')">🚀 Commencer maintenant</button>
+  </section>
+</div>
 
 </div>
 <div id="sec-discover" style="display:none">
