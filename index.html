@@ -1406,7 +1406,7 @@ header{
 .orbit-section{padding:0 0 6px;}
 .orbit-stage{
   position:relative;width:100%;
-  height:min(82vw,330px);
+  height:min(96vw,400px);
   margin:0 auto;
   touch-action:none;
   user-select:none;-webkit-user-select:none;
@@ -1424,47 +1424,60 @@ header{
 }
 .genesis-core{
   position:absolute;left:50%;top:50%;
-  width:30%;aspect-ratio:1/1;min-width:108px;max-width:140px;
-  margin-left:calc(-15%);margin-top:calc(-15% - 0px);
+  width:46%;aspect-ratio:1/1;min-width:160px;max-width:200px;
+  margin-left:-23%;margin-top:calc(-23% - 0px);
   border-radius:50%;
-  background:radial-gradient(circle at 35% 28%,#fef3c7,var(--genesis) 55%,#92400e 100%);
   display:flex;align-items:center;justify-content:center;
-  box-shadow:0 0 30px rgba(251,191,36,.5),0 0 70px rgba(251,191,36,.22),inset 0 0 24px rgba(255,255,255,.18);
   cursor:pointer;z-index:5;
+}
+.genesis-core canvas{width:100%;height:100%;display:block;border-radius:50%;}
+.genesis-core:active{transform:translate(-50%,-50%) scale(.97);}
+.genesis-core-glow{
+  position:absolute;inset:-14%;border-radius:50%;
+  background:radial-gradient(circle,rgba(251,191,36,.35),transparent 70%);
+  filter:blur(10px);pointer-events:none;
   animation:genesis-pulse 4s ease-in-out infinite;
 }
-.genesis-core:active{transform:translate(-50%,-50%) scale(.96);}
 @keyframes genesis-pulse{
-  0%,100%{box-shadow:0 0 30px rgba(251,191,36,.5),0 0 70px rgba(251,191,36,.22),inset 0 0 24px rgba(255,255,255,.18);}
-  50%{box-shadow:0 0 42px rgba(251,191,36,.7),0 0 90px rgba(251,191,36,.32),inset 0 0 30px rgba(255,255,255,.24);}
+  0%,100%{opacity:.6;transform:scale(1);}
+  50%{opacity:1;transform:scale(1.08);}
 }
-.gc-content{text-align:center;color:#1c0a00;}
-.gc-title{font-family:'Syne',sans-serif;font-weight:800;font-size:1.05rem;letter-spacing:-.03em;}
-.gc-sub{font-size:.46rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;opacity:.65;margin-top:2px;}
-.gc-sub2{font-size:.42rem;font-weight:700;opacity:.55;margin-top:1px;}
+.genesis-title-block{text-align:center;margin-top:-6px;}
+.gc-title{
+  font-family:'Syne',sans-serif;font-weight:800;font-size:1.5rem;letter-spacing:-.04em;
+  background:linear-gradient(90deg,var(--genesis),#fff,var(--genesis));
+  background-size:200% auto;-webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  animation:gth-shine 4s linear infinite;
+}
+.gc-sub{font-size:.62rem;font-weight:600;letter-spacing:.06em;color:var(--muted);font-family:'JetBrains Mono',monospace;margin-top:2px;}
+
+.orbit-tagline{
+  text-align:center;font-size:.78rem;color:rgba(240,240,248,.65);
+  font-weight:400;line-height:1.5;padding:8px 28px 0;
+}
 
 .orbit-ring{position:absolute;inset:0;z-index:3;}
 .orbit-node{
   position:absolute;left:50%;top:50%;
-  width:58px;height:58px;margin:-29px 0 0 -29px;
+  width:62px;height:62px;margin:-31px 0 0 -31px;
   border-radius:50%;
   display:flex;align-items:center;justify-content:center;
-  cursor:pointer;border:2px solid rgba(255,255,255,.12);
-  transition:box-shadow .25s,border-color .25s;
+  cursor:pointer;border:2px solid rgba(255,255,255,.1);
+  transition:box-shadow .25s,border-color .25s,filter .25s;
 }
-.orbit-node-emoji{font-size:1.3rem;line-height:1;}
+.orbit-node canvas{width:100%;height:100%;display:block;border-radius:50%;}
 .orbit-node-label{
-  position:absolute;bottom:-17px;left:50%;transform:translateX(-50%);
-  font-size:.58rem;font-weight:800;font-family:'Syne',sans-serif;
+  position:absolute;bottom:-18px;left:50%;transform:translateX(-50%);
+  font-size:.6rem;font-weight:800;font-family:'Syne',sans-serif;
   white-space:nowrap;opacity:0;transition:opacity .25s;
 }
 .orbit-node.active{border-width:2px;}
 .orbit-node.active .orbit-node-label{opacity:1;}
 
 .orbit-hint{
-  text-align:center;font-size:.6rem;color:var(--muted);
+  text-align:center;font-size:.58rem;color:var(--muted);
   font-family:'JetBrains Mono',monospace;letter-spacing:.05em;
-  margin:6px 0 14px;display:flex;align-items:center;justify-content:center;gap:6px;
+  margin:8px 0 14px;display:flex;align-items:center;justify-content:center;gap:6px;
 }
 .orbit-hint .arrow{display:inline-block;animation:orbit-hint-move 1.6s ease-in-out infinite;}
 @keyframes orbit-hint-move{0%,100%{transform:translateX(-3px);opacity:.4;}50%{transform:translateX(3px);opacity:1;}}
@@ -1474,60 +1487,49 @@ header{
 </style>
 
   <!-- HERO -->
-  <div class="nh-hero" style="padding:22px 20px 16px">
-    <div class="nh-hero-row">
-      <div class="nh-hero-left">
-        <div class="nh-eyebrow"><div class="live-dot"></div>Vos experts IA · 24h/24</div>
-        <h2>Une IA <em>spécialisée</em> pour chaque besoin.</h2>
-        <p class="nh-hero-sub">Épargne plus vite, protège tes droits, développe ton activité avec 8 experts IA spécialisés, toujours disponibles.</p>
-        <div class="nh-hero-btns" id="nh-hero-btns">
-          <button class="nh-btn-main" onclick="openChat('sofia')">🚀 Essayer gratuitement</button>
-          <button class="nh-btn-sec" onclick="goSection('discover',null)">En savoir plus</button>
-        </div>
+  <div class="nh-hero" style="padding:18px 20px 8px">
+    <div class="nh-eyebrow"><div class="live-dot"></div>Vos experts IA · 24h/24</div>
+    <h2>Une IA <em>spécialisée</em> pour chaque besoin.</h2>
+    <p class="nh-hero-sub">Genesis combine Claude, ChatGPT et Gemini, accompagné de 8 experts spécialisés.</p>
+  </div>
+
+  <!-- ORBITAL EXPERTS INTERFACE -->
+  <div class="orbit-section">
+    <div class="orbit-stage" id="orbitStage">
+      <div class="gc-particles">
+        <div class="gc-particle" style="--fx:18px;--fy:-22px;width:4px;height:4px;top:6%;left:18%;animation-delay:0s;"></div>
+        <div class="gc-particle" style="--fx:-20px;--fy:-12px;width:3px;height:3px;top:12%;left:82%;animation-delay:.8s;"></div>
+        <div class="gc-particle" style="--fx:14px;--fy:20px;width:5px;height:5px;top:88%;left:22%;animation-delay:1.6s;"></div>
+        <div class="gc-particle" style="--fx:-14px;--fy:18px;width:3px;height:3px;top:90%;left:78%;animation-delay:2.4s;"></div>
+        <div class="gc-particle" style="--fx:20px;--fy:6px;width:4px;height:4px;top:50%;left:3%;animation-delay:1.2s;"></div>
+        <div class="gc-particle" style="--fx:-20px;--fy:-6px;width:4px;height:4px;top:46%;left:97%;animation-delay:.4s;"></div>
       </div>
-      <div class="nh-sphere-wrap">
-        <canvas id="homeHeroSphere" width="220" height="220"></canvas>
+      <div class="orbit-ring" id="orbitRing"></div>
+      <div class="genesis-core" id="genesisCore" onclick="if(!_orbitDragMoved)openChat('genesis')">
+        <div class="genesis-core-glow"></div>
+        <canvas class="orbe-canvas" data-expert="genesis" width="200" height="200"></canvas>
       </div>
     </div>
 
+    <div class="genesis-title-block">
+      <div class="gc-title">Genesis</div>
+      <div class="gc-sub">IA Flagship · Claude + GPT + Gemini</div>
+    </div>
+    <div class="orbit-tagline">Décrivez votre besoin. Genesis choisit automatiquement la meilleure IA.</div>
+    <div class="orbit-hint"><span class="arrow">↔</span> Faites glisser pour découvrir vos experts IA</div>
+    <div class="nh-dcard" id="orbitDetailCard" onclick="openChat(_orbitSelected)"></div>
+
+    <div class="nh-hero-btns" id="nh-hero-btns" style="padding:14px 16px 0;justify-content:center;">
+      <button class="nh-btn-main" onclick="openChat('genesis')">✨ Essayer Genesis</button>
+      <button class="nh-btn-sec" onclick="goSection('discover',null)">En savoir plus</button>
+    </div>
+
     <!-- Réassurance -->
-    <div class="nh-reassure">
+    <div class="nh-reassure" style="padding:14px 16px 14px;margin:0;">
       <div class="nh-re"><div class="nh-re-ico">⚡</div><div class="nh-re-t">Réponses 24h/24<br><span style="font-size:.5rem;color:var(--muted)">Sans rendez-vous</span></div></div>
       <div class="nh-re"><div class="nh-re-ico">🔒</div><div class="nh-re-t">Confidentiel<br><span style="font-size:.5rem;color:var(--muted)">Sécurisé à 100%</span></div></div>
       <div class="nh-re"><div class="nh-re-ico">⭐</div><div class="nh-re-t">+1 200 questions<br><span style="font-size:.5rem;color:var(--muted)">déjà répondues</span></div></div>
     </div>
-
-    <!-- Testi hero -->
-    <div class="nh-testi-hero" id="nh-testi-hero">
-      <div class="nh-testi-stars">★★★★★</div>
-      <div class="nh-testi-txt">"Marcus m'a permis de récupérer 2400 € d'indemnités. Incroyable !"</div>
-      <div class="nh-testi-auth">Thomas M. · Ouvrier en usine</div>
-    </div>
-  </div>
-
-  <!-- ORBITAL EXPERTS INTERFACE -->
-  <div class="nh-sec-lbl">Vos 8 experts IA</div>
-  <div class="orbit-section">
-    <div class="orbit-stage" id="orbitStage">
-      <div class="gc-particles">
-        <div class="gc-particle" style="--fx:14px;--fy:-18px;width:4px;height:4px;top:10%;left:20%;animation-delay:0s;"></div>
-        <div class="gc-particle" style="--fx:-16px;--fy:-10px;width:3px;height:3px;top:18%;left:78%;animation-delay:.8s;"></div>
-        <div class="gc-particle" style="--fx:10px;--fy:16px;width:5px;height:5px;top:80%;left:25%;animation-delay:1.6s;"></div>
-        <div class="gc-particle" style="--fx:-12px;--fy:14px;width:3px;height:3px;top:85%;left:75%;animation-delay:2.4s;"></div>
-        <div class="gc-particle" style="--fx:18px;--fy:6px;width:4px;height:4px;top:50%;left:6%;animation-delay:1.2s;"></div>
-        <div class="gc-particle" style="--fx:-18px;--fy:-6px;width:4px;height:4px;top:45%;left:94%;animation-delay:.4s;"></div>
-      </div>
-      <div class="orbit-ring" id="orbitRing"></div>
-      <div class="genesis-core" id="genesisCore" onclick="if(!_orbitDragMoved)openChat('genesis')">
-        <div class="gc-content">
-          <div class="gc-title">Genesis</div>
-          <div class="gc-sub">IA Flagship</div>
-          <div class="gc-sub2">Claude + GPT + Gemini</div>
-        </div>
-      </div>
-    </div>
-    <div class="orbit-hint"><span class="arrow">↔</span> Faites glisser pour découvrir vos experts IA</div>
-    <div class="nh-dcard" id="orbitDetailCard" onclick="openChat(_orbitSelected)"></div>
   </div>
 
   <!-- GENESIS SPOTLIGHT BANNER -->
@@ -2831,9 +2833,8 @@ function initOrbit(){
       node.className='orbit-node';
       node.dataset.expert=id;
       node.dataset.angle=String(i*360/n);
-      node.style.background=ex.bg;
       node.style.boxShadow='0 0 0 rgba(0,0,0,0)';
-      node.innerHTML='<div class="orbit-node-emoji">'+ex.emoji+'</div><div class="orbit-node-label" style="color:'+ex.color+'">'+ex.name+'</div>';
+      node.innerHTML='<canvas class="orbe-canvas" data-expert="'+id+'" width="124" height="124"></canvas><div class="orbit-node-label" style="color:'+ex.color+'">'+ex.name+'</div>';
       node.addEventListener('click',function(){
         if(_orbitDragMoved)return;
         openChat(id);
@@ -2841,10 +2842,11 @@ function initOrbit(){
       ring.appendChild(node);
     });
     attachOrbitDrag(stage);
+    initOrbes(); // démarre l'animation des sphères nouvellement créées
   }
   // (re)compute radius based on current stage size
   var size=Math.min(stage.clientWidth,stage.clientHeight);
-  if(size>0) _orbitRadius=size*0.42;
+  if(size>0) _orbitRadius=size*0.40;
   updateOrbitPositions(true);
   resetOrbitIdle();
 }
@@ -2858,15 +2860,18 @@ function updateOrbitPositions(force){
     var theta=(base+_orbitRotation)%360;
     if(theta<0)theta+=360;
     var rad=theta*Math.PI/180;
+    var d=Math.min(theta,360-theta); // 0 = front (top), 180 = back
+    var depth=d/180; // 0..1
     var x=Math.sin(rad)*_orbitRadius;
-    var y=-Math.cos(rad)*_orbitRadius;
-    var d=Math.min(theta,360-theta);
+    var y=-Math.cos(rad)*_orbitRadius*0.92 + depth*22; // items behind drift down slightly (depth illusion)
     if(d<nearestDist){nearestDist=d;nearestEl=node;}
-    var scale=0.6+0.45*(1-d/180);
-    var opacity=0.4+0.6*(1-d/180);
+    var scale=1.15-0.65*depth;   // front = 1.15x, back = .5x
+    var opacity=1-0.62*depth;     // front = 1, back = .38
+    var blur=depth>0.45?((depth-0.45)*3).toFixed(1):'0';
     node.style.transform='translate('+x.toFixed(1)+'px,'+y.toFixed(1)+'px) scale('+scale.toFixed(3)+')';
     node.style.opacity=opacity.toFixed(2);
-    node.style.zIndex=String(Math.round(10-d/36));
+    node.style.zIndex=String(Math.round(20-d/9));
+    node.style.filter=blur>0?'blur('+blur+'px)':'none';
   });
   if(nearestEl){
     var nearestId=nearestEl.dataset.expert;
@@ -2877,8 +2882,8 @@ function updateOrbitPositions(force){
         var active=node.dataset.expert===_orbitSelected;
         node.classList.toggle('active',active);
         var ex=EXPERTS[node.dataset.expert];
-        node.style.boxShadow=active?('0 0 22px '+ex.color+', 0 0 8px '+ex.color):'none';
-        node.style.borderColor=active?ex.color:'rgba(255,255,255,.12)';
+        node.style.boxShadow=active?('0 0 26px '+ex.color+', 0 0 10px '+ex.color):'none';
+        node.style.borderColor=active?ex.color:'rgba(255,255,255,.1)';
       });
       updateOrbitDetail(_orbitSelected);
       if(changed && navigator.vibrate)navigator.vibrate(8);
@@ -2914,49 +2919,49 @@ function updateOrbitDetail(id){
 function attachOrbitDrag(stage){
   var dragging=false,startX=0,lastX=0,lastT=0,velocity=0;
 
-  function getX(e){return (e.touches?e.touches[0]:e).clientX;}
   function onDown(e){
     dragging=true;_orbitDragMoved=false;
     cancelAnimationFrame(_orbitInertiaRAF);
     cancelAnimationFrame(_orbitAutoRAF);
     clearTimeout(_orbitIdleTimer);
-    startX=getX(e);lastX=startX;lastT=Date.now();velocity=0;
+    startX=e.clientX;lastX=startX;lastT=Date.now();velocity=0;
+    if(stage.setPointerCapture && e.pointerId!==undefined){try{stage.setPointerCapture(e.pointerId);}catch(err){}}
   }
   function onMove(e){
     if(!dragging)return;
-    var x=getX(e);
+    var x=e.clientX;
     var dx=x-lastX;
-    if(Math.abs(x-startX)>4)_orbitDragMoved=true;
+    if(Math.abs(x-startX)>3)_orbitDragMoved=true;
     var now=Date.now();var dt=now-lastT||16;
     velocity=dx/dt;
-    _orbitRotation+=dx*0.6;
+    _orbitRotation+=dx*0.75;
     updateOrbitPositions();
     lastX=x;lastT=now;
     if(_orbitDragMoved && e.cancelable)e.preventDefault();
   }
-  function onUp(){
+  function onUp(e){
     if(!dragging)return;
     dragging=false;
+    if(stage.releasePointerCapture && e.pointerId!==undefined){try{stage.releasePointerCapture(e.pointerId);}catch(err){}}
     if(_orbitDragMoved){
       runInertia();
     }else{
       resetOrbitIdle();
     }
   }
-  stage.addEventListener('mousedown',onDown);
-  stage.addEventListener('touchstart',onDown,{passive:true});
-  window.addEventListener('mousemove',onMove);
-  stage.addEventListener('touchmove',onMove,{passive:false});
-  window.addEventListener('mouseup',onUp);
-  stage.addEventListener('touchend',onUp);
+  stage.addEventListener('pointerdown',onDown);
+  stage.addEventListener('pointermove',onMove,{passive:false});
+  stage.addEventListener('pointerup',onUp);
+  stage.addEventListener('pointercancel',onUp);
+  stage.addEventListener('pointerleave',function(e){if(dragging&&e.pressure===0)onUp(e);});
 
   function runInertia(){
-    var v=velocity*0.6*16;
+    var v=velocity*0.75*16;
     function step(){
-      v*=0.94;
+      v*=0.95;
       _orbitRotation+=v;
       updateOrbitPositions();
-      if(Math.abs(v)>0.05){
+      if(Math.abs(v)>0.04){
         _orbitInertiaRAF=requestAnimationFrame(step);
       }else{
         snapToNearest();
@@ -2976,7 +2981,7 @@ function attachOrbitDrag(stage){
     animateRotationTo(_orbitRotation-best);
   }
   function animateRotationTo(target){
-    var start=_orbitRotation;var diff=target-start;var startTime=Date.now();var dur=350;
+    var start=_orbitRotation;var diff=target-start;var startTime=Date.now();var dur=320;
     function step(){
       var t=Math.min(1,(Date.now()-startTime)/dur);
       var ease=1-Math.pow(1-t,3);
