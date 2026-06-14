@@ -682,7 +682,7 @@ header{
 
 /* Hero */
 .ld-hero{padding:18px 22px 6px;text-align:center;}
-.ld-sphere-wrap{width:120px;height:120px;margin:0 auto 10px;}
+.ld-sphere-wrap{width:160px;height:160px;margin:0 auto 10px;display:flex;align-items:center;justify-content:center;}
 #ldSphere{width:160px;height:160px;display:block;filter:drop-shadow(0 0 30px rgba(168,85,247,.45));}
 .ld-eyebrow{display:inline-flex;align-items:center;gap:6px;background:rgba(244,162,97,.08);border:1px solid rgba(244,162,97,.2);border-radius:30px;padding:5px 14px;font-size:.58rem;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);font-family:'JetBrains Mono',monospace;margin-bottom:14px;}
 .ld-eyebrow .live-dot{background:var(--gold);box-shadow:0 0 8px var(--gold);}
@@ -816,11 +816,7 @@ header{
 }
 
 /* Advantages section */
-.ld-adv-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:0 16px;margin-bottom:4px;}
-.ld-adv-card{background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:14px;padding:12px 8px;text-align:center;}
-.ld-adv-ico{font-size:1.2rem;margin-bottom:4px;}
-.ld-adv-txt{font-size:.62rem;color:var(--muted);font-weight:500;line-height:1.3;}
-.ld-checklist{display:grid;grid-template-columns:1fr 1fr;gap:8px 10px;padding:12px 16px 0;}
+.ld-checklist{display:grid;grid-template-columns:1fr 1fr;gap:8px 10px;padding:8px 16px 0;}
 .ld-check-item{display:flex;align-items:center;gap:6px;font-size:.74rem;color:rgba(240,240,248,.8);font-weight:300;}
 .ld-check-item .ck{color:#34d399;flex-shrink:0;}
 
@@ -874,7 +870,7 @@ header{
 
     <!-- Hero -->
     <div class="ld-hero">
-      <div class="ld-sphere-wrap"><canvas id="ldSphere" width="120" height="120"></canvas></div>
+      <div class="ld-sphere-wrap"><canvas id="ldSphere" width="160" height="160"></canvas></div>
       <div class="ld-eyebrow"><div class="live-dot"></div>Vos experts IA · 24h/24</div>
       <h1>Une IA <em>spécialisée</em> pour chaque besoin</h1>
       <p class="ld-hero-sub">Genesis combine Claude, ChatGPT et Gemini dans une seule IA, accompagné de 8 experts spécialisés en finance, droit, entreprise, impression 3D, images IA et plus.</p>
@@ -933,11 +929,6 @@ header{
 
     <!-- Avantages -->
     <div class="ld-sec-title">Pourquoi <em>Nexo</em> ✦</div>
-    <div class="ld-adv-cards">
-      <div class="ld-adv-card"><div class="ld-adv-ico">⚡</div><div class="ld-adv-txt">Réponses 24h/24</div></div>
-      <div class="ld-adv-card"><div class="ld-adv-ico">🔒</div><div class="ld-adv-txt">Données sécurisées</div></div>
-      <div class="ld-adv-card"><div class="ld-adv-ico">🇫🇷</div><div class="ld-adv-txt">Adapté à la France</div></div>
-    </div>
     <div class="ld-checklist">
       <div class="ld-check-item"><span class="ck">✅</span>Claude + ChatGPT + Gemini</div>
       <div class="ld-check-item"><span class="ck">✅</span>8 experts spécialisés</div>
@@ -1458,17 +1449,21 @@ header{
 .exp-scroll::-webkit-scrollbar{display:none;}
 .exp-card{
   flex-shrink:0;scroll-snap-align:start;
-  display:flex;flex-direction:column;align-items:center;gap:6px;
-  width:84px;cursor:pointer;
+  display:flex;align-items:center;gap:10px;
+  width:208px;padding:10px;border-radius:16px;
+  background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);
+  cursor:pointer;
 }
-.exp-card-av{width:64px;height:64px;border-radius:18px;overflow:hidden;border:1px solid rgba(255,255,255,.08);}
+.exp-card-av{width:52px;height:52px;border-radius:14px;overflow:hidden;flex-shrink:0;}
 .exp-card-av canvas{width:100%;height:100%;display:block;}
-.exp-card-name{font-family:'Syne',sans-serif;font-weight:800;font-size:.72rem;letter-spacing:-.01em;}
-.exp-card-role{font-size:.52rem;color:var(--muted);font-weight:300;text-align:center;line-height:1.2;}
+.exp-card-info{flex:1;min-width:0;}
+.exp-card-name{font-family:'Syne',sans-serif;font-weight:800;font-size:.9rem;letter-spacing:-.02em;display:flex;align-items:center;gap:5px;margin-bottom:1px;}
+.exp-card-role{font-size:.6rem;color:var(--muted);font-weight:500;margin-bottom:3px;}
+.exp-card-desc{font-size:.64rem;color:rgba(240,240,248,.5);line-height:1.3;font-weight:300;}
 .exp-card-badge{
   font-size:.42rem;font-weight:700;padding:1px 6px;border-radius:20px;
   font-family:'JetBrains Mono',monospace;letter-spacing:.05em;
-  background:linear-gradient(135deg,var(--gold),var(--gold2));color:#000;margin-top:-2px;
+  background:linear-gradient(135deg,var(--gold),var(--gold2));color:#000;flex-shrink:0;
 }
 
 
@@ -2766,6 +2761,15 @@ window.addEventListener('load', initOrbes);
 var OTHER_EXPERTS=['sofia','marcus','luna','alex','max','koda','nova'];
 var _expCarouselInited=false;
 
+var EXP_USE={
+  sofia:"Budget, épargne, investissements",
+  marcus:"Droits, contrats, licenciement",
+  luna:"Toutes vos questions du quotidien",
+  alex:"Auto-entreprise, création, fiscalité",
+  max:"Réglages et dépannage impression 3D",
+  koda:"Code, débogage, sites web, jeux",
+  nova:"Génère et retouche tes images"
+};
 function initExpCarousel(){
   if(_expCarouselInited)return;
   var scroll=document.getElementById('expScroll');
@@ -2778,9 +2782,11 @@ function initExpCarousel(){
     var badge=ex.premiumOnly?'<div class="exp-card-badge">⭐ Premium</div>':'';
     card.innerHTML=
       '<div class="exp-card-av"><canvas class="orbe-canvas" data-expert="'+id+'" width="64" height="64"></canvas></div>'+
-      '<div class="exp-card-name" style="color:'+ex.color+'">'+ex.name+'</div>'+
-      '<div class="exp-card-role">'+ex.role+'</div>'+
-      badge;
+      '<div class="exp-card-info">'+
+        '<div class="exp-card-name" style="color:'+ex.color+'">'+ex.name+badge+'</div>'+
+        '<div class="exp-card-role">'+ex.role+'</div>'+
+        '<div class="exp-card-desc">'+(EXP_USE[id]||'')+'</div>'+
+      '</div>';
     card.addEventListener('click',function(){openChat(id);});
     scroll.appendChild(card);
   });
