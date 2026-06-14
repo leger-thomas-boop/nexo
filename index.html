@@ -1424,8 +1424,8 @@ header{
 }
 .genesis-core{
   position:absolute;left:50%;top:50%;
-  width:46%;aspect-ratio:1/1;min-width:160px;max-width:200px;
-  margin-left:-23%;margin-top:calc(-23% - 0px);
+  width:52%;aspect-ratio:1/1;min-width:170px;max-width:220px;
+  margin-left:-26%;margin-top:calc(-26% - 0px);
   border-radius:50%;
   display:flex;align-items:center;justify-content:center;
   cursor:pointer;z-index:5;
@@ -1469,10 +1469,11 @@ header{
 .orbit-node-label{
   position:absolute;bottom:-18px;left:50%;transform:translateX(-50%);
   font-size:.6rem;font-weight:800;font-family:'Syne',sans-serif;
-  white-space:nowrap;opacity:0;transition:opacity .25s;
+  white-space:nowrap;opacity:.85;transition:opacity .25s,font-size .25s;
+  text-shadow:0 1px 4px rgba(0,0,0,.6);
 }
 .orbit-node.active{border-width:2px;}
-.orbit-node.active .orbit-node-label{opacity:1;}
+.orbit-node.active .orbit-node-label{opacity:1;font-size:.68rem;}
 
 .orbit-hint{
   text-align:center;font-size:.58rem;color:var(--muted);
@@ -1505,7 +1506,7 @@ header{
         <div class="gc-particle" style="--fx:-20px;--fy:-6px;width:4px;height:4px;top:46%;left:97%;animation-delay:.4s;"></div>
       </div>
       <div class="orbit-ring" id="orbitRing"></div>
-      <div class="genesis-core" id="genesisCore" onclick="if(!_orbitDragMoved)openChat('genesis')">
+      <div class="genesis-core" id="genesisCore">
         <div class="genesis-core-glow"></div>
         <canvas class="orbe-canvas" data-expert="genesis" width="200" height="200"></canvas>
       </div>
@@ -2730,11 +2731,12 @@ function initOrbes(){
     canvas._orbeInit=true;
     var ctx=canvas.getContext('2d');
     var W=canvas.width, H=canvas.height, CX=W/2, CY=H/2, R=W*0.32;
+    var small=W<=70; // orbit mini-spheres: version allégée pour la fluidité
     var expert=canvas.getAttribute('data-expert');
     var cols=ORBE_COLORS[expert]||ORBE_COLORS.luna;
     // sphere points
     var pts=[];
-    var N=90;
+    var N=small?22:90;
     for(var i=0;i<N;i++){
       var phi=Math.acos(-1+(2*i)/N);
       var theta=Math.sqrt(N*Math.PI)*phi;
@@ -2742,7 +2744,8 @@ function initOrbes(){
     }
     // orbiting sparks
     var sparks=[];
-    for(var j=0;j<6;j++){
+    var nSparks=small?2:6;
+    for(var j=0;j<nSparks;j++){
       sparks.push({a:Math.random()*Math.PI*2,r:R+W*0.06+Math.random()*W*0.06,tilt:Math.random()*Math.PI,spd:(0.01+Math.random()*0.012)*(Math.random()>.5?1:-1),sz:0.8+Math.random()*1.5,ci:Math.floor(Math.random()*cols.length)});
     }
     var rot=0,t=0;
@@ -2766,16 +2769,18 @@ function initOrbes(){
         return{sx:CX+x3*rp,sy:CY+y3*rp,depth:(z3+1)/2,glow:(Math.sin(t*p.spd+p.phase)+1)/2,ci:p.ci};
       });
       proj.sort(function(a,b){return a.depth-b.depth;});
-      // filaments
-      var front=proj.filter(function(p){return p.depth>0.5;});
-      for(var a=0;a<front.length;a++){
-        for(var b=a+1;b<front.length;b++){
-          var dx=front[a].sx-front[b].sx,dy=front[a].sy-front[b].sy;
-          var dist=Math.sqrt(dx*dx+dy*dy);
-          if(dist<W*0.13){
-            var alp=(1-dist/(W*0.13))*front[a].depth*0.3;
-            ctx.beginPath();ctx.moveTo(front[a].sx,front[a].sy);ctx.lineTo(front[b].sx,front[b].sy);
-            ctx.strokeStyle=ha(cols[front[a].ci],alp);ctx.lineWidth=0.5;ctx.stroke();
+      // filaments (désactivé pour les petites sphères : trop coûteux)
+      if(!small){
+        var front=proj.filter(function(p){return p.depth>0.5;});
+        for(var a=0;a<front.length;a++){
+          for(var b=a+1;b<front.length;b++){
+            var dx=front[a].sx-front[b].sx,dy=front[a].sy-front[b].sy;
+            var dist=Math.sqrt(dx*dx+dy*dy);
+            if(dist<W*0.13){
+              var alp=(1-dist/(W*0.13))*front[a].depth*0.3;
+              ctx.beginPath();ctx.moveTo(front[a].sx,front[a].sy);ctx.lineTo(front[b].sx,front[b].sy);
+              ctx.strokeStyle=ha(cols[front[a].ci],alp);ctx.lineWidth=0.5;ctx.stroke();
+            }
           }
         }
       }
@@ -2834,11 +2839,7 @@ function initOrbit(){
       node.dataset.expert=id;
       node.dataset.angle=String(i*360/n);
       node.style.boxShadow='0 0 0 rgba(0,0,0,0)';
-      node.innerHTML='<canvas class="orbe-canvas" data-expert="'+id+'" width="124" height="124"></canvas><div class="orbit-node-label" style="color:'+ex.color+'">'+ex.name+'</div>';
-      node.addEventListener('click',function(){
-        if(_orbitDragMoved)return;
-        openChat(id);
-      });
+      node.innerHTML='<canvas class="orbe-canvas" data-expert="'+id+'" width="64" height="64"></canvas><div class="orbit-node-label" style="color:'+ex.color+'">'+ex.name+'</div>';
       ring.appendChild(node);
     });
     attachOrbitDrag(stage);
@@ -2846,7 +2847,7 @@ function initOrbit(){
   }
   // (re)compute radius based on current stage size
   var size=Math.min(stage.clientWidth,stage.clientHeight);
-  if(size>0) _orbitRadius=size*0.40;
+  if(size>0) _orbitRadius=size*0.42;
   updateOrbitPositions(true);
   resetOrbitIdle();
 }
@@ -2867,11 +2868,9 @@ function updateOrbitPositions(force){
     if(d<nearestDist){nearestDist=d;nearestEl=node;}
     var scale=1.15-0.65*depth;   // front = 1.15x, back = .5x
     var opacity=1-0.62*depth;     // front = 1, back = .38
-    var blur=depth>0.45?((depth-0.45)*3).toFixed(1):'0';
     node.style.transform='translate('+x.toFixed(1)+'px,'+y.toFixed(1)+'px) scale('+scale.toFixed(3)+')';
     node.style.opacity=opacity.toFixed(2);
     node.style.zIndex=String(Math.round(20-d/9));
-    node.style.filter=blur>0?'blur('+blur+'px)':'none';
   });
   if(nearestEl){
     var nearestId=nearestEl.dataset.expert;
@@ -2919,12 +2918,23 @@ function updateOrbitDetail(id){
 function attachOrbitDrag(stage){
   var dragging=false,startX=0,lastX=0,lastT=0,velocity=0;
 
+  var pendingDx=0,rafPending=false,downTarget=null;
+
+  function flush(){
+    rafPending=false;
+    if(pendingDx===0)return;
+    _orbitRotation+=pendingDx*0.75;
+    pendingDx=0;
+    updateOrbitPositions();
+  }
+
   function onDown(e){
     dragging=true;_orbitDragMoved=false;
     cancelAnimationFrame(_orbitInertiaRAF);
     cancelAnimationFrame(_orbitAutoRAF);
     clearTimeout(_orbitIdleTimer);
     startX=e.clientX;lastX=startX;lastT=Date.now();velocity=0;
+    downTarget=e.target.closest('.orbit-node, .genesis-core');
     if(stage.setPointerCapture && e.pointerId!==undefined){try{stage.setPointerCapture(e.pointerId);}catch(err){}}
   }
   function onMove(e){
@@ -2934,8 +2944,8 @@ function attachOrbitDrag(stage){
     if(Math.abs(x-startX)>3)_orbitDragMoved=true;
     var now=Date.now();var dt=now-lastT||16;
     velocity=dx/dt;
-    _orbitRotation+=dx*0.75;
-    updateOrbitPositions();
+    pendingDx+=dx;
+    if(!rafPending){rafPending=true;requestAnimationFrame(flush);}
     lastX=x;lastT=now;
     if(_orbitDragMoved && e.cancelable)e.preventDefault();
   }
@@ -2946,8 +2956,14 @@ function attachOrbitDrag(stage){
     if(_orbitDragMoved){
       runInertia();
     }else{
+      // simple tap : ouvre directement l'expert/Genesis touché
+      if(downTarget){
+        if(downTarget.classList.contains('genesis-core')){openChat('genesis');}
+        else if(downTarget.dataset.expert){openChat(downTarget.dataset.expert);}
+      }
       resetOrbitIdle();
     }
+    downTarget=null;
   }
   stage.addEventListener('pointerdown',onDown);
   stage.addEventListener('pointermove',onMove,{passive:false});
