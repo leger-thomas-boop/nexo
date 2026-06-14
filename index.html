@@ -1836,6 +1836,27 @@ function loadSession(){var s=localStorage.getItem('nexo_session');if(s){try{var 
 function saveSession(user,session){currentUser=user;userSession=session;localStorage.setItem('nexo_session',JSON.stringify({user:user,session:session}));}
 function clearSession(){currentUser=null;userSession=null;localStorage.removeItem('nexo_session');localStorage.removeItem('nexo_premium');}
 
+// Le token d'accès Supabase expire après ~1h. S'il est expiré (ou proche de l'être),
+// on le rafraîchit avec le refresh_token pour éviter d'apparaître "gratuit" alors qu'on est premium.
+async function refreshSessionIfNeeded(){
+  if(!userSession||!userSession.access_token)return false;
+  var now=Math.floor(Date.now()/1000);
+  if(userSession.expires_at && (userSession.expires_at-now)>60) return true; // encore valide
+  if(!userSession.refresh_token) return false;
+  try{
+    var r=await fetch(SUPABASE_URL+'/auth/v1/token?grant_type=refresh_token',{method:'POST',headers:{'Content-Type':'application/json','apikey':SUPABASE_ANON},body:JSON.stringify({refresh_token:userSession.refresh_token})});
+    var data=await r.json();
+    if(data.access_token){
+      userSession.access_token=data.access_token;
+      userSession.refresh_token=data.refresh_token||userSession.refresh_token;
+      userSession.expires_at=data.expires_at||(now+(data.expires_in||3600));
+      saveSession(currentUser,userSession);
+      return true;
+    }
+  }catch(e){console.warn('Rafraîchissement session échoué',e);}
+  return false;
+}
+
 function switchAuth(mode){
   document.querySelectorAll('.auth-tab').forEach(function(t,i){t.classList.toggle('active',(mode==='login'&&i===0)||(mode==='signup'&&i===1));});
   document.getElementById('auth-login').style.display=mode==='login'?'block':'none';
@@ -1857,7 +1878,7 @@ async function doLogin(){
     else if(raw.indexOf('rate limit')>-1||raw.indexOf('too many')>-1)fr='Trop de tentatives. Patientez quelques minutes.';
     err.textContent=fr;err.style.display='block';return;
   }
-  saveSession(data.user,{access_token:data.access_token});enterApp();
+  saveSession(data.user,{access_token:data.access_token,refresh_token:data.refresh_token,expires_at:data.expires_at||(Math.floor(Date.now()/1000)+(data.expires_in||3600))});enterApp();
 }
 async function doSignup(){
   var email=document.getElementById('signup-email').value.trim();
@@ -1870,7 +1891,7 @@ async function doSignup(){
   var data=await supabaseSignup(email,password);
   btn.disabled=false;btn.textContent='Créer mon compte gratuit →';
   if(data.error||data.msg){err.textContent=traduireErreur(data.msg||data.error_description||data.error);err.style.display='block';return;}
-  if(data.access_token){saveSession(data.user,{access_token:data.access_token});enterApp();}
+  if(data.access_token){saveSession(data.user,{access_token:data.access_token,refresh_token:data.refresh_token,expires_at:data.expires_at||(Math.floor(Date.now()/1000)+(data.expires_in||3600))});enterApp();}
   else{suc.innerHTML='✅ <strong>Compte créé !</strong><br>Un email de confirmation vient de vous être envoyé. Ouvrez-le et cliquez sur le lien pour activer votre compte, puis connectez-vous.';suc.style.display='block';}
 }
 // Traduit les messages d'erreur Supabase (anglais) en français
@@ -2134,6 +2155,7 @@ async function enterApp(){
     document.getElementById('userEmailDisplay').textContent=currentUser&&currentUser.email?currentUser.email:'';
   });
   try{
+    await refreshSessionIfNeeded();
     var r=await fetch(SUPABASE_URL+'/rest/v1/profiles?email=eq.'+currentUser.email+'&select=is_premium',{headers:{'apikey':SUPABASE_ANON,'Authorization':'Bearer '+userSession.access_token}});
     var data=await r.json();
     if(data[0]&&data[0].is_premium) setPremiumActive();
@@ -2258,6 +2280,7 @@ async function openChat(id){
   var area=document.getElementById('msgsArea');area.innerHTML='';
   if(convos[id].length===0&&userSession&&currentUser&&currentUser.id){
     try{
+      await refreshSessionIfNeeded();
       var r=await fetch(SUPABASE_URL+'/rest/v1/messages?expert=eq.'+id+'&user_id=eq.'+currentUser.id+'&order=created_at.asc&limit=50',{headers:{'apikey':SUPABASE_ANON,'Authorization':'Bearer '+userSession.access_token}});
       var hist=await r.json();
       if(hist&&hist.length>0){convos[id]=hist.map(function(m){return{role:m.role,content:m.content};});convos[id].forEach(function(m){if(m.role==='user')appendUser(_ctText(m.content));else appendBot(_ctText(m.content),id);});}
@@ -2591,7 +2614,7 @@ async function sendText(txt){
 }
 async function saveMessage(expert,role,content){
   if(!userSession||!currentUser||!currentUser.id)return;
-  try{await fetch(SUPABASE_URL+'/rest/v1/messages',{method:'POST',headers:{'apikey':SUPABASE_ANON,'Authorization':'Bearer '+userSession.access_token,'Content-Type':'application/json','Prefer':'return=minimal'},body:JSON.stringify({user_id:currentUser.id,expert:expert,role:role,content:content})});}catch(e){}
+  try{await refreshSessionIfNeeded();await fetch(SUPABASE_URL+'/rest/v1/messages',{method:'POST',headers:{'apikey':SUPABASE_ANON,'Authorization':'Bearer '+userSession.access_token,'Content-Type':'application/json','Prefer':'return=minimal'},body:JSON.stringify({user_id:currentUser.id,expert:expert,role:role,content:content})});}catch(e){}
 }
 function showLocked(id){
   var ex=EXPERTS[id];var area=document.getElementById('msgsArea');
