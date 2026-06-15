@@ -241,13 +241,13 @@ header{position:sticky;top:0;z-index:200;background:rgba(8,8,16,.88);backdrop-fi
 .chat-hdr-name{font-family:'Syne',sans-serif;font-weight:800;font-size:.95rem;letter-spacing:-.03em;}
 .chat-hdr-status{font-size:.62rem;display:flex;gap:5px;align-items:center;color:var(--muted);font-family:'JetBrains Mono',monospace;margin-top:1px;}
 .status-icon{width:5px;height:5px;border-radius:50%;background:#34d399;box-shadow:0 0 6px #34d399;animation:pulse 2s infinite;}
-.msgs{flex:1;overflow-y:auto;padding:64px 4px 16px;display:flex;flex-direction:column;gap:10px;}
+.msgs{flex:1;overflow-y:auto;padding:64px 2px 16px;display:flex;flex-direction:column;gap:10px;}
 .msg{max-width:84%;animation:msgIn .22s ease;}
 @keyframes msgIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
 .msg.user{align-self:flex-end;}
 .msg.bot{align-self:flex-start;display:flex;gap:4px;align-items:flex-start;max-width:100%;width:100%;}
 .msg-mini-avatar{width:20px;height:20px;border-radius:7px;flex-shrink:0;overflow:hidden;margin-top:3px;}
-.bubble{padding:11px 15px;border-radius:18px;font-size:.84rem;line-height:1.65;overflow-wrap:break-word;word-break:break-word;}
+.bubble{padding:11px 15px;border-radius:18px;font-size:.92rem;line-height:1.6;overflow-wrap:break-word;word-break:break-word;}
 .chat-link{color:var(--gold);text-decoration:underline;word-break:break-all;pointer-events:auto;position:relative;z-index:2;cursor:pointer;}
 .msg.user .chat-link{color:#000;text-decoration:underline;}
 .bubble{position:relative;}
@@ -2223,7 +2223,7 @@ var EXPERTS={
   genesis:{name:'Genesis',role:'IA Flagship — Multi-modèles',limitClass:'genesis-bar',color:'#fbbf24',freeLimit:0,premiumOnly:true,emoji:'✨',bg:'linear-gradient(135deg,#451a03,#92400e)',vision:true,webSearch:true,isGenesis:true,
     suggestions:["Quelle est la meilleure stratégie pour mon business ?","Analyse ce document en profondeur","Compare plusieurs approches pour ce problème","Recherche les dernières infos sur ce sujet"],
     welcome:"Bienvenue sur **Genesis** ✨\n\nJe suis l'IA flagship de Nexo : selon ta question, je mobilise **Claude, GPT et/ou Gemini** — seul ou combinés — pour te donner la meilleure réponse possible.\n\nTu peux m'envoyer du texte, une photo, un document, et je cherche sur Internet si besoin.\n\nPose-moi n'importe quelle question, même complexe.",
-    system:"Tu es Genesis, l'IA flagship de Nexo. Tu es exigeante, précise, et tu fournis toujours la meilleure réponse possible en combinant plusieurs perspectives si besoin. Réponds de façon claire, structurée et directe, sans jamais mentionner que tu es composée de plusieurs IA. Français parfait, **gras** pour les points clés."}
+    system:"Tu es Genesis, l'IA flagship de Nexo. Tu es exigeante, précise, et tu fournis toujours la meilleure réponse possible en combinant plusieurs perspectives si besoin. Va droit au but : réponds de façon naturelle et concise, comme dans une conversation, sans jamais mentionner que tu es composée de plusieurs IA. Français parfait, **gras** avec parcimonie pour les points vraiment importants."}
 };
 
 var isPremium=false,current=null,convos={};
@@ -2730,7 +2730,7 @@ async function sendText(txt){
   var _now=new Date();
   var _dateStr=_now.toLocaleDateString('fr-FR',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
   extractMemory(displayTxt);
-  var _sysWithDate=buildSystemWithMemory(ex.system)+" CONTEXTE TEMPOREL : nous sommes aujourd'hui le "+_dateStr+". Utilise systématiquement cette date comme référence pour toute question liée au temps (aujourd'hui, demain, ce week-end, cette semaine, etc.). Ne te base jamais sur une autre date.";
+  var _sysWithDate=buildSystemWithMemory(ex.system)+" CONTEXTE TEMPOREL : nous sommes aujourd'hui le "+_dateStr+". Utilise systématiquement cette date comme référence pour toute question liée au temps (aujourd'hui, demain, ce week-end, cette semaine, etc.). Ne te base jamais sur une autre date. STYLE DE RÉPONSE : sois bref et direct par défaut — quelques phrases ou un court paragraphe suffisent pour la plupart des questions. N'utilise des titres, sections multiples ou longues listes à puces QUE si la question est complexe ET le justifie vraiment, ou si l'utilisateur demande explicitement plus de détails (\"explique en détail\", \"développe\", \"complet\", etc.). Évite les réponses qui ressemblent à un rapport quand une réponse simple suffit.";
   try{
     if(ex.isGenesis){
       // Indicateur "réflexion/recherche" animé pour Genesis
