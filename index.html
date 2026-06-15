@@ -849,6 +849,10 @@ header{
 }
 .genesis-route-btn:hover{background:rgba(255,255,255,.09);}
 .genesis-route-btn:disabled{cursor:default;}
+.genesis-model-tag{
+  font-size:.56rem;color:var(--muted);font-family:'JetBrains Mono',monospace;
+  margin-top:6px;letter-spacing:.04em;opacity:.7;
+}
 .gth-icon{font-size:1rem;animation:gth-spin 1.8s linear infinite;display:inline-block;}
 @keyframes gth-spin{0%{transform:rotate(0deg) scale(1);}50%{transform:rotate(180deg) scale(1.2);}100%{transform:rotate(360deg) scale(1);}}
 .gth-text{font-size:.78rem;color:var(--genesis);font-weight:600;background:linear-gradient(90deg,var(--genesis),#fff,var(--genesis));background-size:200% auto;-webkit-background-clip:text;-webkit-text-fill-color:transparent;animation:gth-shine 2s linear infinite;}
@@ -1981,19 +1985,38 @@ async function refreshSessionIfNeeded(){
   if(!userSession||!userSession.access_token)return false;
   var now=Math.floor(Date.now()/1000);
   if(userSession.expires_at && (userSession.expires_at-now)>60) return true; // encore valide
-  if(!userSession.refresh_token) return false;
+  return forceRefreshSession();
+}
+async function forceRefreshSession(){
+  if(!userSession||!userSession.refresh_token)return false;
   try{
     var r=await fetch(SUPABASE_URL+'/auth/v1/token?grant_type=refresh_token',{method:'POST',headers:{'Content-Type':'application/json','apikey':SUPABASE_ANON},body:JSON.stringify({refresh_token:userSession.refresh_token})});
     var data=await r.json();
     if(data.access_token){
       userSession.access_token=data.access_token;
       userSession.refresh_token=data.refresh_token||userSession.refresh_token;
-      userSession.expires_at=data.expires_at||(now+(data.expires_in||3600));
+      userSession.expires_at=data.expires_at||(Math.floor(Date.now()/1000)+(data.expires_in||3600));
       saveSession(currentUser,userSession);
       return true;
     }
   }catch(e){console.warn('Rafraîchissement session échoué',e);}
   return false;
+}
+// Requête Supabase authentifiée, avec rafraîchissement réactif si le serveur rejette le token (401)
+async function supaAuthFetch(url,opts){
+  opts=opts||{};
+  opts.headers=Object.assign({},opts.headers,{apikey:SUPABASE_ANON});
+  await refreshSessionIfNeeded();
+  opts.headers['Authorization']='Bearer '+userSession.access_token;
+  var r=await fetch(url,opts);
+  if(r.status===401){
+    var refreshed=await forceRefreshSession();
+    if(refreshed){
+      opts.headers['Authorization']='Bearer '+userSession.access_token;
+      r=await fetch(url,opts);
+    }
+  }
+  return r;
 }
 
 function switchAuth(mode){
@@ -2295,8 +2318,7 @@ async function enterApp(){
     document.getElementById('userEmailDisplay').textContent=currentUser&&currentUser.email?currentUser.email:'';
   });
   try{
-    await refreshSessionIfNeeded();
-    var r=await fetch(SUPABASE_URL+'/rest/v1/profiles?email=eq.'+currentUser.email+'&select=is_premium',{headers:{'apikey':SUPABASE_ANON,'Authorization':'Bearer '+userSession.access_token}});
+    var r=await supaAuthFetch(SUPABASE_URL+'/rest/v1/profiles?email=eq.'+currentUser.email+'&select=is_premium',{});
     var data=await r.json();
     if(data[0]&&data[0].is_premium) setPremiumActive();
   }catch(e){console.warn('Vérification premium échouée',e);}
@@ -2421,8 +2443,7 @@ async function openChat(id){
   var area=document.getElementById('msgsArea');area.innerHTML='';
   if(convos[id].length===0&&userSession&&currentUser&&currentUser.id){
     try{
-      await refreshSessionIfNeeded();
-      var r=await fetch(SUPABASE_URL+'/rest/v1/messages?expert=eq.'+id+'&user_id=eq.'+currentUser.id+'&order=created_at.asc&limit=50',{headers:{'apikey':SUPABASE_ANON,'Authorization':'Bearer '+userSession.access_token}});
+      var r=await supaAuthFetch(SUPABASE_URL+'/rest/v1/messages?expert=eq.'+id+'&user_id=eq.'+currentUser.id+'&order=created_at.asc&limit=50',{});
       var hist=await r.json();
       if(hist&&hist.length>0){convos[id]=hist.map(function(m){return{role:m.role,content:m.content};});convos[id].forEach(function(m){if(m.role==='user')appendUser(_ctText(m.content));else appendBot(_ctText(m.content),id);});}
       else{addBotBubble(ex.welcome,id);showSuggs(id);}
@@ -2435,7 +2456,22 @@ async function openChat(id){
 function closeChat(){document.getElementById('chat-view').style.display='none';document.getElementById('home').style.display='block';}
 function addBotBubble(text,id){convos[id].push({role:'assistant',content:text});appendBot(text,id);}
 // Streaming effect: type the reply progressively like a real AI
-function streamBotBubble(text,id){
+function _modelsLabel(models){
+  if(!models||!models.length)return null;
+  var map={claude:'Claude',gpt:'ChatGPT',gemini:'Gemini'};
+  return models.map(function(m){return map[m]||m;}).join(' + ');
+}
+function _appendModelTag(div,models){
+  var label=_modelsLabel(models);
+  if(!label)return;
+  var wrap=div.querySelector('div[style*="flex:1"]');
+  if(!wrap)return;
+  var tag=document.createElement('div');
+  tag.className='genesis-model-tag';
+  tag.textContent='Répondu par '+label;
+  wrap.appendChild(tag);
+}
+function streamBotBubble(text,id,models){
   convos[id].push({role:'assistant',content:text});
   var area=document.getElementById('msgsArea');
   var div=document.createElement('div');div.className='msg bot';
@@ -2458,6 +2494,7 @@ function streamBotBubble(text,id){
       span.innerHTML=fmt(text);
       if(caret)caret.remove();
       foot.style.visibility='visible';
+      _appendModelTag(div,models);
       area.scrollTop=area.scrollHeight;
       return;
     }
@@ -2481,7 +2518,7 @@ function _createStreamBubble(id){
   area.appendChild(div);
   return {div:div,key:key,span:div.querySelector('.stream-txt'),caret:div.querySelector('.stream-caret'),foot:div.querySelector('.msg-foot'),area:area};
 }
-async function streamResponseBody(resp,id){
+async function streamResponseBody(resp,id,models){
   document.getElementById('typing')&&document.getElementById('typing').remove();
   var b=_createStreamBubble(id);
   var area=b.area;
@@ -2504,6 +2541,7 @@ async function streamResponseBody(resp,id){
   render();
   if(b.caret)b.caret.remove();
   b.foot.style.visibility='visible';
+  _appendModelTag(b.div,models);
   _copyStore[b.key]=full;
   convos[id].push({role:'assistant',content:full});
   area.scrollTop=area.scrollHeight;
@@ -2576,13 +2614,20 @@ function appendGenesisRoute(message,expertIds,originalQuestion,id){
     var e=EXPERTS[eid];
     return '<button class="genesis-route-btn" style="border-color:'+e.color+'66" data-expert="'+eid+'">'+e.emoji+' Continuer avec '+e.name+' →</button>';
   }).join('');
+  btnsHtml+='<button class="genesis-route-btn genesis-route-self" style="border-color:'+EXPERTS.genesis.color+'66" data-self="1">✨ Non, laisse Genesis répondre</button>';
   div.innerHTML='<div class="msg-mini-avatar">'+getAvatarMini(id)+'</div><div style="flex:1;min-width:0;"><div class="bubble">'+fmt(message)+'<div class="genesis-route-btns">'+btnsHtml+'</div></div><div class="msg-foot"><span class="msg-time">'+now()+'</span></div></div>';
   area.appendChild(div);area.scrollTop=area.scrollHeight;
   div.querySelectorAll('.genesis-route-btn').forEach(function(btn){
     btn.addEventListener('click',function(){
-      var eid=btn.dataset.expert;
       div.querySelectorAll('.genesis-route-btn').forEach(function(b){b.disabled=true;b.style.opacity='.5';});
-      btn.style.opacity='1';btn.textContent='✓ Redirection...';
+      btn.style.opacity='1';
+      if(btn.dataset.self){
+        btn.textContent='✨ Genesis répond...';
+        genesisAnswerDirectly(id);
+        return;
+      }
+      var eid=btn.dataset.expert;
+      btn.textContent='✓ Redirection...';
       setTimeout(function(){
         openChat(eid).then(function(){
           var inp=document.getElementById('msgInp');
@@ -2592,6 +2637,37 @@ function appendGenesisRoute(message,expertIds,originalQuestion,id){
       },350);
     });
   });
+}
+// Quand l'utilisateur préfère que Genesis réponde lui-même plutôt que d'être redirigé.
+// Reconstruit la conversation (sans la suggestion de redirection) et relance Genesis avec isFirstMessage=false (=> répond directement).
+async function genesisAnswerDirectly(id){
+  var ex=EXPERTS[id];
+  // retire la suggestion de redirection de l'historique, on repart de la dernière question utilisateur
+  convos[id].pop();
+  var area=document.getElementById('msgsArea');
+  var ty=document.createElement('div');ty.className='msg bot typing';ty.id='typing';
+  ty.innerHTML='<div class="msg-mini-avatar">'+getAvatarMini(id)+'</div><div class="bubble genesis-thinking"><span class="gth-icon">✨</span><span class="gth-text">Genesis réfléchit</span><span class="gth-dots"><span></span><span></span><span></span></span></div>';
+  area.appendChild(ty);area.scrollTop=area.scrollHeight;
+  var _now=new Date();
+  var _dateStr=_now.toLocaleDateString('fr-FR',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
+  var _sysWithDate=buildSystemWithMemory(ex.system)+" CONTEXTE TEMPOREL : nous sommes aujourd'hui le "+_dateStr+". Utilise systématiquement cette date comme référence pour toute question liée au temps (aujourd'hui, demain, ce week-end, cette semaine, etc.). Ne te base jamais sur une autre date. STYLE DE RÉPONSE : sois bref et direct par défaut — quelques phrases ou un court paragraphe suffisent pour la plupart des questions. N'utilise des titres, sections multiples ou longues listes à puces QUE si la question est complexe ET le justifie vraiment, ou si l'utilisateur demande explicitement plus de détails (\"explique en détail\", \"développe\", \"complet\", etc.). Évite les réponses qui ressemblent à un rapport quand une réponse simple suffit.";
+  var msgs=convos[id].slice(-12).map(function(m){return{role:m.role,content:m.content};});
+  try{
+    var gr2=await fetch('/api/genesis',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({system:_sysWithDate,messages:msgs,userEmail:currentUser&&currentUser.email,isFirstMessage:false})});
+    var ctype=gr2.headers.get('content-type')||'';
+    if(ctype.indexOf('application/json')===-1){
+      if(!gr2.ok||!gr2.body){document.getElementById('typing')&&document.getElementById('typing').remove();addBotBubble("❌ Genesis n'a pas pu répondre, réessayez.",id);return;}
+      var modelsHdr1=gr2.headers.get('x-genesis-models');
+      var greply=await streamResponseBody(gr2,id,modelsHdr1?modelsHdr1.split(','):null);
+      saveMessage(id,'assistant',greply);
+      return;
+    }
+    var gd2;
+    try{gd2=await gr2.json();}catch(e){document.getElementById('typing')&&document.getElementById('typing').remove();addBotBubble("⏱️ Genesis a mis trop de temps à répondre. Réessaie.",id);return;}
+    document.getElementById('typing')&&document.getElementById('typing').remove();
+    if(!gr2.ok||!gd2.text){addBotBubble(gd2.error||"❌ Genesis n'a pas pu répondre, réessayez.",id);return;}
+    streamBotBubble(gd2.text,id,gd2.models);saveMessage(id,'assistant',gd2.text);
+  }catch(e){document.getElementById('typing')&&document.getElementById('typing').remove();addBotBubble("❌ Connexion impossible.",id);}
 }
 function appendBotImage(imageUrl,prompt,id){
   var area=document.getElementById('msgsArea');
@@ -2904,7 +2980,8 @@ async function sendText(txt){
           addBotBubble("❌ Genesis n'a pas pu répondre, réessayez.",id);
           return;
         }
-        var greply=await streamResponseBody(gr2,id);
+        var modelsHdr2=gr2.headers.get('x-genesis-models');
+        var greply=await streamResponseBody(gr2,id,modelsHdr2?modelsHdr2.split(','):null);
         saveMessage(id,'assistant',greply);
         return;
       }
@@ -2919,7 +2996,7 @@ async function sendText(txt){
       if(gd2.redirect){appendGenesisRoute(gd2.redirect.reason,[gd2.redirect.expertId],txt,id);saveMessage(id,'assistant',gd2.redirect.reason);return;}
       if(gd2.ambiguous){appendGenesisRoute(gd2.ambiguous.reason,[gd2.ambiguous.expertId,gd2.ambiguous.expertId2],txt,id);saveMessage(id,'assistant',gd2.ambiguous.reason);return;}
       if(!gr2.ok||!gd2.text){addBotBubble(gd2.error||"❌ Genesis n'a pas pu répondre, réessayez.",id);return;}
-      streamBotBubble(gd2.text,id);saveMessage(id,'assistant',gd2.text);
+      streamBotBubble(gd2.text,id,gd2.models);saveMessage(id,'assistant',gd2.text);
       return;
     }
     var reply=await streamFromAPI('/api/chat',{system:_sysWithDate,messages:msgs,webSearch:(id==='luna'||id==='max'||id==='koda'||ex.webSearch)},id);
@@ -2928,7 +3005,7 @@ async function sendText(txt){
 }
 async function saveMessage(expert,role,content){
   if(!userSession||!currentUser||!currentUser.id)return;
-  try{await refreshSessionIfNeeded();await fetch(SUPABASE_URL+'/rest/v1/messages',{method:'POST',headers:{'apikey':SUPABASE_ANON,'Authorization':'Bearer '+userSession.access_token,'Content-Type':'application/json','Prefer':'return=minimal'},body:JSON.stringify({user_id:currentUser.id,expert:expert,role:role,content:content})});}catch(e){}
+  try{await supaAuthFetch(SUPABASE_URL+'/rest/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','Prefer':'return=minimal'},body:JSON.stringify({user_id:currentUser.id,expert:expert,role:role,content:content})});}catch(e){}
 }
 function showLocked(id){
   var ex=EXPERTS[id];var area=document.getElementById('msgsArea');
