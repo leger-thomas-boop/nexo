@@ -1854,6 +1854,7 @@ async function supabaseSignup(email,password){var r=await fetch(SUPABASE_URL+'/a
 async function supabaseLogin(email,password){var r=await fetch(SUPABASE_URL+'/auth/v1/token?grant_type=password',{method:'POST',headers:{'Content-Type':'application/json','apikey':SUPABASE_ANON},body:JSON.stringify({email:email,password:password})});return r.json();}
 
 var currentUser=null,userSession=null;
+var _genesisSessionFirstMsg=true; // remis à true à chaque ouverture du chat Genesis
 function loadSession(){var s=localStorage.getItem('nexo_session');if(s){try{var p=JSON.parse(s);currentUser=p.user;userSession=p.session;return true;}catch(e){}}return false;}
 function saveSession(user,session){currentUser=user;userSession=session;localStorage.setItem('nexo_session',JSON.stringify({user:user,session:session}));}
 function clearSession(){currentUser=null;userSession=null;localStorage.removeItem('nexo_session');localStorage.removeItem('nexo_premium');}
@@ -2271,6 +2272,7 @@ function setPremiumActive(){isPremium=true;document.getElementById('planPill').t
 
 async function openChat(id){
   current=id;var ex=EXPERTS[id];
+  if(id==='genesis')_genesisSessionFirstMsg=true; // (re)ouverture du chat Genesis -> 1er message de CETTE session = candidat au routage
   // Bloquer les experts premiumOnly pour les non-premium
   if(ex.premiumOnly && !isPremium){
     document.getElementById('home').style.display='none';
@@ -2352,6 +2354,54 @@ function streamBotBubble(text,id){
   step();
 }
 var _copyStore={};
+// Vrai streaming (comme Claude) : lit la réponse au fur et à mesure qu'elle arrive du serveur.
+// Retourne le texte complet une fois terminé (et l'ajoute à convos[id]).
+function _createStreamBubble(id){
+  var area=document.getElementById('msgsArea');
+  var div=document.createElement('div');div.className='msg bot';
+  var key='c'+(Date.now())+Math.floor(Math.random()*10000);
+  div.innerHTML='<div class="msg-mini-avatar">'+getAvatarMini(id)+'</div><div style="flex:1;min-width:0;"><div class="bubble"><span class="stream-txt"></span><span class="stream-caret"></span></div><div class="msg-foot" style="visibility:hidden"><span class="msg-time">'+now()+'</span><button class="copy-btn" onclick="copyMsg(this,\''+key+'\')">⧉ Copier</button></div></div>';
+  area.appendChild(div);
+  return {div:div,key:key,span:div.querySelector('.stream-txt'),caret:div.querySelector('.stream-caret'),foot:div.querySelector('.msg-foot'),area:area};
+}
+async function streamResponseBody(resp,id){
+  document.getElementById('typing')&&document.getElementById('typing').remove();
+  var b=_createStreamBubble(id);
+  var area=b.area;
+  var nearBottom=function(){return area.scrollHeight-area.scrollTop-area.clientHeight<120;};
+  var reader=resp.body.getReader();
+  var decoder=new TextDecoder();
+  var full='';
+  var pending=false;
+  function render(){
+    pending=false;
+    b.span.innerHTML=fmt(full);
+    if(nearBottom())area.scrollTop=area.scrollHeight;
+  }
+  while(true){
+    var chunk=await reader.read();
+    if(chunk.done)break;
+    full+=decoder.decode(chunk.value,{stream:true});
+    if(!pending){pending=true;requestAnimationFrame(render);}
+  }
+  render();
+  if(b.caret)b.caret.remove();
+  b.foot.style.visibility='visible';
+  _copyStore[b.key]=full;
+  convos[id].push({role:'assistant',content:full});
+  area.scrollTop=area.scrollHeight;
+  return full;
+}
+async function streamFromAPI(url,payload,id){
+  var resp=await fetch(url,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
+  if(!resp.ok||!resp.body){
+    var errData=null;try{errData=await resp.json();}catch(e){}
+    var err=new Error((errData&&(errData.error&&errData.error.message||errData.error))||'stream error');
+    err.userMessage=(errData&&(errData.error&&errData.error.message||errData.error))||null;
+    throw err;
+  }
+  return streamResponseBody(resp,id);
+}
 function appendBot(text,id){
   var area=document.getElementById('msgsArea');
   var div=document.createElement('div');div.className='msg bot';
@@ -2686,8 +2736,22 @@ async function sendText(txt){
       // Indicateur "réflexion/recherche" animé pour Genesis
       var tyEl=document.getElementById('typing');
       if(tyEl)tyEl.innerHTML='<div class="msg-mini-avatar">'+getAvatarMini(id)+'</div><div class="bubble genesis-thinking"><span class="gth-icon">✨</span><span class="gth-text">Genesis réfléchit</span><span class="gth-dots"><span></span><span></span><span></span></span></div>';
-      var isFirstMsg=convos[id].filter(function(m){return m.role==='user';}).length===1;
+      var isFirstMsg=_genesisSessionFirstMsg;
+      _genesisSessionFirstMsg=false;
       var gr2=await fetch('/api/genesis',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({system:_sysWithDate,messages:msgs,userEmail:currentUser&&currentUser.email,isFirstMessage:isFirstMsg})});
+      var ctype=gr2.headers.get('content-type')||'';
+      if(ctype.indexOf('application/json')===-1){
+        // ── Réponse en streaming réel (cas le plus courant : un seul modèle) ──
+        if(!gr2.ok||!gr2.body){
+          document.getElementById('typing')&&document.getElementById('typing').remove();
+          addBotBubble("❌ Genesis n'a pas pu répondre, réessayez.",id);
+          return;
+        }
+        var greply=await streamResponseBody(gr2,id);
+        saveMessage(id,'assistant',greply);
+        return;
+      }
+      // ── Réponse JSON : redirection, ambiguïté, ou fusion multi-IA ──
       var gd2;
       try{gd2=await gr2.json();}catch(parseErr){
         document.getElementById('typing')&&document.getElementById('typing').remove();
@@ -2701,11 +2765,8 @@ async function sendText(txt){
       streamBotBubble(gd2.text,id);saveMessage(id,'assistant',gd2.text);
       return;
     }
-    var r=await fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({system:_sysWithDate,messages:msgs,webSearch:(id==='luna'||id==='max'||id==='koda'||ex.webSearch)})});
-    var d=await r.json();
-    var reply=d.content?d.content.map(function(b){return b.text||'';}).join(''):"Je n'ai pas pu répondre, réessayez.";
-    document.getElementById('typing')&&document.getElementById('typing').remove();
-    streamBotBubble(reply,id);saveMessage(id,'assistant',reply);
+    var reply=await streamFromAPI('/api/chat',{system:_sysWithDate,messages:msgs,webSearch:(id==='luna'||id==='max'||id==='koda'||ex.webSearch)},id);
+    saveMessage(id,'assistant',reply);
   }catch(e){document.getElementById('typing')&&document.getElementById('typing').remove();addBotBubble("❌ Connexion impossible.",id);}
 }
 async function saveMessage(expert,role,content){
