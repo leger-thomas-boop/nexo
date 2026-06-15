@@ -223,7 +223,7 @@ header{position:sticky;top:0;z-index:200;background:rgba(8,8,16,.88);backdrop-fi
   position:absolute;top:0;left:0;right:0;z-index:20;
   padding:14px 16px;display:flex;align-items:center;gap:12px;
   border-bottom:none;
-  background:linear-gradient(to bottom,rgba(8,8,16,.92) 30%,rgba(8,8,16,.55) 70%,rgba(8,8,16,0));
+  background:linear-gradient(to bottom,rgba(8,8,16,1) 45%,rgba(8,8,16,.7) 75%,rgba(8,8,16,0));
   backdrop-filter:blur(14px);
   -webkit-mask-image:linear-gradient(to bottom,#000 60%,transparent 100%);
   mask-image:linear-gradient(to bottom,#000 60%,transparent 100%);
@@ -241,12 +241,12 @@ header{position:sticky;top:0;z-index:200;background:rgba(8,8,16,.88);backdrop-fi
 .chat-hdr-name{font-family:'Syne',sans-serif;font-weight:800;font-size:.95rem;letter-spacing:-.03em;}
 .chat-hdr-status{font-size:.62rem;display:flex;gap:5px;align-items:center;color:var(--muted);font-family:'JetBrains Mono',monospace;margin-top:1px;}
 .status-icon{width:5px;height:5px;border-radius:50%;background:#34d399;box-shadow:0 0 6px #34d399;animation:pulse 2s infinite;}
-.msgs{flex:1;overflow-y:auto;padding:64px 16px 16px;display:flex;flex-direction:column;gap:10px;}
+.msgs{flex:1;overflow-y:auto;padding:64px 10px 16px;display:flex;flex-direction:column;gap:10px;}
 .msg{max-width:84%;animation:msgIn .22s ease;}
 @keyframes msgIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
 .msg.user{align-self:flex-end;}
-.msg.bot{align-self:flex-start;display:flex;gap:8px;align-items:flex-start;max-width:100%;width:100%;}
-.msg-mini-avatar{width:28px;height:28px;border-radius:9px;flex-shrink:0;overflow:hidden;}
+.msg.bot{align-self:flex-start;display:flex;gap:6px;align-items:flex-start;max-width:100%;width:100%;}
+.msg-mini-avatar{width:24px;height:24px;border-radius:8px;flex-shrink:0;overflow:hidden;margin-top:2px;}
 .bubble{padding:11px 15px;border-radius:18px;font-size:.84rem;line-height:1.65;overflow-wrap:break-word;word-break:break-word;}
 .chat-link{color:var(--gold);text-decoration:underline;word-break:break-all;pointer-events:auto;position:relative;z-index:2;cursor:pointer;}
 .msg.user .chat-link{color:#000;text-decoration:underline;}
@@ -841,6 +841,14 @@ header{
 
 /* Genesis "réfléchit" indicator */
 .genesis-thinking{display:flex;align-items:center;gap:8px;}
+.genesis-route-btns{display:flex;flex-direction:column;gap:8px;margin-top:12px;}
+.genesis-route-btn{
+  padding:11px 14px;border-radius:13px;border:1.5px solid;background:rgba(255,255,255,.04);
+  font-family:'Syne',sans-serif;font-weight:700;font-size:.82rem;text-align:left;cursor:pointer;
+  transition:.2s;color:inherit;
+}
+.genesis-route-btn:hover{background:rgba(255,255,255,.09);}
+.genesis-route-btn:disabled{cursor:default;}
 .gth-icon{font-size:1rem;animation:gth-spin 1.8s linear infinite;display:inline-block;}
 @keyframes gth-spin{0%{transform:rotate(0deg) scale(1);}50%{transform:rotate(180deg) scale(1.2);}100%{transform:rotate(360deg) scale(1);}}
 .gth-text{font-size:.78rem;color:var(--genesis);font-weight:600;background:linear-gradient(90deg,var(--genesis),#fff,var(--genesis));background-size:200% auto;-webkit-background-clip:text;-webkit-text-fill-color:transparent;animation:gth-shine 2s linear infinite;}
@@ -2350,6 +2358,32 @@ function appendBot(text,id){
   div.innerHTML='<div class="msg-mini-avatar">'+getAvatarMini(id)+'</div><div style="flex:1;min-width:0;"><div class="bubble">'+fmt(text)+'</div><div class="msg-foot"><span class="msg-time">'+now()+'</span><button class="copy-btn" onclick="copyMsg(this,\''+key+'\')">⧉ Copier</button></div></div>';
   area.appendChild(div);area.scrollTop=area.scrollHeight;
 }
+// Bulle de redirection Genesis -> expert(s) Nexo, avec bouton(s) "Continuer avec X"
+function appendGenesisRoute(message,expertIds,originalQuestion,id){
+  convos[id].push({role:'assistant',content:message});
+  var area=document.getElementById('msgsArea');
+  var div=document.createElement('div');div.className='msg bot';
+  var btnsHtml=expertIds.map(function(eid){
+    var e=EXPERTS[eid];
+    return '<button class="genesis-route-btn" style="border-color:'+e.color+'66" data-expert="'+eid+'">'+e.emoji+' Continuer avec '+e.name+' →</button>';
+  }).join('');
+  div.innerHTML='<div class="msg-mini-avatar">'+getAvatarMini(id)+'</div><div style="flex:1;min-width:0;"><div class="bubble">'+fmt(message)+'<div class="genesis-route-btns">'+btnsHtml+'</div></div><div class="msg-foot"><span class="msg-time">'+now()+'</span></div></div>';
+  area.appendChild(div);area.scrollTop=area.scrollHeight;
+  div.querySelectorAll('.genesis-route-btn').forEach(function(btn){
+    btn.addEventListener('click',function(){
+      var eid=btn.dataset.expert;
+      div.querySelectorAll('.genesis-route-btn').forEach(function(b){b.disabled=true;b.style.opacity='.5';});
+      btn.style.opacity='1';btn.textContent='✓ Redirection...';
+      setTimeout(function(){
+        openChat(eid).then(function(){
+          var inp=document.getElementById('msgInp');
+          inp.value=originalQuestion;
+          sendMsg();
+        });
+      },350);
+    });
+  });
+}
 function appendBotImage(imageUrl,prompt,id){
   var area=document.getElementById('msgsArea');
   var div=document.createElement('div');div.className='msg bot';
@@ -2483,7 +2517,43 @@ function onPhotoPicked(e){
     return;
   }
 
-  // ── Images : compression via canvas ──────────────────────────────────────
+  // ── Photos HEIC/HEIF (format par défaut des photos de la galerie iPhone) ──
+  // Ces fichiers ne sont pas décodables par <canvas>/<img> dans le navigateur,
+  // contrairement aux photos prises directement (converties en JPEG). On les
+  // convertit donc d'abord en JPEG via heic2any (chargé à la demande).
+  var isHeic=file.type==='image/heic'||file.type==='image/heif'||/\.(heic|heif)$/i.test(file.name||'');
+  if(isHeic){
+    loadHeic2Any(function(ok){
+      if(!ok){alert("Impossible de charger le convertisseur de photo. Vérifie ta connexion et réessaie.");return;}
+      window.heic2any({blob:file,toType:'image/jpeg',quality:0.85}).then(function(converted){
+        var jpegBlob=converted instanceof Blob?converted:converted[0];
+        processImageFile(jpegBlob);
+      }).catch(function(){
+        alert('Ce format de photo n\'est pas pris en charge. Essaie une autre photo, ou active "Le plus compatible" dans Réglages > Appareil photo > Formats sur ton iPhone.');
+      });
+    });
+    e.target.value='';
+    return;
+  }
+
+  processImageFile(file);
+  e.target.value='';
+}
+var _heic2anyState=0; // 0=non chargé, 1=en cours, 2=chargé
+var _heic2anyCallbacks=[];
+function loadHeic2Any(cb){
+  if(window.heic2any){cb(true);return;}
+  _heic2anyCallbacks.push(cb);
+  if(_heic2anyState!==0)return;
+  _heic2anyState=1;
+  var s=document.createElement('script');
+  s.src='https://cdn.jsdelivr.net/npm/heic2any@0.0.4/dist/heic2any.min.js';
+  s.onload=function(){_heic2anyState=2;_heic2anyCallbacks.forEach(function(f){f(true);});_heic2anyCallbacks=[];};
+  s.onerror=function(){_heic2anyState=0;_heic2anyCallbacks.forEach(function(f){f(false);});_heic2anyCallbacks=[];};
+  document.head.appendChild(s);
+}
+// ── Images : compression via canvas ──────────────────────────────────────
+function processImageFile(file){
   var reader=new FileReader();
   reader.onload=function(){
     var dataUrl=reader.result;
@@ -2509,10 +2579,12 @@ function onPhotoPicked(e){
       if(nameEl)nameEl.style.display='none';
       ip.style.display='flex';
     };
+    img.onerror=function(){
+      alert("Impossible de lire cette photo. Essaie une autre photo, ou prends-en une nouvelle avec l'appareil photo.");
+    };
     img.src=dataUrl;
   };
   reader.readAsDataURL(file);
-  e.target.value='';
 }
 function clearAttachedImage(){
   _attachedImage=null;
@@ -2612,9 +2684,12 @@ async function sendText(txt){
       // Indicateur "réflexion/recherche" animé pour Genesis
       var tyEl=document.getElementById('typing');
       if(tyEl)tyEl.innerHTML='<div class="msg-mini-avatar">'+getAvatarMini(id)+'</div><div class="bubble genesis-thinking"><span class="gth-icon">✨</span><span class="gth-text">Genesis réfléchit</span><span class="gth-dots"><span></span><span></span><span></span></span></div>';
-      var gr2=await fetch('/api/genesis',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({system:_sysWithDate,messages:msgs,userEmail:currentUser&&currentUser.email})});
+      var isFirstMsg=convos[id].filter(function(m){return m.role==='user';}).length===1;
+      var gr2=await fetch('/api/genesis',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({system:_sysWithDate,messages:msgs,userEmail:currentUser&&currentUser.email,isFirstMessage:isFirstMsg})});
       var gd2=await gr2.json();
       document.getElementById('typing')&&document.getElementById('typing').remove();
+      if(gd2.redirect){appendGenesisRoute(gd2.redirect.reason,[gd2.redirect.expertId],txt,id);saveMessage(id,'assistant',gd2.redirect.reason);return;}
+      if(gd2.ambiguous){appendGenesisRoute(gd2.ambiguous.reason,[gd2.ambiguous.expertId,gd2.ambiguous.expertId2],txt,id);saveMessage(id,'assistant',gd2.ambiguous.reason);return;}
       if(!gr2.ok||!gd2.text){addBotBubble(gd2.error||"❌ Genesis n'a pas pu répondre, réessayez.",id);return;}
       streamBotBubble(gd2.text,id);saveMessage(id,'assistant',gd2.text);
       return;
