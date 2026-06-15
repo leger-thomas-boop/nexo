@@ -1461,6 +1461,76 @@ header{
   cursor:pointer;box-shadow:0 8px 24px rgba(251,191,36,.3);
   position:relative;z-index:1;
 }
+.gh-flagship-badge{
+  display:inline-flex;align-items:center;gap:5px;margin:0 auto 8px;
+  background:rgba(251,191,36,.12);border:1px solid rgba(251,191,36,.35);
+  border-radius:20px;padding:4px 12px;font-size:.62rem;font-weight:800;
+  letter-spacing:.08em;color:var(--genesis);font-family:'JetBrains Mono',monospace;
+  position:relative;z-index:1;width:max-content;
+}
+.gh-headline{
+  font-family:'Syne',sans-serif;font-weight:800;font-size:1.05rem;line-height:1.35;
+  letter-spacing:-.02em;margin-top:8px;position:relative;z-index:1;color:var(--text);
+}
+
+/* ── DÉMONSTRATION VISUELLE (routage) ── */
+.nh-demo-card{
+  margin:14px 16px;border-radius:18px;padding:16px;
+  background:rgba(255,255,255,.03);border:1px solid var(--border);
+}
+.nh-demo-q{
+  font-size:.78rem;font-style:italic;color:rgba(240,240,248,.7);
+  line-height:1.5;margin-bottom:12px;padding-bottom:12px;border-bottom:1px dashed var(--border);
+}
+.nh-demo-flow{display:flex;flex-direction:column;gap:10px;}
+.nh-demo-step{
+  font-size:.8rem;font-weight:700;font-family:'Syne',sans-serif;
+  display:flex;align-items:center;gap:8px;opacity:0;
+  animation:nh-demo-reveal 6s ease-in-out infinite;
+}
+.nh-demo-step-1{animation-delay:0s;color:rgba(240,240,248,.75);}
+.nh-demo-step-2{animation-delay:1.4s;color:var(--marcus);}
+.nh-demo-step-3{animation-delay:2.8s;color:#34d399;}
+.nh-demo-spin{display:inline-block;animation:gth-spin 1.8s linear infinite;}
+@keyframes nh-demo-reveal{
+  0%{opacity:0;transform:translateY(6px);}
+  8%,88%{opacity:1;transform:translateY(0);}
+  96%,100%{opacity:0;transform:translateY(0);}
+}
+
+/* ── COMMENT GENESIS FONCTIONNE ── */
+.nh-flow-diagram{
+  margin:4px 16px 14px;display:flex;flex-direction:column;align-items:center;gap:2px;
+}
+.nh-flow-node{
+  width:100%;text-align:center;padding:11px;border-radius:13px;
+  background:rgba(255,255,255,.04);border:1px solid var(--border);
+  font-size:.8rem;font-weight:700;font-family:'Syne',sans-serif;
+}
+.nh-flow-node-genesis{
+  background:linear-gradient(135deg,rgba(251,191,36,.15),rgba(251,191,36,.05));
+  border-color:rgba(251,191,36,.35);color:var(--genesis);
+}
+.nh-flow-arrow{font-size:.85rem;color:var(--muted);line-height:1;padding:2px 0;}
+.nh-flow-examples{
+  margin:0 16px 14px;display:flex;flex-direction:column;gap:6px;
+  background:rgba(255,255,255,.02);border:1px solid var(--border);border-radius:14px;padding:10px 14px;
+}
+.nh-flow-ex{display:flex;align-items:center;gap:8px;font-size:.74rem;padding:4px 0;}
+.nh-flow-ex span:first-child{color:rgba(240,240,248,.6);flex:1;}
+.nh-flow-ex .arrow{color:var(--muted);flex-shrink:0;}
+.nh-flow-ex-tag{font-weight:800;font-family:'Syne',sans-serif;flex-shrink:0;}
+
+/* ── ESSAYEZ UN EXEMPLE ── */
+.nh-try-grid{
+  margin:4px 16px 14px;display:grid;grid-template-columns:1fr 1fr;gap:8px;
+}
+.nh-try-card{
+  padding:12px 10px;border-radius:13px;background:rgba(255,255,255,.03);
+  border:1px solid var(--border);font-size:.72rem;font-weight:600;line-height:1.35;
+  cursor:pointer;transition:.2s;color:rgba(240,240,248,.85);
+}
+.nh-try-card:active{background:rgba(255,255,255,.07);border-color:rgba(251,191,36,.3);transform:scale(.98);}
 
 /* ── CARROUSEL EXPERTS (scroll natif, fiable sur mobile) ── */
 .exp-scroll{
@@ -1502,10 +1572,12 @@ header{
   <!-- GENESIS HERO CARD (élément central, vedette) -->
   <div class="genesis-hero-card" id="genesisHeroCard">
     <div class="gh-glow"></div>
+    <div class="gh-flagship-badge">🏆 FLAGSHIP AI</div>
     <div class="gh-sphere-wrap"><div class="gh-sphere"><canvas class="orbe-canvas" data-expert="genesis" width="200" height="200"></canvas></div></div>
     <div class="gh-title">Genesis</div>
-    <div class="gh-sub">IA Flagship · Claude + GPT + Gemini</div>
-    <div class="gh-tagline">Décrivez votre besoin. Genesis choisit automatiquement la meilleure IA pour vous répondre.</div>
+    <div class="gh-sub">Claude + GPT + Gemini</div>
+    <div class="gh-headline">Une seule question.<br>Le meilleur expert automatiquement.</div>
+    <div class="gh-tagline">Genesis analyse votre demande et choisit automatiquement la meilleure IA ou le meilleur expert Nexo.</div>
     <div class="gh-features">
       <div class="gh-feat"><span class="ico">🧠</span><span>Multi-IA combinées</span></div>
       <div class="gh-feat"><span class="ico">🌐</span><span>Recherche Internet</span></div>
@@ -1513,6 +1585,47 @@ header{
       <div class="gh-feat"><span class="ico">📷</span><span>Analyse de photos</span></div>
     </div>
     <button class="gh-cta">✨ Discuter avec Genesis</button>
+  </div>
+
+  <!-- DÉMONSTRATION VISUELLE (routage automatique) -->
+  <div class="nh-demo-card">
+    <div class="nh-demo-q">"Mon patron peut-il me licencier pendant un arrêt maladie ?"</div>
+    <div class="nh-demo-flow">
+      <div class="nh-demo-step nh-demo-step-1"><span class="nh-demo-spin">✨</span> Genesis analyse...</div>
+      <div class="nh-demo-step nh-demo-step-2">⚖️ <strong>Marcus</strong> sélectionné</div>
+      <div class="nh-demo-step nh-demo-step-3">✅ Réponse générée</div>
+    </div>
+  </div>
+
+  <!-- COMMENT GENESIS FONCTIONNE -->
+  <div class="nh-sec-lbl">Comment Genesis fonctionne</div>
+  <div class="nh-flow-diagram">
+    <div class="nh-flow-node">Votre question</div>
+    <div class="nh-flow-arrow">↓</div>
+    <div class="nh-flow-node nh-flow-node-genesis">✨ Genesis</div>
+    <div class="nh-flow-arrow">↓</div>
+    <div class="nh-flow-node">Choix intelligent</div>
+    <div class="nh-flow-arrow">↓</div>
+    <div class="nh-flow-node">Expert spécialisé</div>
+  </div>
+  <div class="nh-flow-examples">
+    <div class="nh-flow-ex"><span>Question juridique</span><span class="arrow">→</span><span class="nh-flow-ex-tag" style="color:var(--marcus)">Marcus</span></div>
+    <div class="nh-flow-ex"><span>Question finance</span><span class="arrow">→</span><span class="nh-flow-ex-tag" style="color:var(--sofia)">Sofia</span></div>
+    <div class="nh-flow-ex"><span>Question image</span><span class="arrow">→</span><span class="nh-flow-ex-tag" style="color:var(--nova)">Nova</span></div>
+    <div class="nh-flow-ex"><span>Impression 3D</span><span class="arrow">→</span><span class="nh-flow-ex-tag" style="color:var(--max)">Max</span></div>
+    <div class="nh-flow-ex"><span>Développement</span><span class="arrow">→</span><span class="nh-flow-ex-tag" style="color:var(--koda)">Koda</span></div>
+    <div class="nh-flow-ex"><span>Question complexe</span><span class="arrow">→</span><span class="nh-flow-ex-tag" style="color:var(--genesis)">Claude+GPT+Gemini</span></div>
+  </div>
+
+  <!-- ESSAYEZ UN EXEMPLE -->
+  <div class="nh-sec-lbl">Essayez un exemple</div>
+  <div class="nh-try-grid">
+    <div class="nh-try-card" onclick="tryGenesisExample('Mon patron peut-il me licencier pendant un arrêt maladie ?')">⚖️ Mon patron peut-il me licencier ?</div>
+    <div class="nh-try-card" onclick="tryGenesisExample('Comment économiser 300€ par mois avec mon salaire ?')">💰 Comment économiser 300€/mois ?</div>
+    <div class="nh-try-card" onclick="tryGenesisExample('Comment créer mon auto-entreprise étape par étape ?')">🏢 Comment créer mon auto-entreprise ?</div>
+    <div class="nh-try-card" onclick="tryGenesisExample('Transforme ma photo en style cartoon')">🎨 Transforme ma photo en cartoon</div>
+    <div class="nh-try-card" onclick="tryGenesisExample('Comment bien régler mon imprimante 3D ?')">🖨️ Comment régler mon imprimante 3D ?</div>
+    <div class="nh-try-card" onclick="tryGenesisExample('Aide-moi à créer une application mobile')">💻 Crée-moi une application mobile</div>
   </div>
 
   <!-- CARROUSEL DES 7 AUTRES EXPERTS -->
@@ -1523,22 +1636,25 @@ header{
   <div class="nh-why">
     <div class="nh-why-title">Pourquoi choisir Nexo ?</div>
     <div class="nh-why-list">
-      <div class="nh-why-item"><div class="nh-why-ico">⚡</div><div class="nh-why-txt"><strong>8 IA spécialisées</strong> — chacun expert dans son domaine.</div></div>
+      <div class="nh-why-item"><div class="nh-why-ico">⚡</div><div class="nh-why-txt"><strong>Réponses instantanées</strong> — disponibles 24h/24, 7j/7.</div></div>
       <div class="nh-why-item"><div class="nh-why-ico">🔒</div><div class="nh-why-txt"><strong>Confidentialité totale</strong> — vos données sont protégées et sécurisées.</div></div>
-      <div class="nh-why-item"><div class="nh-why-ico">⏱️</div><div class="nh-why-txt"><strong>Réponses instantanées</strong> — disponibles 24h/24, 7j/7.</div></div>
-      <div class="nh-why-item"><div class="nh-why-ico">🇫🇷</div><div class="nh-why-txt"><strong>100% adapté à la France</strong> — Livret A, URSSAF, Code du travail. Nos experts connaissent les règles françaises.</div></div>
+      <div class="nh-why-item"><div class="nh-why-ico">🇫🇷</div><div class="nh-why-txt"><strong>Adapté à la France</strong> — Livret A, URSSAF, Code du travail.</div></div>
+      <div class="nh-why-item"><div class="nh-why-ico">🧠</div><div class="nh-why-txt"><strong>Routage intelligent</strong> — Genesis choisit toujours le bon expert.</div></div>
+      <div class="nh-why-item"><div class="nh-why-ico">🌐</div><div class="nh-why-txt"><strong>Recherche Internet</strong> — infos à jour, en temps réel.</div></div>
+      <div class="nh-why-item"><div class="nh-why-ico">📄</div><div class="nh-why-txt"><strong>Analyse de documents</strong> — PDF, contrats, factures...</div></div>
+      <div class="nh-why-item"><div class="nh-why-ico">📷</div><div class="nh-why-txt"><strong>Analyse de photos</strong> — diagnostics et retouches visuelles.</div></div>
     </div>
 
     <div class="nh-stats">
-      <div class="nh-stat"><div class="nh-stat-ico">💬</div><div class="nh-stat-val">1 200+</div><div class="nh-stat-lbl">Questions répondues</div></div>
-      <div class="nh-stat"><div class="nh-stat-ico">👥</div><div class="nh-stat-val">150+</div><div class="nh-stat-lbl">Utilisateurs actifs</div></div>
-      <div class="nh-stat"><div class="nh-stat-ico">🤖</div><div class="nh-stat-val">8</div><div class="nh-stat-lbl">Experts IA</div></div>
-      <div class="nh-stat"><div class="nh-stat-ico">⭐</div><div class="nh-stat-val">4.9/5</div><div class="nh-stat-lbl">Note moyenne</div></div>
+      <div class="nh-stat"><div class="nh-stat-ico">💬</div><div class="nh-stat-val" data-count="1200" data-suffix="+">0</div><div class="nh-stat-lbl">Questions répondues</div></div>
+      <div class="nh-stat"><div class="nh-stat-ico">👥</div><div class="nh-stat-val" data-count="150" data-suffix="+">0</div><div class="nh-stat-lbl">Utilisateurs actifs</div></div>
+      <div class="nh-stat"><div class="nh-stat-ico">🤖</div><div class="nh-stat-val" data-count="8" data-suffix="">0</div><div class="nh-stat-lbl">Experts IA</div></div>
+      <div class="nh-stat"><div class="nh-stat-ico">⭐</div><div class="nh-stat-val" data-count="4.9" data-suffix="/5">0</div><div class="nh-stat-lbl">Note moyenne</div></div>
     </div>
 
     <div class="nh-cta-block" id="nh-cta-block">
-      <div class="nh-cta-txt">Posez vos premières questions sans carte bancaire.</div>
-      <button class="nh-cta-btn" onclick="openChat('sofia')">Commencer maintenant 🚀</button>
+      <div class="nh-cta-txt">Vous aimez Nexo ? Partagez-le avec vos proches.</div>
+      <button class="nh-cta-btn" onclick="shareNexo()">↗ Partager Nexo</button>
     </div>
   </div>
 
@@ -2173,6 +2289,7 @@ async function enterApp(){
     initHomeBg();
     initOrbes();
     initExpCarousel();
+    initStatsCounter();
     var letter=(currentUser&&currentUser.email?currentUser.email[0]:'U').toUpperCase();
     document.getElementById('avatarHdr').textContent=letter;
     document.getElementById('userEmailDisplay').textContent=currentUser&&currentUser.email?currentUser.email:'';
@@ -2411,6 +2528,46 @@ function appendBot(text,id){
   area.appendChild(div);area.scrollTop=area.scrollHeight;
 }
 // Bulle de redirection Genesis -> expert(s) Nexo, avec bouton(s) "Continuer avec X"
+// "Essayez un exemple" : ouvre Genesis et envoie directement la question d'exemple
+function tryGenesisExample(text){
+  openChat('genesis').then(function(){
+    var inp=document.getElementById('msgInp');
+    if(!inp)return;
+    inp.value=text;
+    sendMsg();
+  });
+}
+// Animation "compteur" pour les statistiques (déclenchée à l'apparition à l'écran)
+var _statsAnimated=false;
+function initStatsCounter(){
+  if(_statsAnimated)return;
+  var stats=document.querySelectorAll('.nh-stat-val');
+  if(!stats.length)return;
+  var obs=new IntersectionObserver(function(entries){
+    entries.forEach(function(entry){
+      if(!entry.isIntersecting||_statsAnimated)return;
+      _statsAnimated=true;
+      stats.forEach(function(el){
+        var target=parseFloat(el.dataset.count);
+        var suffix=el.dataset.suffix||'';
+        var isDecimal=el.dataset.count.indexOf('.')!==-1;
+        var dur=1100,start=null;
+        function frame(ts){
+          if(!start)start=ts;
+          var p=Math.min(1,(ts-start)/dur);
+          var eased=1-Math.pow(1-p,3);
+          var val=target*eased;
+          el.textContent=(isDecimal?val.toFixed(1):Math.round(val).toLocaleString('fr-FR'))+suffix;
+          if(p<1)requestAnimationFrame(frame);
+          else el.textContent=(isDecimal?target.toFixed(1):target.toLocaleString('fr-FR'))+suffix;
+        }
+        requestAnimationFrame(frame);
+      });
+      obs.disconnect();
+    });
+  },{threshold:0.3});
+  obs.observe(stats[0]);
+}
 function appendGenesisRoute(message,expertIds,originalQuestion,id){
   convos[id].push({role:'assistant',content:message});
   var area=document.getElementById('msgsArea');
