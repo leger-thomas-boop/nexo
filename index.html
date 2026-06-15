@@ -2688,7 +2688,12 @@ async function sendText(txt){
       if(tyEl)tyEl.innerHTML='<div class="msg-mini-avatar">'+getAvatarMini(id)+'</div><div class="bubble genesis-thinking"><span class="gth-icon">✨</span><span class="gth-text">Genesis réfléchit</span><span class="gth-dots"><span></span><span></span><span></span></span></div>';
       var isFirstMsg=convos[id].filter(function(m){return m.role==='user';}).length===1;
       var gr2=await fetch('/api/genesis',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({system:_sysWithDate,messages:msgs,userEmail:currentUser&&currentUser.email,isFirstMessage:isFirstMsg})});
-      var gd2=await gr2.json();
+      var gd2;
+      try{gd2=await gr2.json();}catch(parseErr){
+        document.getElementById('typing')&&document.getElementById('typing').remove();
+        addBotBubble("⏱️ Genesis a mis trop de temps à répondre (question complexe). Réessaie, ou reformule plus simplement.",id);
+        return;
+      }
       document.getElementById('typing')&&document.getElementById('typing').remove();
       if(gd2.redirect){appendGenesisRoute(gd2.redirect.reason,[gd2.redirect.expertId],txt,id);saveMessage(id,'assistant',gd2.redirect.reason);return;}
       if(gd2.ambiguous){appendGenesisRoute(gd2.ambiguous.reason,[gd2.ambiguous.expertId,gd2.ambiguous.expertId2],txt,id);saveMessage(id,'assistant',gd2.ambiguous.reason);return;}
