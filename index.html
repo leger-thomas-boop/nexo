@@ -261,6 +261,8 @@ header{position:sticky;top:0;z-index:200;background:rgba(8,8,16,.88);backdrop-fi
 .msg-time{font-size:.56rem;color:var(--muted);font-family:'JetBrains Mono',monospace;}
 .msg-foot{display:flex;align-items:center;gap:10px;margin-top:4px;padding:0 3px;}
 .copy-btn{background:rgba(255,255,255,.05);border:1px solid var(--border);color:var(--muted);font-family:'JetBrains Mono',monospace;font-size:.56rem;padding:3px 8px;border-radius:8px;cursor:pointer;transition:.15s;}
+.speak-btn{background:rgba(255,255,255,.05);border:1px solid var(--border);color:var(--muted);font-size:.7rem;padding:3px 7px;border-radius:8px;cursor:pointer;transition:.15s;line-height:1;}
+.speak-btn.speaking{color:var(--genesis);border-color:rgba(251,191,36,.4);background:rgba(251,191,36,.08);}
 .copy-btn:hover{background:rgba(255,255,255,.1);color:var(--text);}
 .copy-btn.copied{color:#34d399;border-color:rgba(52,211,153,.3);background:rgba(52,211,153,.08);}
 .stream-caret{display:inline-block;width:7px;height:14px;margin-left:2px;border-radius:2px;background:var(--gold);vertical-align:text-bottom;animation:caret-blink .8s steps(1) infinite;}
@@ -840,7 +842,20 @@ header{
 .ld-foot a{font-size:.66rem;color:var(--muted);text-decoration:underline;cursor:pointer;font-family:'JetBrains Mono',monospace;}
 
 /* Genesis "réfléchit" indicator */
-.genesis-thinking{display:flex;align-items:center;gap:8px;}
+.genesis-thinking{display:flex;flex-direction:column;gap:6px;padding:4px 0;}
+.genesis-thinking .gth-header{display:flex;align-items:center;gap:8px;}
+.genesis-thinking-steps{display:flex;flex-direction:column;gap:4px;margin-top:2px;}
+.gth-step{
+  font-size:.7rem;color:rgba(240,240,248,.5);font-family:'JetBrains Mono',monospace;
+  display:flex;align-items:center;gap:6px;
+  opacity:0;transform:translateX(-6px);
+  transition:opacity .35s ease,transform .35s ease,color .35s ease;
+}
+.gth-step.visible{opacity:1;transform:translateX(0);}
+.gth-step.done{color:rgba(240,240,248,.8);}
+.gth-step.done::before{content:'✓ ';color:#34d399;}
+.gth-step.active::before{content:'→ ';color:var(--genesis);}
+.gth-step.active{color:var(--genesis);}
 .genesis-route-btns{display:flex;flex-direction:column;gap:8px;margin-top:12px;}
 .genesis-route-btn{
   padding:11px 14px;border-radius:13px;border:1.5px solid;background:rgba(255,255,255,.04);
@@ -2441,7 +2456,7 @@ async function openChat(id){
   document.getElementById('home').style.display='none';
   document.getElementById('chat-view').style.display='flex';
   var area=document.getElementById('msgsArea');area.innerHTML='';
-  if(convos[id].length===0&&userSession&&currentUser&&currentUser.id){
+  if(convos[id].filter(function(m){return m.role==='user';}).length===0&&userSession&&currentUser&&currentUser.id){
     try{
       var r=await supaAuthFetch(SUPABASE_URL+'/rest/v1/messages?expert=eq.'+id+'&user_id=eq.'+currentUser.id+'&order=created_at.asc&limit=50',{});
       var hist=await r.json();
@@ -2459,7 +2474,12 @@ function addBotBubble(text,id){convos[id].push({role:'assistant',content:text});
 function _modelsLabel(models){
   if(!models||!models.length)return null;
   var map={claude:'Claude',gpt:'ChatGPT',gemini:'Gemini'};
-  return models.map(function(m){return map[m]||m;}).join(' + ');
+  return models.map(function(m){
+    var parts=String(m).split(':');
+    var name=map[parts[0]]||parts[0];
+    var score=parts[1]?(' — '+parts[1]+'%'):'';
+    return name+score;
+  }).join(' + ');
 }
 function _appendModelTag(div,models){
   var label=_modelsLabel(models);
@@ -2477,7 +2497,7 @@ function streamBotBubble(text,id,models){
   var div=document.createElement('div');div.className='msg bot';
   var key='c'+(Date.now())+Math.floor(Math.random()*10000);
   _copyStore[key]=text;
-  div.innerHTML='<div class="msg-mini-avatar">'+getAvatarMini(id)+'</div><div style="flex:1;min-width:0;"><div class="bubble"><span class="stream-txt"></span><span class="stream-caret"></span></div><div class="msg-foot" style="visibility:hidden"><span class="msg-time">'+now()+'</span><button class="copy-btn" onclick="copyMsg(this,\''+key+'\')">⧉ Copier</button></div></div>';
+  div.innerHTML='<div class="msg-mini-avatar">'+getAvatarMini(id)+'</div><div style="flex:1;min-width:0;"><div class="bubble"><span class="stream-txt"></span><span class="stream-caret"></span></div><div class="msg-foot" style="visibility:hidden"><span class="msg-time">'+now()+'</span><button class="copy-btn" onclick="copyMsg(this,\''+key+'\')">⧉ Copier</button><button class="speak-btn" onclick="speakMsg(this)" title="Écouter">🔊</button></div></div>';
   area.appendChild(div);
   var span=div.querySelector('.stream-txt');
   var caret=div.querySelector('.stream-caret');
@@ -2514,7 +2534,7 @@ function _createStreamBubble(id){
   var area=document.getElementById('msgsArea');
   var div=document.createElement('div');div.className='msg bot';
   var key='c'+(Date.now())+Math.floor(Math.random()*10000);
-  div.innerHTML='<div class="msg-mini-avatar">'+getAvatarMini(id)+'</div><div style="flex:1;min-width:0;"><div class="bubble"><span class="stream-txt"></span><span class="stream-caret"></span></div><div class="msg-foot" style="visibility:hidden"><span class="msg-time">'+now()+'</span><button class="copy-btn" onclick="copyMsg(this,\''+key+'\')">⧉ Copier</button></div></div>';
+  div.innerHTML='<div class="msg-mini-avatar">'+getAvatarMini(id)+'</div><div style="flex:1;min-width:0;"><div class="bubble"><span class="stream-txt"></span><span class="stream-caret"></span></div><div class="msg-foot" style="visibility:hidden"><span class="msg-time">'+now()+'</span><button class="copy-btn" onclick="copyMsg(this,\''+key+'\')">⧉ Copier</button><button class="speak-btn" onclick="speakMsg(this)" title="Écouter">🔊</button></div></div>';
   area.appendChild(div);
   return {div:div,key:key,span:div.querySelector('.stream-txt'),caret:div.querySelector('.stream-caret'),foot:div.querySelector('.msg-foot'),area:area};
 }
@@ -2562,7 +2582,7 @@ function appendBot(text,id){
   var div=document.createElement('div');div.className='msg bot';
   var key='c'+(Date.now())+Math.floor(Math.random()*10000);
   _copyStore[key]=text;
-  div.innerHTML='<div class="msg-mini-avatar">'+getAvatarMini(id)+'</div><div style="flex:1;min-width:0;"><div class="bubble">'+fmt(text)+'</div><div class="msg-foot"><span class="msg-time">'+now()+'</span><button class="copy-btn" onclick="copyMsg(this,\''+key+'\')">⧉ Copier</button></div></div>';
+  div.innerHTML='<div class="msg-mini-avatar">'+getAvatarMini(id)+'</div><div style="flex:1;min-width:0;"><div class="bubble">'+fmt(text)+'</div><div class="msg-foot"><span class="msg-time">'+now()+'</span><button class="copy-btn" onclick="copyMsg(this,\''+key+'\')">⧉ Copier</button><button class="speak-btn" onclick="speakMsg(this)" title="Écouter">🔊</button></div></div>';
   area.appendChild(div);area.scrollTop=area.scrollHeight;
 }
 // Bulle de redirection Genesis -> expert(s) Nexo, avec bouton(s) "Continuer avec X"
@@ -2639,6 +2659,25 @@ function appendGenesisRoute(message,expertIds,originalQuestion,id){
   });
 }
 // Quand l'utilisateur préfère que Genesis réponde lui-même plutôt que d'être redirigé.
+function _genesisThinkingHTML(){
+  return '<div class="msg-mini-avatar">'+getAvatarMini('genesis')+'</div><div class="bubble genesis-thinking"><div class="gth-header"><span class="gth-icon">✨</span><span class="gth-text">Genesis réfléchit</span><span class="gth-dots"><span></span><span></span><span></span></span></div><div class="genesis-thinking-steps" id="gth-steps"></div></div>';
+}
+function animateGenesisSteps(steps){
+  if(!steps||!steps.length)return;
+  var container=document.getElementById('gth-steps');
+  if(!container)return;
+  steps.forEach(function(s,i){
+    var el=document.createElement('div');
+    el.className='gth-step';
+    el.textContent=s;
+    container.appendChild(el);
+    setTimeout(function(){
+      el.classList.add('visible');
+      if(i>0){var prev=container.children[i-1];if(prev){prev.classList.remove('active');prev.classList.add('done');}}
+      el.classList.add('active');
+    },400+i*700);
+  });
+}
 // Reconstruit la conversation (sans la suggestion de redirection) et relance Genesis avec isFirstMessage=false (=> répond directement).
 async function genesisAnswerDirectly(id){
   var ex=EXPERTS[id];
@@ -2646,7 +2685,7 @@ async function genesisAnswerDirectly(id){
   convos[id].pop();
   var area=document.getElementById('msgsArea');
   var ty=document.createElement('div');ty.className='msg bot typing';ty.id='typing';
-  ty.innerHTML='<div class="msg-mini-avatar">'+getAvatarMini(id)+'</div><div class="bubble genesis-thinking"><span class="gth-icon">✨</span><span class="gth-text">Genesis réfléchit</span><span class="gth-dots"><span></span><span></span><span></span></span></div>';
+  ty.innerHTML=_genesisThinkingHTML();
   area.appendChild(ty);area.scrollTop=area.scrollHeight;
   var _now=new Date();
   var _dateStr=_now.toLocaleDateString('fr-FR',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
@@ -2968,7 +3007,7 @@ async function sendText(txt){
     if(ex.isGenesis){
       // Indicateur "réflexion/recherche" animé pour Genesis
       var tyEl=document.getElementById('typing');
-      if(tyEl)tyEl.innerHTML='<div class="msg-mini-avatar">'+getAvatarMini(id)+'</div><div class="bubble genesis-thinking"><span class="gth-icon">✨</span><span class="gth-text">Genesis réfléchit</span><span class="gth-dots"><span></span><span></span><span></span></span></div>';
+      if(tyEl)tyEl.innerHTML=_genesisThinkingHTML();
       var isFirstMsg=_genesisSessionFirstMsg;
       _genesisSessionFirstMsg=false;
       var gr2=await fetch('/api/genesis',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({system:_sysWithDate,messages:msgs,userEmail:currentUser&&currentUser.email,isFirstMessage:isFirstMsg})});
@@ -2985,18 +3024,31 @@ async function sendText(txt){
         saveMessage(id,'assistant',greply);
         return;
       }
-      // ── Réponse JSON : redirection, ambiguïté, ou fusion multi-IA ──
+      // ── Réponse JSON : redirection, ambiguïté, ou réponse avec scores ──
       var gd2;
       try{gd2=await gr2.json();}catch(parseErr){
         document.getElementById('typing')&&document.getElementById('typing').remove();
         addBotBubble("⏱️ Genesis a mis trop de temps à répondre (question complexe). Réessaie, ou reformule plus simplement.",id);
         return;
       }
+      // Anime les étapes de raisonnement AVANT d'afficher la réponse
+      if(gd2.reasoning_steps&&gd2.reasoning_steps.length){
+        animateGenesisSteps(gd2.reasoning_steps);
+        await new Promise(function(r){setTimeout(r,Math.min(gd2.reasoning_steps.length*700+400,2500));});
+      }
       document.getElementById('typing')&&document.getElementById('typing').remove();
       if(gd2.redirect){appendGenesisRoute(gd2.redirect.reason,[gd2.redirect.expertId],txt,id);saveMessage(id,'assistant',gd2.redirect.reason);return;}
       if(gd2.ambiguous){appendGenesisRoute(gd2.ambiguous.reason,[gd2.ambiguous.expertId,gd2.ambiguous.expertId2],txt,id);saveMessage(id,'assistant',gd2.ambiguous.reason);return;}
       if(!gr2.ok||!gd2.text){addBotBubble(gd2.error||"❌ Genesis n'a pas pu répondre, réessayez.",id);return;}
-      streamBotBubble(gd2.text,id,gd2.models);saveMessage(id,'assistant',gd2.text);
+      var modelsMeta=gd2.models;
+      if(gd2.claude_score!=null&&gd2.gpt_score!=null){
+        modelsMeta=modelsMeta.map(function(m){
+          if(m==='claude')return 'claude:'+gd2.claude_score;
+          if(m==='gpt')return 'gpt:'+gd2.gpt_score;
+          return m;
+        });
+      }
+      streamBotBubble(gd2.text,id,modelsMeta);saveMessage(id,'assistant',gd2.text);
       return;
     }
     var reply=await streamFromAPI('/api/chat',{system:_sysWithDate,messages:msgs,webSearch:(id==='luna'||id==='max'||id==='koda'||ex.webSearch)},id);
@@ -3217,7 +3269,53 @@ window.addEventListener('load',function(){
 });
 
 
-// ── SHARE ──
+// ── VOIX : lecture des réponses IA (Speech Synthesis API) ──
+var _currentUtterance=null;
+function speakMsg(btn){
+  // Arrêter si déjà en train de parler
+  if(_currentUtterance&&window.speechSynthesis.speaking){
+    window.speechSynthesis.cancel();
+    _currentUtterance=null;
+    document.querySelectorAll('.speak-btn.speaking').forEach(function(b){b.classList.remove('speaking');b.textContent='🔊';});
+    if(btn.classList.contains('speaking')){btn.classList.remove('speaking');btn.textContent='🔊';return;}
+  }
+  // Trouver le texte de la bulle parente
+  var bubble=btn.closest('.msg.bot');
+  if(!bubble)return;
+  var streamSpan=bubble.querySelector('.stream-txt');
+  var rawText=(streamSpan?streamSpan.textContent:bubble.querySelector('.bubble').textContent)||'';
+  var text=rawText.replace(/[\*\_\#\~\`\>\-]+/g,' ').replace(/\s+/g,' ').trim();
+  if(!text)return;
+  var utterance=new SpeechSynthesisUtterance(text);
+  utterance.lang='fr-FR';
+  utterance.rate=1.05;
+  utterance.pitch=1;
+  // Choisir une voix française si disponible
+  var voices=window.speechSynthesis.getVoices();
+  var frVoice=voices.find(function(v){return v.lang==='fr-FR'&&v.localService;})
+    ||voices.find(function(v){return v.lang==='fr-FR';})
+    ||voices.find(function(v){return v.lang.startsWith('fr');});
+  if(frVoice)utterance.voice=frVoice;
+  utterance.onend=function(){
+    _currentUtterance=null;
+    btn.classList.remove('speaking');
+    btn.textContent='🔊';
+  };
+  utterance.onerror=function(){
+    _currentUtterance=null;
+    btn.classList.remove('speaking');
+    btn.textContent='🔊';
+  };
+  _currentUtterance=utterance;
+  btn.classList.add('speaking');
+  btn.textContent='⏹';
+  window.speechSynthesis.speak(utterance);
+}
+// Charger les voix dès que possible (asynchrone sur certains navigateurs)
+if(window.speechSynthesis&&window.speechSynthesis.onvoiceschanged!==undefined){
+  window.speechSynthesis.onvoiceschanged=function(){window.speechSynthesis.getVoices();};
+}
+
 function shareNexo(){
   var url='https://nexo-eight-theta.vercel.app';
   var shareData={
