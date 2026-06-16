@@ -294,6 +294,7 @@ header{position:sticky;top:0;z-index:200;background:rgba(8,8,16,.88);backdrop-fi
 .limit-bar.marcus-bar{color:var(--marcus);}
 .limit-bar.luna-bar{color:var(--luna);}
 .limit-bar.alex-bar{color:var(--alex);}
+.limit-bar.genesis-bar{color:var(--genesis);}
 .limit-upgrade{font-weight:600;cursor:pointer;text-decoration:underline;}
 .locked-ov{position:absolute;inset:0;z-index:10;background:rgba(8,8,16,.96);backdrop-filter:blur(16px);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:32px;}
 .locked-av{width:80px;height:80px;border-radius:20px;overflow:hidden;margin-bottom:16px;}
@@ -982,23 +983,7 @@ header{
 
     <!-- LISTE COMPLÈTE DES EXPERTS — landing -->
     <div class="ld-sec-title">Vos <em>8 experts</em> IA ✦</div>
-    <div class="nh-full-list">
-      <div class="nh-full-item nh-full-genesis" onclick="landingToAuth('signup')">
-        <div class="nh-full-av"><canvas class="orbe-canvas" data-expert="genesis" width="80" height="80"></canvas></div>
-        <div class="nh-full-info"><div class="nh-full-name" style="color:var(--genesis)">Genesis</div><div class="nh-full-role">IA Flagship — Multi-modèles</div></div>
-        <div class="nh-full-badge" style="background:linear-gradient(135deg,var(--genesis),var(--gold2));color:#000">✨ Flagship</div>
-      </div>
-      <div class="nh-full-item" onclick="landingToAuth('signup')">
-        <div class="nh-full-av"><canvas class="orbe-canvas" data-expert="sofia" width="80" height="80"></canvas></div>
-        <div class="nh-full-info"><div class="nh-full-name" style="color:var(--sofia)">Sofia</div><div class="nh-full-role">Conseillère Financière</div></div>
-      </div>
-      <div class="nh-full-item" onclick="landingToAuth('signup')">
-        <div class="nh-full-av"><canvas class="orbe-canvas" data-expert="marcus" width="80" height="80"></canvas></div>
-        <div class="nh-full-info"><div class="nh-full-name" style="color:var(--marcus)">Marcus</div><div class="nh-full-role">Droit du Travail</div></div>
-      </div>
-      <div class="nh-full-item" onclick="landingToAuth('signup')">
-        <div class="nh-full-av"><canvas class="orbe-canvas" data-expert="luna" width="80" height="80"></canvas></div>
-        <div class="nh-full-info"><div class="nh-full-name" style="color:var(--luna)">Luna</div><div class="nh-full-role">Assistante Polyvalente</div></div>
+    <div class="nh-full-list"><div class="nh-full-info"><div class="nh-full-name" style="color:var(--luna)">Luna</div><div class="nh-full-role">Assistante Polyvalente</div></div>
       </div>
       <div class="nh-full-item" onclick="landingToAuth('signup')">
         <div class="nh-full-av"><canvas class="orbe-canvas" data-expert="alex" width="80" height="80"></canvas></div>
@@ -2374,7 +2359,7 @@ var EXPERTS={
     suggestions:["Crée un logo moderne pour mon business","Fais une miniature TikTok accrocheuse","Crée une affiche publicitaire premium","Génère un mockup produit réaliste"],
     welcome:"Salut ! Je suis **Nova**, ta créatrice d'images IA 🎨\n\nJe peux faire deux choses :\n\n🖼️ **Générer** une image depuis ta description\n✏️ **Modifier** une photo que tu m'envoies\n\nExemples : logo, affiche, miniature TikTok, ou envoie-moi une photo et dis-moi ce que tu veux changer !\n\n⚠️ _Réservé aux membres **Premium** — 20 images/mois._",
     system:"Tu es Nova, experte en création et modification d'images IA. Tu as deux modes :\n\n1. GÉNÉRATION (sans photo) : l'utilisateur décrit une image. Tu reformules sa demande en prompt anglais très détaillé et précis (sujet, style, couleurs, cadrage, ambiance) et tu génères.\n\n2. ÉDITION (avec photo) : l'utilisateur envoie une photo et décrit ce qu'il veut modifier. TRÈS IMPORTANT pour l'édition : ton prompt doit TOUJOURS commencer par décrire fidèlement ce qui est dans la photo originale, puis décrire la modification. Exemple : si la photo montre un homme avec une barbe et qu'il demande 'fais-moi en cartoon', le prompt doit être : 'Transform this photo of a bearded man into a cartoon character, keeping his facial features, beard and expression, cartoon animation style, colorful, detailed face'. Ne JAMAIS inventer un nouveau sujet. TOUJOURS garder le sujet original de la photo et juste appliquer la modification demandée. STYLE DE RÉPONSE : Court et enthousiaste. Confirme ce que tu vas faire, génère, et propose des variantes si besoin."},
-  genesis:{name:'Genesis',role:'IA Flagship — Multi-modèles',limitClass:'genesis-bar',color:'#fbbf24',freeLimit:0,premiumOnly:true,emoji:'✨',bg:'linear-gradient(135deg,#451a03,#92400e)',vision:true,webSearch:true,isGenesis:true,
+  genesis:{name:'Genesis',role:'IA Flagship — Multi-modèles',limitClass:'genesis-bar',color:'#fbbf24',freeLimit:5,emoji:'✨',bg:'linear-gradient(135deg,#451a03,#92400e)',vision:true,webSearch:true,isGenesis:true,
     suggestions:["Quelle est la meilleure stratégie pour mon business ?","Analyse ce document en profondeur","Compare plusieurs approches pour ce problème","Recherche les dernières infos sur ce sujet"],
     welcome:"Bienvenue sur **Genesis** ✨\n\nJe suis l'IA flagship de Nexo : selon ta question, je mobilise **Claude, GPT et/ou Gemini** — seul ou combinés — pour te donner la meilleure réponse possible.\n\nTu peux m'envoyer du texte, une photo, un document, et je cherche sur Internet si besoin.\n\nPose-moi n'importe quelle question, même complexe.",
     system:"Tu es Genesis, l'IA flagship de Nexo. Tu es exigeante, précise, et tu fournis toujours la meilleure réponse possible en combinant plusieurs perspectives si besoin. Va droit au but : réponds de façon naturelle et concise, comme dans une conversation, sans jamais mentionner que tu es composée de plusieurs IA. Français parfait, **gras** avec parcimonie pour les points vraiment importants."}
@@ -3051,7 +3036,7 @@ async function sendText(txt){
       streamBotBubble(gd2.text,id,modelsMeta);saveMessage(id,'assistant',gd2.text);
       return;
     }
-    var reply=await streamFromAPI('/api/chat',{system:_sysWithDate,messages:msgs,webSearch:(id==='luna'||id==='max'||id==='koda'||ex.webSearch)},id);
+    var reply=await streamFromAPI('/api/chat',{system:_sysWithDate,messages:msgs,webSearch:(id==='max'||id==='koda'||ex.webSearch)},id);
     saveMessage(id,'assistant',reply);
   }catch(e){document.getElementById('typing')&&document.getElementById('typing').remove();addBotBubble("❌ Connexion impossible.",id);}
 }
@@ -3225,13 +3210,12 @@ function initOrbes(){
 window.addEventListener('load', initOrbes);
 
 // ── GENESIS HERO + EXPERTS CARROUSEL (simple & fiable) ──
-var OTHER_EXPERTS=['sofia','marcus','luna','alex','max','koda','nova'];
+var OTHER_EXPERTS=['sofia','marcus','alex','max','koda','nova'];
 var _expCarouselInited=false;
 
 var EXP_USE={
   sofia:"Budget, épargne, investissements",
   marcus:"Droits, contrats, licenciement",
-  luna:"Toutes vos questions du quotidien",
   alex:"Auto-entreprise, création, fiscalité",
   max:"Réglages et dépannage impression 3D",
   koda:"Code, débogage, sites web, jeux",
