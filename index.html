@@ -2441,7 +2441,10 @@ async function openChat(id){
   document.getElementById('home').style.display='none';
   document.getElementById('chat-view').style.display='flex';
   var area=document.getElementById('msgsArea');area.innerHTML='';
-  if(convos[id].filter(function(m){return m.role==='user';}).length===0&&userSession&&currentUser&&currentUser.id){
+  // Vider convos[id] pour forcer le rechargement depuis Supabase à chaque ouverture
+  // (évite que les messages de routage "redirect" bloquent le rechargement de l'historique)
+  convos[id]=[];
+  if(userSession&&currentUser&&currentUser.id){
     try{
       var r=await supaAuthFetch(SUPABASE_URL+'/rest/v1/messages?expert=eq.'+id+'&user_id=eq.'+currentUser.id+'&order=created_at.asc&limit=50',{});
       var hist=await r.json();
@@ -2449,11 +2452,10 @@ async function openChat(id){
       else{addBotBubble(ex.welcome,id);showSuggs(id);}
     }catch(e){addBotBubble(ex.welcome,id);showSuggs(id);}
   }else{
-    if(convos[id].length===0){addBotBubble(ex.welcome,id);showSuggs(id);}
-    else{convos[id].forEach(function(m){if(m.role==='user')appendUser(_ctText(m.content),_ctImg(m.content));else appendBot(_ctText(m.content),id);});}
+    addBotBubble(ex.welcome,id);showSuggs(id);
   }
 }
-function closeChat(){document.getElementById('chat-view').style.display='none';document.getElementById('home').style.display='block';}
+function closeChat(){document.getElementById('chat-view').style.display='none';document.getElementById('home').style.display='block';_genesisSessionFirstMsg=true;}
 function addBotBubble(text,id){convos[id].push({role:'assistant',content:text});appendBot(text,id);}
 // Streaming effect: type the reply progressively like a real AI
 function _modelsLabel(models){
@@ -3042,7 +3044,12 @@ async function sendText(txt){
 }
 async function saveMessage(expert,role,content){
   if(!userSession||!currentUser||!currentUser.id)return;
-  try{await supaAuthFetch(SUPABASE_URL+'/rest/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','Prefer':'return=minimal'},body:JSON.stringify({user_id:currentUser.id,expert:expert,role:role,content:content})});}catch(e){}
+  // Tronquer le contenu si trop long (limite Supabase text field)
+  var safeContent=typeof content==='string'?content.slice(0,8000):String(content||'').slice(0,8000);
+  try{
+    var r=await supaAuthFetch(SUPABASE_URL+'/rest/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','Prefer':'return=minimal'},body:JSON.stringify({user_id:currentUser.id,expert:expert,role:role,content:safeContent})});
+    if(!r.ok){var errBody=await r.text().catch(()=>'');console.error('[saveMessage] Supabase error',r.status,errBody);}
+  }catch(e){console.error('[saveMessage] Exception:',e.message);}
 }
 function showLocked(id){
   var ex=EXPERTS[id];var area=document.getElementById('msgsArea');
