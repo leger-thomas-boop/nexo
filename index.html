@@ -1579,7 +1579,7 @@ header{
     <div class="gh-flagship-badge">🏆 FLAGSHIP AI</div>
     <div class="gh-sphere-wrap"><div class="gh-sphere"><canvas class="orbe-canvas" data-expert="genesis" width="200" height="200"></canvas></div></div>
     <div class="gh-title">Genesis</div>
-    <div class="gh-sub">Claude + GPT + Gemini</div>
+    <div class="gh-sub">Claude · ChatGPT · Gemini</div>
     <div class="gh-headline">Une seule question.<br>Le meilleur expert automatiquement.</div>
     <div class="gh-tagline">Genesis analyse votre demande et choisit automatiquement la meilleure IA ou le meilleur expert Nexo.</div>
     <div class="gh-features">
@@ -2465,8 +2465,7 @@ function _modelsLabel(models){
     var score=parts[1]?(' — '+parts[1]+'%'):'';
     return name+score;
   }).join(' + ');
-}
-function _appendModelTag(div,models){
+}function _appendModelTag(div,models){
   var label=_modelsLabel(models);
   if(!label)return;
   var wrap=div.querySelector('div[style*="flex:1"]');
@@ -3026,10 +3025,11 @@ async function sendText(txt){
       if(gd2.ambiguous){appendGenesisRoute(gd2.ambiguous.reason,[gd2.ambiguous.expertId,gd2.ambiguous.expertId2],txt,id);saveMessage(id,'assistant',gd2.ambiguous.reason);return;}
       if(!gr2.ok||!gd2.text){addBotBubble(gd2.error||"❌ Genesis n'a pas pu répondre, réessayez.",id);return;}
       var modelsMeta=gd2.models;
-      if(gd2.claude_score!=null&&gd2.gpt_score!=null){
-        modelsMeta=modelsMeta.map(function(m){
-          if(m==='claude')return 'claude:'+gd2.claude_score;
-          if(m==='gpt')return 'gpt:'+gd2.gpt_score;
+      if(gd2.claude_score!=null||gd2.gpt_score!=null||gd2.gemini_score!=null){
+        modelsMeta=(gd2.models||modelsMeta).map(function(m){
+          if(m==='claude'&&gd2.claude_score!=null)return 'claude:'+gd2.claude_score;
+          if(m==='gpt'&&gd2.gpt_score!=null)return 'gpt:'+gd2.gpt_score;
+          if(m==='gemini'&&gd2.gemini_score!=null)return 'gemini:'+gd2.gemini_score;
           return m;
         });
       }
