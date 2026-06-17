@@ -259,12 +259,52 @@ header{position:sticky;top:0;z-index:200;background:rgba(8,8,16,.88);backdrop-fi
 .bubble .md-li{position:relative;padding-left:14px;margin:2px 0;}
 .bubble .md-li::before{content:'•';position:absolute;left:2px;color:var(--gold);}
 .msg-time{font-size:.56rem;color:var(--muted);font-family:'JetBrains Mono',monospace;}
-.msg-foot{display:flex;align-items:center;gap:10px;margin-top:4px;padding:0 3px;}
+.msg-foot{display:flex;align-items:center;gap:8px;margin-top:4px;padding:0 3px;flex-wrap:wrap;}
 .copy-btn{background:rgba(255,255,255,.05);border:1px solid var(--border);color:var(--muted);font-family:'JetBrains Mono',monospace;font-size:.56rem;padding:3px 8px;border-radius:8px;cursor:pointer;transition:.15s;}
 .speak-btn{background:rgba(255,255,255,.05);border:1px solid var(--border);color:var(--muted);font-size:.7rem;padding:3px 7px;border-radius:8px;cursor:pointer;transition:.15s;line-height:1;}
 .speak-btn.speaking{color:var(--genesis);border-color:rgba(251,191,36,.4);background:rgba(251,191,36,.08);}
 .copy-btn:hover{background:rgba(255,255,255,.1);color:var(--text);}
 .copy-btn.copied{color:#34d399;border-color:rgba(52,211,153,.3);background:rgba(52,211,153,.08);}
+.thumb-btn{background:none;border:none;font-size:.82rem;cursor:pointer;opacity:.45;transition:.15s;padding:2px 3px;line-height:1;}
+.thumb-btn:hover{opacity:.9;transform:scale(1.15);}
+.thumb-btn.active-up{opacity:1;filter:none;}
+.thumb-btn.active-down{opacity:1;filter:none;}
+
+/* ── SUGGESTIONS CONTEXTUELLES ── */
+.ctx-suggestion{
+  display:flex;align-items:center;gap:7px;margin-top:8px;
+  background:rgba(255,255,255,.03);border:1px solid var(--border);
+  border-radius:11px;padding:8px 10px;cursor:pointer;transition:.18s;
+  font-size:.72rem;color:rgba(240,240,248,.65);
+}
+.ctx-suggestion:hover{background:rgba(255,255,255,.07);border-color:rgba(255,255,255,.15);}
+.ctx-suggestion strong{color:var(--text);}
+
+/* ── TUTORIEL ONBOARDING ── */
+#onboarding-overlay{
+  position:fixed;inset:0;z-index:800;background:rgba(8,8,16,.92);backdrop-filter:blur(16px);
+  display:none;flex-direction:column;align-items:center;justify-content:flex-end;
+  max-width:600px;margin:0 auto;left:50%;transform:translateX(-50%);width:100%;
+}
+.ob-sheet{
+  width:100%;background:rgba(18,18,30,.98);border:1px solid var(--border);
+  border-radius:28px 28px 0 0;padding:28px 24px 40px;
+}
+.ob-dots{display:flex;justify-content:center;gap:6px;margin-bottom:20px;}
+.ob-dot{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.15);transition:.25s;}
+.ob-dot.active{background:var(--genesis);width:22px;border-radius:4px;}
+.ob-slide{display:none;flex-direction:column;align-items:center;text-align:center;gap:10px;animation:ob-fadein .3s ease;}
+.ob-slide.active{display:flex;}
+@keyframes ob-fadein{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:none;}}
+.ob-emoji{font-size:2.8rem;line-height:1;}
+.ob-title{font-family:'Syne',sans-serif;font-weight:800;font-size:1.15rem;letter-spacing:-.03em;}
+.ob-desc{font-size:.82rem;color:rgba(240,240,248,.6);line-height:1.6;max-width:320px;}
+.ob-btn{
+  margin-top:14px;width:100%;padding:14px;border:none;border-radius:14px;
+  background:linear-gradient(135deg,var(--genesis),#f59e0b);
+  color:#1c0a00;font-family:'Syne',sans-serif;font-weight:800;font-size:.9rem;cursor:pointer;
+}
+.ob-skip{margin-top:8px;font-size:.68rem;color:var(--muted);cursor:pointer;text-align:center;}
 .stream-caret{display:inline-block;width:7px;height:14px;margin-left:2px;border-radius:2px;background:var(--gold);vertical-align:text-bottom;animation:caret-blink .8s steps(1) infinite;}
 @keyframes caret-blink{0%,50%{opacity:1}51%,100%{opacity:0}}
 .msg.user .msg-time{text-align:right;}
@@ -1186,6 +1226,37 @@ header{
     <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:.85rem;color:var(--text);margin-bottom:10px;">🔴 Erreurs récentes détectées</div>
     <div id="adminErrors" style="font-size:.74rem;color:rgba(240,240,248,.6);line-height:1.8;">
       <span style="color:var(--muted);">Aucune analyse effectuée.</span>
+    </div>
+  </div>
+</div>
+
+<!-- ONBOARDING -->
+<div id="onboarding-overlay">
+  <div class="ob-sheet">
+    <div class="ob-dots">
+      <div class="ob-dot active" id="ob-dot-0"></div>
+      <div class="ob-dot" id="ob-dot-1"></div>
+      <div class="ob-dot" id="ob-dot-2"></div>
+    </div>
+    <div class="ob-slide active" id="ob-slide-0">
+      <div class="ob-emoji">✨</div>
+      <div class="ob-title">Bienvenue sur Nexo</div>
+      <div class="ob-desc">Nexo réunit 7 experts IA spécialisés et Genesis, votre chef d'orchestre qui choisit automatiquement la meilleure IA pour chaque question.</div>
+      <button class="ob-btn" onclick="obNext()">Suivant →</button>
+      <div class="ob-skip" onclick="obClose()">Passer</div>
+    </div>
+    <div class="ob-slide" id="ob-slide-1">
+      <div class="ob-emoji">🧠</div>
+      <div class="ob-title">Genesis, votre IA flagship</div>
+      <div class="ob-desc">Posez n'importe quelle question à Genesis. Il analyse votre besoin, choisit entre Claude, ChatGPT et Gemini, et vous oriente vers le bon expert si besoin.</div>
+      <button class="ob-btn" onclick="obNext()">Suivant →</button>
+      <div class="ob-skip" onclick="obClose()">Passer</div>
+    </div>
+    <div class="ob-slide" id="ob-slide-2">
+      <div class="ob-emoji">⚖️💰🎨</div>
+      <div class="ob-title">7 experts à votre service</div>
+      <div class="ob-desc">Marcus (droit du travail), Sofia (finance), Alex (entreprise), Max (impression 3D), Koda (dev), Nova (images IA) — chacun ultra-spécialisé dans son domaine.</div>
+      <button class="ob-btn" onclick="obClose()">Commencer avec Genesis ✨</button>
     </div>
   </div>
 </div>
@@ -2373,6 +2444,7 @@ async function enterApp(){
     initOrbes();
     initExpCarousel();
     initStatsCounter();
+    checkOnboarding();
     var letter=(currentUser&&currentUser.email?currentUser.email[0]:'U').toUpperCase();
     document.getElementById('avatarHdr').textContent=letter;
     document.getElementById('userEmailDisplay').textContent=currentUser&&currentUser.email?currentUser.email:'';
@@ -2549,7 +2621,7 @@ function streamBotBubble(text,id,models){
   var div=document.createElement('div');div.className='msg bot';
   var key='c'+(Date.now())+Math.floor(Math.random()*10000);
   _copyStore[key]=text;
-  div.innerHTML='<div class="msg-mini-avatar">'+getAvatarMini(id)+'</div><div style="flex:1;min-width:0;"><div class="bubble"><span class="stream-txt"></span><span class="stream-caret"></span></div><div class="msg-foot" style="visibility:hidden"><span class="msg-time">'+now()+'</span><button class="copy-btn" onclick="copyMsg(this,\''+key+'\')">⧉ Copier</button><button class="speak-btn" onclick="speakMsg(this)" title="Écouter">🔊</button></div></div>';
+  div.innerHTML='<div class="msg-mini-avatar">'+getAvatarMini(id)+'</div><div style="flex:1;min-width:0;"><div class="bubble"><span class="stream-txt"></span><span class="stream-caret"></span></div><div class="msg-foot" style="visibility:hidden"><span class="msg-time">'+now()+'</span><button class="copy-btn" onclick="copyMsg(this,\''+key+'\')">⧉ Copier</button><button class="speak-btn" onclick="speakMsg(this)" title="Écouter">🔊</button><button class="thumb-btn" onclick="rateMsg(this,1)" title="Utile">👍</button><button class="thumb-btn" onclick="rateMsg(this,-1)" title="Pas utile">👎</button></div></div>';
   area.appendChild(div);
   var span=div.querySelector('.stream-txt');
   var caret=div.querySelector('.stream-caret');
@@ -2578,15 +2650,15 @@ function streamBotBubble(text,id,models){
     setTimeout(step,18);
   }
   step();
+  return div;
 }
-var _copyStore={};
 // Vrai streaming (comme Claude) : lit la réponse au fur et à mesure qu'elle arrive du serveur.
 // Retourne le texte complet une fois terminé (et l'ajoute à convos[id]).
 function _createStreamBubble(id){
   var area=document.getElementById('msgsArea');
   var div=document.createElement('div');div.className='msg bot';
   var key='c'+(Date.now())+Math.floor(Math.random()*10000);
-  div.innerHTML='<div class="msg-mini-avatar">'+getAvatarMini(id)+'</div><div style="flex:1;min-width:0;"><div class="bubble"><span class="stream-txt"></span><span class="stream-caret"></span></div><div class="msg-foot" style="visibility:hidden"><span class="msg-time">'+now()+'</span><button class="copy-btn" onclick="copyMsg(this,\''+key+'\')">⧉ Copier</button><button class="speak-btn" onclick="speakMsg(this)" title="Écouter">🔊</button></div></div>';
+  div.innerHTML='<div class="msg-mini-avatar">'+getAvatarMini(id)+'</div><div style="flex:1;min-width:0;"><div class="bubble"><span class="stream-txt"></span><span class="stream-caret"></span></div><div class="msg-foot" style="visibility:hidden"><span class="msg-time">'+now()+'</span><button class="copy-btn" onclick="copyMsg(this,\''+key+'\')">⧉ Copier</button><button class="speak-btn" onclick="speakMsg(this)" title="Écouter">🔊</button><button class="thumb-btn" onclick="rateMsg(this,1)" title="Utile">👍</button><button class="thumb-btn" onclick="rateMsg(this,-1)" title="Pas utile">👎</button></div></div>';
   area.appendChild(div);
   return {div:div,key:key,span:div.querySelector('.stream-txt'),caret:div.querySelector('.stream-caret'),foot:div.querySelector('.msg-foot'),area:area};
 }
@@ -2634,7 +2706,7 @@ function appendBot(text,id){
   var div=document.createElement('div');div.className='msg bot';
   var key='c'+(Date.now())+Math.floor(Math.random()*10000);
   _copyStore[key]=text;
-  div.innerHTML='<div class="msg-mini-avatar">'+getAvatarMini(id)+'</div><div style="flex:1;min-width:0;"><div class="bubble">'+fmt(text)+'</div><div class="msg-foot"><span class="msg-time">'+now()+'</span><button class="copy-btn" onclick="copyMsg(this,\''+key+'\')">⧉ Copier</button><button class="speak-btn" onclick="speakMsg(this)" title="Écouter">🔊</button></div></div>';
+  div.innerHTML='<div class="msg-mini-avatar">'+getAvatarMini(id)+'</div><div style="flex:1;min-width:0;"><div class="bubble">'+fmt(text)+'</div><div class="msg-foot"><span class="msg-time">'+now()+'</span><button class="copy-btn" onclick="copyMsg(this,\''+key+'\')">⧉ Copier</button><button class="speak-btn" onclick="speakMsg(this)" title="Écouter">🔊</button><button class="thumb-btn" onclick="rateMsg(this,1)" title="Utile">👍</button><button class="thumb-btn" onclick="rateMsg(this,-1)" title="Pas utile">👎</button></div></div>';
   area.appendChild(div);area.scrollTop=area.scrollHeight;
 }
 // Bulle de redirection Genesis -> expert(s) Nexo, avec bouton(s) "Continuer avec X"
@@ -3093,6 +3165,7 @@ async function sendText(txt){
       if(gd2.ambiguous){appendGenesisRoute(gd2.ambiguous.reason,[gd2.ambiguous.expertId,gd2.ambiguous.expertId2],txt,id);saveMessage(id,'assistant',gd2.ambiguous.reason);return;}
       if(!gr2.ok||!gd2.text){addBotBubble(gd2.error||"❌ Genesis n'a pas pu répondre, réessayez.",id);return;}
       var modelsMeta=gd2.models;
+      var modelsMeta=(gd2.models||[modelsHdr2||'claude']);
       if(gd2.claude_score!=null||gd2.gpt_score!=null||gd2.gemini_score!=null){
         modelsMeta=(gd2.models||modelsMeta).map(function(m){
           if(m==='claude'&&gd2.claude_score!=null)return 'claude:'+gd2.claude_score;
@@ -3101,7 +3174,12 @@ async function sendText(txt){
           return m;
         });
       }
-      streamBotBubble(gd2.text,id,modelsMeta);saveMessage(id,'assistant',gd2.text);
+      var lastBotDiv=streamBotBubble(gd2.text,id,modelsMeta);
+      // Suggestion contextuelle : si un expert Nexo aurait pu mieux répondre
+      if(gd2.suggested_expert&&CTX_EXPERT_HINTS[gd2.suggested_expert]&&lastBotDiv){
+        appendCtxSuggestion(lastBotDiv,gd2.suggested_expert);
+      }
+      saveMessage(id,'assistant',gd2.text);
       return;
     }
     var reply=await streamFromAPI('/api/chat',{system:_sysWithDate,messages:msgs,webSearch:(id==='max'||id==='koda'||ex.webSearch)},id);
@@ -3491,6 +3569,81 @@ function copyAdminReport(){
 }
 // ── END ADMIN ──
 
+// ── POUCES 👍👎 SATISFACTION ────────────────────────────────────────────
+async function rateMsg(btn,value){
+  var msg=btn.closest('.msg.bot');
+  if(!msg)return;
+  var btns=msg.querySelectorAll('.thumb-btn');
+  btns.forEach(function(b){b.classList.remove('active-up','active-down');b.style.opacity='.3';});
+  btn.classList.add(value===1?'active-up':'active-down');
+  btn.style.opacity='1';
+  // Trouver l'expert courant
+  var expert=current||'genesis';
+  // Sauvegarder dans Supabase (table feedbacks)
+  try{
+    await supaAuthFetch(SUPABASE_URL+'/rest/v1/feedbacks',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','Prefer':'return=minimal'},
+      body:JSON.stringify({user_id:currentUser&&currentUser.id,expert:expert,rating:value,created_at:new Date().toISOString()})
+    });
+  }catch(e){/* silencieux */}
+}
+
+// ── ONBOARDING ────────────────────────────────────────────────────────────
+var _obSlide=0;
+function showOnboarding(){
+  var el=document.getElementById('onboarding-overlay');
+  if(el)el.style.display='flex';
+  _obSlide=0;
+  obUpdateSlide();
+}
+function obNext(){
+  _obSlide++;
+  if(_obSlide>=3){obClose();return;}
+  obUpdateSlide();
+}
+function obUpdateSlide(){
+  for(var i=0;i<3;i++){
+    document.getElementById('ob-slide-'+i).classList.toggle('active',i===_obSlide);
+    document.getElementById('ob-dot-'+i).classList.toggle('active',i===_obSlide);
+  }
+}
+function obClose(){
+  var el=document.getElementById('onboarding-overlay');
+  if(el)el.style.display='none';
+  localStorage.setItem('nexo_onboarded','1');
+  openChat('genesis');
+}
+function checkOnboarding(){
+  if(!localStorage.getItem('nexo_onboarded')){
+    setTimeout(showOnboarding,600);
+  }
+}
+
+// ── SUGGESTIONS CONTEXTUELLES ─────────────────────────────────────────────
+// Affiche sous une réponse Genesis une suggestion vers un expert plus adapté
+// si l'orchestrateur a detecté un domaine avec un score >60 pour un expert Nexo.
+var CTX_EXPERT_HINTS={
+  sofia:{label:'Sofia est encore plus précise pour la finance',emoji:'💚'},
+  marcus:{label:'Marcus est encore plus précis pour le droit du travail',emoji:'⚖️'},
+  alex:{label:'Alex est encore plus précis pour l\'entrepreneuriat',emoji:'🏢'},
+  max:{label:'Max est encore plus précis pour l\'impression 3D',emoji:'🖨️'},
+  koda:{label:'Koda est encore plus précis pour le développement',emoji:'💻'},
+  nova:{label:'Nova peut générer ou retoucher des images',emoji:'🎨'},
+};
+function appendCtxSuggestion(parentDiv,expertId){
+  var hint=CTX_EXPERT_HINTS[expertId];
+  if(!hint)return;
+  var ex=EXPERTS[expertId];if(!ex)return;
+  var s=document.createElement('div');
+  s.className='ctx-suggestion';
+  s.innerHTML='<span style="font-size:1rem;">'+hint.emoji+'</span><span>💡 <strong>'+ex.name+'</strong> — '+hint.label+' →</span>';
+  s.addEventListener('click',function(){openChat(expertId);});
+  var wrap=parentDiv.querySelector('div[style*="flex:1"]');
+  if(wrap)wrap.appendChild(s);
+}
+
+// ── END FEATURES ──
 function shareNexo(){
   var url='https://nexo-eight-theta.vercel.app';
   var shareData={
