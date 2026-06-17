@@ -954,7 +954,28 @@ header{
   font-size:.56rem;color:var(--muted);font-family:'JetBrains Mono',monospace;
   margin-top:6px;letter-spacing:.04em;opacity:.7;
 }
-/* ── DISCOVER GENESIS CARD ── */
+/* ── SIDEBAR ── */
+.sidebar-expert-item{
+  display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:11px;
+  cursor:pointer;transition:.15s;
+}
+.sidebar-expert-item:hover{background:rgba(255,255,255,.06);}
+.sidebar-expert-av{width:28px;height:28px;border-radius:8px;overflow:hidden;flex-shrink:0;}
+.sidebar-expert-av canvas{width:100%;height:100%;display:block;}
+.sidebar-expert-name{font-family:'Syne',sans-serif;font-weight:700;font-size:.8rem;}
+.sidebar-expert-role{font-size:.6rem;color:var(--muted);}
+.sidebar-hist-item{
+  display:flex;align-items:center;gap:8px;padding:9px 10px;border-radius:11px;
+  cursor:pointer;transition:.15s;border:1px solid transparent;
+}
+.sidebar-hist-item:hover{background:rgba(255,255,255,.05);border-color:var(--border);}
+.sidebar-hist-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;}
+.sidebar-hist-info{flex:1;min-width:0;}
+.sidebar-hist-expert{font-size:.62rem;font-weight:700;font-family:'Syne',sans-serif;margin-bottom:1px;}
+.sidebar-hist-preview{font-size:.68rem;color:rgba(240,240,248,.45);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.sidebar-hist-time{font-size:.56rem;color:var(--muted);font-family:'JetBrains Mono',monospace;flex-shrink:0;}
+
+
 .disc-genesis-card{
   margin:4px 16px 0;border-radius:18px;padding:16px;
   background:linear-gradient(160deg,rgba(251,191,36,.08),rgba(255,255,255,.03));
@@ -1331,7 +1352,8 @@ header{
 <canvas id="homeBgCanvas" style="position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none;max-width:600px;margin:0 auto;left:50%;transform:translateX(-50%);"></canvas>
 <header>
   <div class="hdr-row">
-    <div class="logo"><span class="nex">Nex</span><span class="o">o</span></div>
+    <button onclick="openSidebar()" style="background:rgba(255,255,255,.06);border:1px solid var(--border);border-radius:10px;padding:6px 10px;color:var(--text);font-size:.95rem;cursor:pointer;line-height:1;">☰</button>
+    <div class="logo" style="margin:0 auto;"><span class="nex">Nex</span><span class="o">o</span></div>
     <div class="hdr-right">
       <div class="plan-pill free" id="planPill">GRATUIT</div>
       <div class="avatar-hdr" id="avatarHdr" onclick="toggleUserMenu()">N</div>
@@ -1787,76 +1809,10 @@ header{
     <button class="gh-cta">✨ Discuter avec Genesis</button>
   </div>
 
-  <!-- DÉMONSTRATION VISUELLE (routage automatique) -->
-  <div class="nh-demo-card">
-    <div class="nh-demo-q">"Mon patron peut-il me licencier pendant un arrêt maladie ?"</div>
-    <div class="nh-demo-flow">
-      <div class="nh-demo-step nh-demo-step-1"><span class="nh-demo-spin">✨</span> Genesis analyse...</div>
-      <div class="nh-demo-step nh-demo-step-2">⚖️ <strong>Marcus</strong> sélectionné</div>
-      <div class="nh-demo-step nh-demo-step-3">✅ Réponse générée</div>
-    </div>
-  </div>
-
-  <!-- COMMENT GENESIS FONCTIONNE -->
-  <div class="nh-sec-lbl">Comment Genesis fonctionne</div>
-  <div class="nh-flow-diagram">
-    <div class="nh-flow-node">Votre question</div>
-    <div class="nh-flow-arrow">↓</div>
-    <div class="nh-flow-node nh-flow-node-genesis">✨ Genesis</div>
-    <div class="nh-flow-arrow">↓</div>
-    <div class="nh-flow-node">Choix intelligent</div>
-    <div class="nh-flow-arrow">↓</div>
-    <div class="nh-flow-node">Expert spécialisé</div>
-  </div>
-  <div class="nh-flow-examples">
-    <div class="nh-flow-ex"><span>Question juridique</span><span class="arrow">→</span><span class="nh-flow-ex-tag" style="color:var(--marcus)">Marcus</span></div>
-    <div class="nh-flow-ex"><span>Question finance</span><span class="arrow">→</span><span class="nh-flow-ex-tag" style="color:var(--sofia)">Sofia</span></div>
-    <div class="nh-flow-ex"><span>Question image</span><span class="arrow">→</span><span class="nh-flow-ex-tag" style="color:var(--nova)">Nova</span></div>
-    <div class="nh-flow-ex"><span>Impression 3D</span><span class="arrow">→</span><span class="nh-flow-ex-tag" style="color:var(--max)">Max</span></div>
-    <div class="nh-flow-ex"><span>Développement</span><span class="arrow">→</span><span class="nh-flow-ex-tag" style="color:var(--koda)">Koda</span></div>
-    <div class="nh-flow-ex"><span>Question complexe</span><span class="arrow">→</span><span class="nh-flow-ex-tag" style="color:var(--genesis)">Claude+GPT+Gemini</span></div>
-  </div>
-
-  <!-- ESSAYEZ UN EXEMPLE -->
-  <div class="nh-sec-lbl">Essayez un exemple</div>
-  <div class="nh-try-grid">
-    <div class="nh-try-card" onclick="tryGenesisExample('Mon patron peut-il me licencier pendant un arrêt maladie ?')">⚖️ Mon patron peut-il me licencier ?</div>
-    <div class="nh-try-card" onclick="tryGenesisExample('Comment économiser 300€ par mois avec mon salaire ?')">💰 Comment économiser 300€/mois ?</div>
-    <div class="nh-try-card" onclick="tryGenesisExample('Comment créer mon auto-entreprise étape par étape ?')">🏢 Comment créer mon auto-entreprise ?</div>
-    <div class="nh-try-card" onclick="tryGenesisExample('Transforme ma photo en style cartoon')">🎨 Transforme ma photo en cartoon</div>
-    <div class="nh-try-card" onclick="tryGenesisExample('Comment bien régler mon imprimante 3D ?')">🖨️ Comment régler mon imprimante 3D ?</div>
-    <div class="nh-try-card" onclick="tryGenesisExample('Aide-moi à créer une application mobile')">💻 Crée-moi une application mobile</div>
-  </div>
-
-  <!-- CARROUSEL DES 7 AUTRES EXPERTS -->
-  <div class="nh-sec-lbl">Et aussi, vos 7 autres experts</div>
+  <!-- EXPERTS -->
+  <div class="nh-sec-lbl">Vos experts</div>
   <div class="exp-scroll" id="expScroll"></div>
 
-  <!-- BLOC POURQUOI + STATS + CTA -->
-  <div class="nh-why">
-    <div class="nh-why-title">Pourquoi choisir Nexo ?</div>
-    <div class="nh-why-list">
-      <div class="nh-why-item"><div class="nh-why-ico">⚡</div><div class="nh-why-txt"><strong>Réponses instantanées</strong> — disponibles 24h/24, 7j/7.</div></div>
-      <div class="nh-why-item"><div class="nh-why-ico">🔒</div><div class="nh-why-txt"><strong>Confidentialité totale</strong> — vos données sont protégées et sécurisées.</div></div>
-      <div class="nh-why-item"><div class="nh-why-ico">🇫🇷</div><div class="nh-why-txt"><strong>Adapté à la France</strong> — Livret A, URSSAF, Code du travail.</div></div>
-      <div class="nh-why-item"><div class="nh-why-ico">🧠</div><div class="nh-why-txt"><strong>Routage intelligent</strong> — Genesis choisit toujours le bon expert.</div></div>
-      <div class="nh-why-item"><div class="nh-why-ico">🌐</div><div class="nh-why-txt"><strong>Recherche Internet</strong> — infos à jour, en temps réel.</div></div>
-      <div class="nh-why-item"><div class="nh-why-ico">📄</div><div class="nh-why-txt"><strong>Analyse de documents</strong> — PDF, contrats, factures...</div></div>
-      <div class="nh-why-item"><div class="nh-why-ico">📷</div><div class="nh-why-txt"><strong>Analyse de photos</strong> — diagnostics et retouches visuelles.</div></div>
-    </div>
-
-    <div class="nh-stats">
-      <div class="nh-stat"><div class="nh-stat-ico">💬</div><div class="nh-stat-val" data-count="1200" data-suffix="+">0</div><div class="nh-stat-lbl">Questions répondues</div></div>
-      <div class="nh-stat"><div class="nh-stat-ico">👥</div><div class="nh-stat-val" data-count="150" data-suffix="+">0</div><div class="nh-stat-lbl">Utilisateurs actifs</div></div>
-      <div class="nh-stat"><div class="nh-stat-ico">🤖</div><div class="nh-stat-val" data-count="8" data-suffix="">0</div><div class="nh-stat-lbl">Experts IA</div></div>
-      <div class="nh-stat"><div class="nh-stat-ico">⭐</div><div class="nh-stat-val" data-count="4.9" data-suffix="/5">0</div><div class="nh-stat-lbl">Note moyenne</div></div>
-    </div>
-
-    <div class="nh-cta-block" id="nh-cta-block">
-      <div class="nh-cta-txt">Vous aimez Nexo ? Partagez-le avec vos proches.</div>
-      <button class="nh-cta-btn" onclick="shareNexo()">↗ Partager Nexo</button>
-    </div>
-  </div>
 
   <div style="height:32px"></div>
 
@@ -1955,6 +1911,35 @@ header{
 </div>
 </div>
 
+<!-- SIDEBAR HISTORIQUE -->
+<div id="sidebar" style="display:none;position:fixed;inset:0;z-index:500;max-width:600px;margin:0 auto;left:50%;transform:translateX(-50%);width:100%;">
+  <div id="sidebar-overlay" onclick="closeSidebar()" style="position:absolute;inset:0;background:rgba(0,0,0,.5);"></div>
+  <div id="sidebar-panel" style="position:absolute;left:0;top:0;bottom:0;width:82%;max-width:320px;background:rgba(12,12,22,.98);border-right:1px solid var(--border);display:flex;flex-direction:column;transform:translateX(-100%);transition:transform .28s ease;">
+    <!-- Sidebar header -->
+    <div style="padding:20px 16px 12px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;">
+      <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:1rem;">💬 Conversations</div>
+      <button onclick="closeSidebar()" style="background:rgba(255,255,255,.06);border:1px solid var(--border);border-radius:8px;padding:4px 10px;color:var(--muted);font-size:.75rem;cursor:pointer;">✕</button>
+    </div>
+    <!-- New conversation button -->
+    <div style="padding:12px 16px;border-bottom:1px solid var(--border);">
+      <button onclick="closeSidebar();openChat('genesis')" style="width:100%;padding:11px;border:none;border-radius:13px;background:linear-gradient(135deg,var(--genesis),#f59e0b);color:#1c0a00;font-family:'Syne',sans-serif;font-weight:800;font-size:.82rem;cursor:pointer;">✨ Nouvelle conversation Genesis</button>
+    </div>
+    <!-- IAs list -->
+    <div style="padding:10px 16px 4px;">
+      <div style="font-size:.6rem;font-weight:700;letter-spacing:.12em;color:var(--muted);font-family:'JetBrains Mono',monospace;margin-bottom:8px;">VOS EXPERTS IA</div>
+      <div id="sidebar-experts" style="display:flex;flex-direction:column;gap:4px;"></div>
+    </div>
+    <div style="height:1px;background:var(--border);margin:10px 16px;"></div>
+    <!-- History -->
+    <div style="padding:0 16px 4px;">
+      <div style="font-size:.6rem;font-weight:700;letter-spacing:.12em;color:var(--muted);font-family:'JetBrains Mono',monospace;margin-bottom:8px;">CONVERSATIONS RÉCENTES</div>
+    </div>
+    <div id="sidebar-history" style="flex:1;overflow-y:auto;padding:0 16px 20px;display:flex;flex-direction:column;gap:4px;">
+      <div style="font-size:.74rem;color:var(--muted);padding:8px 0;">Chargement...</div>
+    </div>
+  </div>
+</div>
+
 <!-- CHAT -->
 <div id="chat-view">
   <div class="chat-hdr">
@@ -1964,6 +1949,7 @@ header{
       <div class="chat-hdr-name" id="chatHdrName"></div>
       <div class="chat-hdr-status"><div class="status-icon"></div><span id="chatHdrStatus">En ligne</span></div>
     </div>
+    <button class="back-btn" onclick="openSidebar()" title="Historique" style="margin-left:auto;font-size:.85rem;">☰</button>
   </div>
   <div class="msgs" id="msgsArea"></div>
   <div class="sugg-area" id="suggArea"></div>
@@ -3739,7 +3725,82 @@ function appendCtxSuggestion(parentDiv,expertId){
   if(wrap)wrap.appendChild(s);
 }
 
-// ── END FEATURES ──
+// ── SIDEBAR HISTORIQUE ───────────────────────────────────────────────────
+var _sidebarOpen=false;
+var SIDEBAR_EXPERTS=['genesis','sofia','marcus','alex','max','koda','nova'];
+
+function openSidebar(){
+  var sidebar=document.getElementById('sidebar');
+  sidebar.style.display='block';
+  setTimeout(function(){document.getElementById('sidebar-panel').style.transform='translateX(0)';},10);
+  _sidebarOpen=true;
+  buildSidebarExperts();
+  loadSidebarHistory();
+}
+function closeSidebar(){
+  document.getElementById('sidebar-panel').style.transform='translateX(-100%)';
+  setTimeout(function(){document.getElementById('sidebar').style.display='none';},280);
+  _sidebarOpen=false;
+}
+
+function buildSidebarExperts(){
+  var el=document.getElementById('sidebar-experts');
+  if(!el||el.dataset.built)return;
+  el.dataset.built='1';
+  SIDEBAR_EXPERTS.forEach(function(id){
+    var ex=EXPERTS[id];if(!ex)return;
+    var item=document.createElement('div');
+    item.className='sidebar-expert-item';
+    item.innerHTML='<div class="sidebar-expert-av"><canvas class="orbe-canvas" data-expert="'+id+'" width="56" height="56"></canvas></div>'+
+      '<div><div class="sidebar-expert-name" style="color:'+ex.color+'">'+ex.name+'</div>'+
+      '<div class="sidebar-expert-role">'+ex.role+'</div></div>';
+    item.addEventListener('click',function(){closeSidebar();setTimeout(function(){openChat(id);},300);});
+    el.appendChild(item);
+  });
+  initOrbes();
+}
+
+async function loadSidebarHistory(){
+  var histEl=document.getElementById('sidebar-history');
+  if(!histEl||!userSession||!currentUser)return;
+  histEl.innerHTML='<div style="font-size:.74rem;color:var(--muted);padding:8px 0;">Chargement...</div>';
+  try{
+    var r=await supaAuthFetch(SUPABASE_URL+'/rest/v1/messages?role=eq.user&user_id=eq.'+currentUser.id+'&order=created_at.desc&limit=40',{});
+    var msgs=await r.json();
+    if(!Array.isArray(msgs)||msgs.length===0){
+      histEl.innerHTML='<div style="font-size:.74rem;color:var(--muted);padding:8px 0;">Aucune conversation pour le moment.</div>';
+      return;
+    }
+    // Déduplique par expert (garde la plus récente de chaque)
+    var seen=new Set();var items=[];
+    msgs.forEach(function(m){
+      if(!seen.has(m.expert)){seen.add(m.expert);items.push(m);}
+    });
+    histEl.innerHTML='';
+    items.forEach(function(m){
+      var ex=EXPERTS[m.expert]||{color:'#888',name:m.expert,role:''};
+      var preview=typeof m.content==='string'?m.content.slice(0,60):'';
+      var d=new Date(m.created_at);
+      var timeStr=d.toLocaleDateString('fr-FR',{day:'2-digit',month:'2-digit'});
+      var item=document.createElement('div');
+      item.className='sidebar-hist-item';
+      item.innerHTML='<div class="sidebar-hist-dot" style="background:'+ex.color+'"></div>'+
+        '<div class="sidebar-hist-info">'+
+          '<div class="sidebar-hist-expert" style="color:'+ex.color+'">'+ex.name+'</div>'+
+          '<div class="sidebar-hist-preview">'+preview+'</div>'+
+        '</div>'+
+        '<div class="sidebar-hist-time">'+timeStr+'</div>';
+      item.addEventListener('click',function(){
+        closeSidebar();
+        setTimeout(function(){openChat(m.expert);},300);
+      });
+      histEl.appendChild(item);
+    });
+  }catch(e){histEl.innerHTML='<div style="font-size:.74rem;color:#f87171;">Erreur de chargement.</div>';}
+}
+
+// ── END SIDEBAR ──
+
 function shareNexo(){
   var url='https://nexo-eight-theta.vercel.app';
   var shareData={
