@@ -2697,6 +2697,7 @@ function _modelsLabel(models){
   tag.textContent='Répondu par '+label;
   wrap.appendChild(tag);
 }
+var _copyStore={};
 function streamBotBubble(text,id,models){
   convos[id].push({role:'assistant',content:text});
   var area=document.getElementById('msgsArea');
@@ -3223,17 +3224,16 @@ async function sendText(txt){
         return;
       }
       var gr2=await fetch('/api/genesis',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({system:_sysWithDate,messages:msgs,userEmail:userEmail,isFirstMessage:isFirstMsg})});
-      if(!gr2.ok){
-        var errTxt=await gr2.text().catch(function(){return '';});
-        document.getElementById('typing')&&document.getElementById('typing').remove();
-        addBotBubble('❌ Erreur Genesis ('+gr2.status+'). Réessayez.',id);
-        console.error('[Genesis] HTTP error',gr2.status,errTxt);
-        return;
-      }
       var gd2;
       try{gd2=await gr2.json();}catch(e){
         document.getElementById('typing')&&document.getElementById('typing').remove();
-        addBotBubble("❌ Réponse invalide de Genesis. Réessayez.",id);
+        addBotBubble('❌ Genesis n\'a pas pu répondre (erreur réseau). Réessayez.',id);
+        return;
+      }
+      if(!gr2.ok){
+        document.getElementById('typing')&&document.getElementById('typing').remove();
+        addBotBubble('❌ '+(gd2.error||'Erreur Genesis '+gr2.status+'. Réessayez.'),id);
+        console.error('[Genesis] error',gr2.status,gd2.error);
         return;
       }
       console.log('[Genesis] response keys:',Object.keys(gd2).join(','));
