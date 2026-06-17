@@ -2662,8 +2662,7 @@ async function openChat(id){
   document.getElementById('home').style.display='none';
   document.getElementById('chat-view').style.display='flex';
   var area=document.getElementById('msgsArea');area.innerHTML='';
-  // Vider convos[id] pour forcer le rechargement depuis Supabase à chaque ouverture
-  // (évite que les messages de routage "redirect" bloquent le rechargement de l'historique)
+  // Toujours partir d'un chat vierge sauf si l'utilisateur rouvre explicitement une conversation
   convos[id]=[];
   if(userSession&&currentUser&&currentUser.id){
     // Ne charge l'historique que si l'utilisateur a explicitement demandé à revoir une conversation
@@ -3791,13 +3790,12 @@ async function loadSidebarHistory(){
   if(!histEl||!userSession||!currentUser)return;
   histEl.innerHTML='<div style="font-size:.74rem;color:var(--muted);padding:8px 0;">Chargement...</div>';
   try{
-    var r=await supaAuthFetch(SUPABASE_URL+'/rest/v1/messages?role=eq.user&user_id=eq.'+currentUser.id+'&order=created_at.desc&limit=40',{});
+    var r=await supaAuthFetch(SUPABASE_URL+'/rest/v1/messages?role=eq.user&user_id=eq.'+currentUser.id+'&order=created_at.desc&limit=100',{});
     var msgs=await r.json();
     if(!Array.isArray(msgs)||msgs.length===0){
       histEl.innerHTML='<div style="font-size:.74rem;color:var(--muted);padding:8px 0;">Aucune conversation pour le moment.</div>';
       return;
     }
-    // Déduplique par expert (garde la plus récente de chaque)
     var seen=new Set();var items=[];
     msgs.forEach(function(m){
       if(!seen.has(m.expert)){seen.add(m.expert);items.push(m);}
@@ -3805,9 +3803,11 @@ async function loadSidebarHistory(){
     histEl.innerHTML='';
     items.forEach(function(m){
       var ex=EXPERTS[m.expert]||{color:'#888',name:m.expert,role:''};
-      var preview=typeof m.content==='string'?m.content.slice(0,60):'';
+      var preview=typeof m.content==='string'?m.content.replace(/\n/g,' ').slice(0,55):'';
       var d=new Date(m.created_at);
-      var timeStr=d.toLocaleDateString('fr-FR',{day:'2-digit',month:'2-digit'});
+      var now2=new Date();
+      var isToday=d.toDateString()===now2.toDateString();
+      var timeStr=isToday?d.toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'}):d.toLocaleDateString('fr-FR',{day:'2-digit',month:'2-digit'});
       var item=document.createElement('div');
       item.className='sidebar-hist-item';
       item.innerHTML='<div class="sidebar-hist-dot" style="background:'+ex.color+'"></div>'+
@@ -3820,7 +3820,8 @@ async function loadSidebarHistory(){
         _loadHistoryForId=m.expert;
         closeSidebar();
         setTimeout(function(){openChat(m.expert);},300);
-      });      histEl.appendChild(item);
+      });
+      histEl.appendChild(item);
     });
   }catch(e){histEl.innerHTML='<div style="font-size:.74rem;color:#f87171;">Erreur de chargement.</div>';}
 }
