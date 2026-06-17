@@ -3170,6 +3170,14 @@ async function sendText(txt){
   var _sysWithDate=buildSystemWithMemory(ex.system)+" CONTEXTE TEMPOREL : nous sommes aujourd'hui le "+_dateStr+". Utilise systématiquement cette date comme référence pour toute question liée au temps (aujourd'hui, demain, ce week-end, cette semaine, etc.). Ne te base jamais sur une autre date. STYLE DE RÉPONSE : sois bref et direct par défaut — quelques phrases ou un court paragraphe suffisent pour la plupart des questions. N'utilise des titres, sections multiples ou longues listes à puces QUE si la question est complexe ET le justifie vraiment, ou si l'utilisateur demande explicitement plus de détails (\"explique en détail\", \"développe\", \"complet\", etc.). Évite les réponses qui ressemblent à un rapport quand une réponse simple suffit.";
   try{
     if(ex.isGenesis){
+      // Si une image est attachée → rediriger directement vers Nova (expert images)
+      if(savedImg&&!savedImg.isDocument){
+        document.getElementById('typing')&&document.getElementById('typing').remove();
+        var redirectMsg='Cette demande concerne une image. Je t\'envoie vers Nova, notre experte en images IA ! 🎨';
+        appendGenesisRoute(redirectMsg,['nova'],txt,id);
+        saveMessage(id,'assistant',redirectMsg);
+        return;
+      }
       // Indicateur "réflexion/recherche" animé pour Genesis
       var tyEl=document.getElementById('typing');
       if(tyEl)tyEl.innerHTML=_genesisThinkingHTML();
@@ -3521,9 +3529,11 @@ function closeAdmin(){document.getElementById('admin-panel').style.display='none
 
 async function loadAdminStats(){
   try{
-    var r1=await supaAuthFetch(SUPABASE_URL+'/rest/v1/messages?select=id,expert,role,content&limit=1000',{});
-    var msgs=await r1.json();
-    if(!Array.isArray(msgs))msgs=[];
+    var r=await fetch('/api/admin',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'stats'})});
+    var d=await r.json();
+    var msgs=Array.isArray(d.messages)?d.messages:[];
+    var profiles=Array.isArray(d.profiles)?d.profiles:[];
+
     document.getElementById('adm-total-msgs').textContent=msgs.length>=1000?'1000+':msgs.length;
 
     var expertCount={};
@@ -3546,17 +3556,13 @@ async function loadAdminStats(){
       barsEl.appendChild(bar);
     });
 
-    var r2=await supaAuthFetch(SUPABASE_URL+'/rest/v1/profiles?select=id,is_premium&limit=500',{});
-    var profiles=await r2.json();
-    if(!Array.isArray(profiles))profiles=[];
     document.getElementById('adm-total-users').textContent=profiles.length;
     document.getElementById('adm-premium-users').textContent=profiles.filter(function(p){return p.is_premium;}).length;
 
-    // Vraies erreurs techniques uniquement (pas le contenu normal des réponses)
     var errors=msgs.filter(function(m){
       if(m.role!=='assistant')return false;
       var c=typeof m.content==='string'?m.content:'';
-      return c.startsWith('❌')||c.startsWith('⏱️')||c==='Connexion impossible.'||c.includes('Aucune réponse disponible')||c.includes('n\'a pas pu répondre');
+      return c.startsWith('❌')||c.startsWith('⏱️')||c==='Connexion impossible.'||c.includes('Aucune réponse disponible')||c.includes("n'a pas pu répondre");
     });
     var errEl=document.getElementById('adminErrors');
     if(errors.length===0){errEl.innerHTML='<span style="color:#34d399">✅ Aucune erreur détectée.</span>';}
