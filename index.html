@@ -2672,8 +2672,7 @@ async function openChat(id){
         convos[id]=hist.map(function(m){return{role:m.role,content:m.content};});
         convos[id].forEach(function(m){if(m.role==='user')appendUser(_ctText(m.content));else appendBot(_ctText(m.content),id);});
       }
-      // Pas de message de bienvenue — l'utilisateur voit juste le chat vide et peut écrire
-    }catch(e){/* silencieux — on laisse le chat vide */}
+    }catch(e){/* silencieux */}
   }
 }
 function closeChat(){document.getElementById('chat-view').style.display='none';document.getElementById('home').style.display='block';_genesisSessionFirstMsg=true;}
@@ -3224,35 +3223,29 @@ async function sendText(txt){
         return;
       }
       var gr2=await fetch('/api/genesis',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({system:_sysWithDate,messages:msgs,userEmail:userEmail,isFirstMessage:isFirstMsg})});
-      var ctype=gr2.headers.get('content-type')||'';
-      if(ctype.indexOf('application/json')===-1){
-        // ── Réponse en streaming réel (cas le plus courant : un seul modèle) ──
-        if(!gr2.ok||!gr2.body){
-          document.getElementById('typing')&&document.getElementById('typing').remove();
-          addBotBubble("❌ Genesis n'a pas pu répondre, réessayez.",id);
-          return;
-        }
-        var modelsHdr2=gr2.headers.get('x-genesis-models');
-        var greply=await streamResponseBody(gr2,id,modelsHdr2?modelsHdr2.split(','):null);
-        saveMessage(id,'assistant',greply);
-        return;
-      }
-      // ── Réponse JSON : redirection, ambiguïté, ou réponse avec scores ──
-      var gd2;
-      try{gd2=await gr2.json();}catch(parseErr){
+      if(!gr2.ok){
+        var errTxt=await gr2.text().catch(function(){return '';});
         document.getElementById('typing')&&document.getElementById('typing').remove();
-        addBotBubble("⏱️ Genesis a mis trop de temps à répondre (question complexe). Réessaie, ou reformule plus simplement.",id);
+        addBotBubble('❌ Erreur Genesis ('+gr2.status+'). Réessayez.',id);
+        console.error('[Genesis] HTTP error',gr2.status,errTxt);
         return;
       }
-      // Anime les étapes de raisonnement AVANT d'afficher la réponse
+      var gd2;
+      try{gd2=await gr2.json();}catch(e){
+        document.getElementById('typing')&&document.getElementById('typing').remove();
+        addBotBubble("❌ Réponse invalide de Genesis. Réessayez.",id);
+        return;
+      }
+      console.log('[Genesis] response keys:',Object.keys(gd2).join(','));
+      // Anime les étapes de raisonnement
       if(gd2.reasoning_steps&&gd2.reasoning_steps.length){
         animateGenesisSteps(gd2.reasoning_steps);
-        await new Promise(function(r){setTimeout(r,Math.min(gd2.reasoning_steps.length*700+400,2500));});
+        await new Promise(function(r){setTimeout(r,Math.min(gd2.reasoning_steps.length*700+400,2000));});
       }
       document.getElementById('typing')&&document.getElementById('typing').remove();
       if(gd2.redirect){appendGenesisRoute(gd2.redirect.reason,[gd2.redirect.expertId],txt,id);saveMessage(id,'assistant',gd2.redirect.reason);return;}
       if(gd2.ambiguous){appendGenesisRoute(gd2.ambiguous.reason,[gd2.ambiguous.expertId,gd2.ambiguous.expertId2],txt,id);saveMessage(id,'assistant',gd2.ambiguous.reason);return;}
-      if(!gr2.ok||!gd2.text){addBotBubble('❌ '+(gd2.error||"Genesis n'a pas pu répondre, réessayez."),id);return;}
+      if(!gd2.text){addBotBubble('❌ '+(gd2.error||"Genesis n'a pas pu répondre, réessayez."),id);return;}
       var modelsMeta=(gd2.models||['gpt']);
       if(gd2.claude_score!=null||gd2.gpt_score!=null||gd2.gemini_score!=null){
         modelsMeta=(gd2.models||modelsMeta).map(function(m){
@@ -3263,10 +3256,7 @@ async function sendText(txt){
         });
       }
       var lastBotDiv=streamBotBubble(gd2.text,id,modelsMeta);
-      // Suggestion contextuelle : si un expert Nexo aurait pu mieux répondre
-      if(gd2.suggested_expert&&CTX_EXPERT_HINTS[gd2.suggested_expert]&&lastBotDiv){
-        appendCtxSuggestion(lastBotDiv,gd2.suggested_expert);
-      }
+      if(gd2.suggested_expert&&CTX_EXPERT_HINTS[gd2.suggested_expert]&&lastBotDiv){appendCtxSuggestion(lastBotDiv,gd2.suggested_expert);}
       saveMessage(id,'assistant',gd2.text);
       return;
     }
