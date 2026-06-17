@@ -869,6 +869,10 @@ header{
   font-size:.56rem;color:var(--muted);font-family:'JetBrains Mono',monospace;
   margin-top:6px;letter-spacing:.04em;opacity:.7;
 }
+/* ── ADMIN PANEL ── */
+.admin-stat-card{background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:13px;padding:12px;text-align:center;}
+.admin-stat-val{font-family:'Syne',sans-serif;font-weight:800;font-size:1.3rem;color:var(--genesis);}
+.admin-stat-lbl{font-size:.58rem;color:var(--muted);margin-top:2px;}
 .gth-icon{font-size:1rem;animation:gth-spin 1.8s linear infinite;display:inline-block;}
 @keyframes gth-spin{0%{transform:rotate(0deg) scale(1);}50%{transform:rotate(180deg) scale(1.2);}100%{transform:rotate(360deg) scale(1);}}
 .gth-text{font-size:.78rem;color:var(--genesis);font-weight:600;background:linear-gradient(90deg,var(--genesis),#fff,var(--genesis));background-size:200% auto;-webkit-background-clip:text;-webkit-text-fill-color:transparent;animation:gth-shine 2s linear infinite;}
@@ -1127,7 +1131,63 @@ header{
   <div class="menu-divider"></div>
   <div class="menu-item small" onclick="showLegal('privacy')">🔒 Confidentialité</div>
   <div class="menu-item small" onclick="showLegal('cgu')">📄 CGU</div>
+  <div id="adminMenuBtn" class="menu-item small" onclick="openAdminLogin()" style="display:none;color:var(--genesis);">⚙️ Admin</div>
   <div class="menu-item danger" onclick="doLogout()">Se déconnecter</div>
+</div>
+
+<!-- ADMIN LOGIN -->
+<div id="admin-login" style="display:none;position:fixed;inset:0;z-index:700;background:rgba(8,8,16,.97);backdrop-filter:blur(20px);display:none;flex-direction:column;align-items:center;justify-content:center;gap:16px;max-width:600px;margin:0 auto;left:50%;transform:translateX(-50%);width:100%;">
+  <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:1.3rem;color:var(--genesis);">⚙️ Admin Nexo</div>
+  <div style="font-size:.75rem;color:var(--muted);">Accès restreint</div>
+  <input id="adminPwdInput" type="password" placeholder="Mot de passe" style="width:240px;padding:12px 16px;border-radius:13px;background:rgba(255,255,255,.06);border:1px solid var(--border);color:var(--text);font-size:.9rem;text-align:center;outline:none;" onkeydown="if(event.key==='Enter')checkAdminPwd()">
+  <div id="adminPwdErr" style="font-size:.7rem;color:#f87171;display:none;">Mot de passe incorrect</div>
+  <div style="display:flex;gap:10px;">
+    <button onclick="checkAdminPwd()" style="padding:10px 24px;border-radius:12px;background:linear-gradient(135deg,var(--genesis),#f59e0b);color:#000;font-family:'Syne',sans-serif;font-weight:800;font-size:.85rem;border:none;cursor:pointer;">Entrer</button>
+    <button onclick="closeAdminLogin()" style="padding:10px 20px;border-radius:12px;background:rgba(255,255,255,.06);border:1px solid var(--border);color:var(--muted);font-size:.85rem;cursor:pointer;">Annuler</button>
+  </div>
+</div>
+
+<!-- ADMIN PANEL -->
+<div id="admin-panel" style="display:none;position:fixed;inset:0;z-index:700;background:#080810;overflow-y:auto;max-width:600px;margin:0 auto;left:50%;transform:translateX(-50%);width:100%;">
+  <div style="padding:16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px;position:sticky;top:0;background:#080810;z-index:10;">
+    <button onclick="closeAdmin()" style="width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,.08);border:1px solid var(--border);color:var(--text);font-size:1rem;cursor:pointer;">←</button>
+    <div>
+      <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:1rem;color:var(--genesis);">⚙️ Admin Nexo</div>
+      <div style="font-size:.6rem;color:var(--muted);font-family:'JetBrains Mono',monospace;">Tableau de bord administrateur</div>
+    </div>
+    <button onclick="runAdminAnalysis()" style="margin-left:auto;padding:8px 16px;border-radius:11px;background:linear-gradient(135deg,var(--genesis),#f59e0b);color:#000;font-family:'Syne',sans-serif;font-weight:800;font-size:.75rem;border:none;cursor:pointer;">🔄 Analyser</button>
+  </div>
+
+  <!-- Stats rapides -->
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:16px;">
+    <div class="admin-stat-card"><div class="admin-stat-val" id="adm-total-msgs">—</div><div class="admin-stat-lbl">Messages totaux</div></div>
+    <div class="admin-stat-card"><div class="admin-stat-val" id="adm-total-users">—</div><div class="admin-stat-lbl">Utilisateurs</div></div>
+    <div class="admin-stat-card"><div class="admin-stat-val" id="adm-premium-users">—</div><div class="admin-stat-lbl">Premium</div></div>
+    <div class="admin-stat-card"><div class="admin-stat-val" id="adm-top-expert">—</div><div class="admin-stat-lbl">Expert le + utilisé</div></div>
+  </div>
+
+  <!-- Rapport IA -->
+  <div style="padding:0 16px 16px;">
+    <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:.85rem;color:var(--text);margin-bottom:10px;">🤖 Rapport IA</div>
+    <div id="adminAiReport" style="background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:14px;padding:14px;font-size:.78rem;color:rgba(240,240,248,.7);line-height:1.7;min-height:80px;">
+      <span style="color:var(--muted);">Clique sur "Analyser" pour générer un rapport.</span>
+    </div>
+    <button id="adminCopyBtn" onclick="copyAdminReport()" style="display:none;margin-top:8px;padding:8px 16px;border-radius:10px;background:rgba(255,255,255,.06);border:1px solid var(--border);color:var(--muted);font-size:.7rem;font-family:'JetBrains Mono',monospace;cursor:pointer;">⧉ Copier le rapport</button>
+  </div>
+
+  <!-- Expert usage -->
+  <div style="padding:0 16px 16px;">
+    <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:.85rem;color:var(--text);margin-bottom:10px;">📊 Utilisation par expert</div>
+    <div id="adminExpertBars" style="display:flex;flex-direction:column;gap:8px;"></div>
+  </div>
+
+  <!-- Erreurs récentes -->
+  <div style="padding:0 16px 32px;">
+    <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:.85rem;color:var(--text);margin-bottom:10px;">🔴 Erreurs récentes détectées</div>
+    <div id="adminErrors" style="font-size:.74rem;color:rgba(240,240,248,.6);line-height:1.8;">
+      <span style="color:var(--muted);">Aucune analyse effectuée.</span>
+    </div>
+  </div>
 </div>
 
 <!-- HOME -->
@@ -2316,6 +2376,12 @@ async function enterApp(){
     var letter=(currentUser&&currentUser.email?currentUser.email[0]:'U').toUpperCase();
     document.getElementById('avatarHdr').textContent=letter;
     document.getElementById('userEmailDisplay').textContent=currentUser&&currentUser.email?currentUser.email:'';
+    // Bouton admin visible uniquement pour les emails administrateurs
+    var adminBtn=document.getElementById('adminMenuBtn');
+    if(adminBtn&&currentUser&&currentUser.email){
+      var isAdmin=ADMIN_EMAILS.some(function(e){return e.toLowerCase()===currentUser.email.toLowerCase();});
+      adminBtn.style.display=isAdmin?'block':'none';
+    }
   });
   try{
     var r=await supaAuthFetch(SUPABASE_URL+'/rest/v1/profiles?email=eq.'+currentUser.email+'&select=is_premium',{});
@@ -2362,7 +2428,7 @@ var EXPERTS={
   genesis:{name:'Genesis',role:'IA Flagship — Multi-modèles',limitClass:'genesis-bar',color:'#fbbf24',freeLimit:5,emoji:'✨',bg:'linear-gradient(135deg,#451a03,#92400e)',vision:true,webSearch:true,isGenesis:true,
     suggestions:["Quelle est la meilleure stratégie pour mon business ?","Analyse ce document en profondeur","Compare plusieurs approches pour ce problème","Recherche les dernières infos sur ce sujet"],
     welcome:"Bienvenue sur **Genesis** ✨\n\nJe suis l'IA flagship de Nexo : selon ta question, je mobilise **Claude, GPT et/ou Gemini** — seul ou combinés — pour te donner la meilleure réponse possible.\n\nTu peux m'envoyer du texte, une photo, un document, et je cherche sur Internet si besoin.\n\nPose-moi n'importe quelle question, même complexe.",
-    system:"Tu es Genesis, l'IA flagship de Nexo. Tu es exigeante, précise, et tu fournis toujours la meilleure réponse possible en combinant plusieurs perspectives si besoin. Va droit au but : réponds de façon naturelle et concise, comme dans une conversation, sans jamais mentionner que tu es composée de plusieurs IA. Français parfait, **gras** avec parcimonie pour les points vraiment importants."}
+    system:"Tu es Genesis, l'IA flagship de Nexo. Tu es précise, directe et concise. Réponds naturellement en français, sans mentionner que tu es composée de plusieurs IA. **Gras** avec parcimonie pour les points vraiment importants."}
 };
 
 var isPremium=false,current=null,convos={};
@@ -3306,6 +3372,119 @@ function speakMsg(btn){
 if(window.speechSynthesis&&window.speechSynthesis.onvoiceschanged!==undefined){
   window.speechSynthesis.onvoiceschanged=function(){window.speechSynthesis.getVoices();};
 }
+
+// ── ADMIN ──────────────────────────────────────────────────────────────────
+var ADMIN_HASH='442cf2699d5ceb9fd5256fe1482e8ed4638b2df5c181a9558fbaa5614f5c3a55';
+var ADMIN_EMAILS=['leger-thomas@outlook.com','legerthomas893@gmail.com'];
+
+async function sha256(str){
+  var buf=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(str));
+  return Array.from(new Uint8Array(buf)).map(function(b){return b.toString(16).padStart(2,'0');}).join('');
+}
+function openAdminLogin(){
+  document.getElementById('userMenu').classList.remove('open');
+  var el=document.getElementById('admin-login');
+  el.style.display='flex';
+  document.getElementById('adminPwdInput').value='';
+  document.getElementById('adminPwdErr').style.display='none';
+  setTimeout(function(){document.getElementById('adminPwdInput').focus();},100);
+}
+function closeAdminLogin(){document.getElementById('admin-login').style.display='none';}
+async function checkAdminPwd(){
+  var pwd=document.getElementById('adminPwdInput').value;
+  var hash=await sha256(pwd);
+  if(hash===ADMIN_HASH){
+    document.getElementById('admin-login').style.display='none';
+    document.getElementById('admin-panel').style.display='block';
+    loadAdminStats();
+  }else{
+    document.getElementById('adminPwdErr').style.display='block';
+    document.getElementById('adminPwdInput').value='';
+    document.getElementById('adminPwdInput').focus();
+  }
+}
+function closeAdmin(){document.getElementById('admin-panel').style.display='none';}
+
+async function loadAdminStats(){
+  try{
+    var r1=await supaAuthFetch(SUPABASE_URL+'/rest/v1/messages?select=id,expert,role,content&limit=1000',{});
+    var msgs=await r1.json();
+    if(!Array.isArray(msgs))msgs=[];
+    document.getElementById('adm-total-msgs').textContent=msgs.length>=1000?'1000+':msgs.length;
+
+    var expertCount={};
+    msgs.forEach(function(m){if(m.role==='user'){expertCount[m.expert]=(expertCount[m.expert]||0)+1;}});
+    var sorted=Object.entries(expertCount).sort(function(a,b){return b[1]-a[1];});
+    if(sorted.length>0)document.getElementById('adm-top-expert').textContent=sorted[0][0];
+
+    var barsEl=document.getElementById('adminExpertBars');
+    barsEl.innerHTML='';
+    var total=sorted.reduce(function(s,e){return s+e[1];},0)||1;
+    sorted.forEach(function(entry){
+      var ex=EXPERTS[entry[0]]||{color:'#888',name:entry[0]};
+      var pct=Math.round(entry[1]/total*100);
+      var bar=document.createElement('div');
+      bar.style.cssText='display:flex;align-items:center;gap:8px;';
+      bar.innerHTML='<div style="width:60px;font-size:.7rem;color:'+ex.color+';font-family:\'Syne\',sans-serif;font-weight:700;">'+entry[0]+'</div>'+
+        '<div style="flex:1;background:rgba(255,255,255,.06);border-radius:6px;height:8px;overflow:hidden;">'+
+          '<div style="width:'+pct+'%;height:100%;background:'+ex.color+';border-radius:6px;"></div></div>'+
+        '<div style="width:36px;font-size:.65rem;color:var(--muted);text-align:right;">'+entry[1]+'</div>';
+      barsEl.appendChild(bar);
+    });
+
+    var r2=await supaAuthFetch(SUPABASE_URL+'/rest/v1/profiles?select=id,is_premium&limit=500',{});
+    var profiles=await r2.json();
+    if(!Array.isArray(profiles))profiles=[];
+    document.getElementById('adm-total-users').textContent=profiles.length;
+    document.getElementById('adm-premium-users').textContent=profiles.filter(function(p){return p.is_premium;}).length;
+
+    var errors=msgs.filter(function(m){return m.role==='assistant'&&typeof m.content==='string'&&(m.content.includes('❌')||m.content.includes('Connexion impossible')||m.content.includes('trop de temps'));});
+    var errEl=document.getElementById('adminErrors');
+    if(errors.length===0){errEl.innerHTML='<span style="color:#34d399">✅ Aucune erreur détectée.</span>';}
+    else{
+      errEl.innerHTML=errors.slice(-5).map(function(e){
+        return '<div style="padding:6px 10px;background:rgba(248,113,113,.08);border:1px solid rgba(248,113,113,.2);border-radius:8px;margin-bottom:4px;">🔴 ['+e.expert+'] '+String(e.content).slice(0,120)+'</div>';
+      }).join('');
+    }
+    return {msgs:msgs,expertCount:expertCount,profiles:profiles,errors:errors};
+  }catch(e){console.error('Admin stats:',e);}
+}
+
+async function runAdminAnalysis(){
+  var reportEl=document.getElementById('adminAiReport');
+  var copyBtn=document.getElementById('adminCopyBtn');
+  reportEl.innerHTML='<span style="color:var(--genesis)">✨ Analyse en cours...</span>';
+  copyBtn.style.display='none';
+  var data=await loadAdminStats();
+  if(!data){reportEl.innerHTML='<span style="color:#f87171">Erreur lors de la collecte.</span>';return;}
+  var expertSummary=Object.entries(data.expertCount).sort(function(a,b){return b[1]-a[1];}).map(function(e){return e[0]+':'+e[1];}).join(', ');
+  var errorSummary=data.errors.length===0?'Aucune':data.errors.slice(-3).map(function(e){return '['+e.expert+'] '+String(e.content).slice(0,80);}).join(' | ');
+  var prompt='Tu es analyste SaaS. Voici les données de Nexo (app multi-IA française) :\n\n'+
+    '- Messages analysés : '+data.msgs.length+'\n'+
+    '- Utilisateurs : '+data.profiles.length+' ('+data.profiles.filter(function(p){return p.is_premium;}).length+' premium)\n'+
+    '- Utilisation experts : '+expertSummary+'\n'+
+    '- Erreurs : '+errorSummary+'\n\n'+
+    'Génère un rapport concis (max 300 mots) en 3 sections :\n'+
+    '🔴 PROBLÈMES DÉTECTÉS\n🟡 AMÉLIORATIONS SUGGÉRÉES\n✅ CE QUI FONCTIONNE BIEN\n\n'+
+    'Sois précis et actionnable. Le développeur lira ce rapport pour coder des corrections.';
+  try{
+    var r=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({model:'claude-sonnet-4-5-20250929',max_tokens:600,messages:[{role:'user',content:prompt}]})});
+    var d=await r.json();
+    var text=(d.content?.[0]?.text)||'Impossible de générer le rapport.';
+    reportEl.innerHTML=text.replace(/\n/g,'<br>').replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>');
+    copyBtn.style.display='block';
+    copyBtn.dataset.report=text;
+  }catch(e){reportEl.innerHTML='<span style="color:#f87171">Erreur : '+e.message+'</span>';}
+}
+function copyAdminReport(){
+  var text=document.getElementById('adminCopyBtn').dataset.report||'';
+  navigator.clipboard.writeText(text).then(function(){
+    document.getElementById('adminCopyBtn').textContent='✓ Copié !';
+    setTimeout(function(){document.getElementById('adminCopyBtn').textContent='⧉ Copier le rapport';},2000);
+  });
+}
+// ── END ADMIN ──
 
 function shareNexo(){
   var url='https://nexo-eight-theta.vercel.app';
