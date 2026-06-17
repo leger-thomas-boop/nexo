@@ -1922,7 +1922,7 @@ header{
     </div>
     <!-- New conversation button -->
     <div style="padding:12px 16px;border-bottom:1px solid var(--border);">
-      <button onclick="closeSidebar();openChat('genesis')" style="width:100%;padding:11px;border:none;border-radius:13px;background:linear-gradient(135deg,var(--genesis),#f59e0b);color:#1c0a00;font-family:'Syne',sans-serif;font-weight:800;font-size:.82rem;cursor:pointer;">✨ Nouvelle conversation Genesis</button>
+      <button onclick="newConversation('genesis')" style="width:100%;padding:11px;border:none;border-radius:13px;background:linear-gradient(135deg,var(--genesis),#f59e0b);color:#1c0a00;font-family:'Syne',sans-serif;font-weight:800;font-size:.82rem;cursor:pointer;">✨ Nouvelle conversation Genesis</button>
     </div>
     <!-- IAs list -->
     <div style="padding:10px 16px 4px;">
@@ -3738,6 +3738,30 @@ function closeSidebar(){
   setTimeout(function(){document.getElementById('sidebar').style.display='none';},280);
   _sidebarOpen=false;
 }
+function newConversation(id){
+  // Vider la conversation en mémoire pour forcer un chat vierge
+  convos[id]=[];
+  closeSidebar();
+  setTimeout(function(){
+    var ex=EXPERTS[id];if(!ex)return;
+    current=id;
+    if(id==='genesis')_genesisSessionFirstMsg=true;
+    document.getElementById('chatHdrName').textContent=ex.name;
+    document.getElementById('chatHdrStatus').textContent=ex.role;
+    document.getElementById('chatAvatarMini').innerHTML=getAvatarMini(id);
+    document.getElementById('sendBtn').style.background='linear-gradient(135deg,'+ex.color+','+ex.color+'cc)';
+    document.getElementById('sendBtn').style.boxShadow='0 4px 16px '+ex.color+'40';
+    clearAttachedImage();
+    document.getElementById('attachBtn').style.display=ex.vision?'flex':'none';
+    document.getElementById('msgInp').placeholder=ex.vision?'Écrivez, envoyez une photo ou un document...':'Écrivez votre question...';
+    var lb=document.getElementById('limitBar');
+    if(isPremium){lb.style.display='none';}else{lb.style.display='flex';lb.className='limit-bar '+ex.limitClass;updateLimitBar(id);}
+    document.getElementById('home').style.display='none';
+    document.getElementById('chat-view').style.display='flex';
+    document.getElementById('msgsArea').innerHTML='';
+    // Chat vierge - pas de rechargement Supabase
+  },300);
+}
 
 function buildSidebarExperts(){
   var el=document.getElementById('sidebar-experts');
@@ -3750,7 +3774,7 @@ function buildSidebarExperts(){
     item.innerHTML='<div class="sidebar-expert-av"><canvas class="orbe-canvas" data-expert="'+id+'" width="56" height="56"></canvas></div>'+
       '<div><div class="sidebar-expert-name" style="color:'+ex.color+'">'+ex.name+'</div>'+
       '<div class="sidebar-expert-role">'+ex.role+'</div></div>';
-    item.addEventListener('click',function(){closeSidebar();setTimeout(function(){openChat(id);},300);});
+    item.addEventListener('click',function(){newConversation(id);});
     el.appendChild(item);
   });
   initOrbes();
@@ -3789,8 +3813,7 @@ async function loadSidebarHistory(){
       item.addEventListener('click',function(){
         closeSidebar();
         setTimeout(function(){openChat(m.expert);},300);
-      });
-      histEl.appendChild(item);
+      });      histEl.appendChild(item);
     });
   }catch(e){histEl.innerHTML='<div style="font-size:.74rem;color:#f87171;">Erreur de chargement.</div>';}
 }
