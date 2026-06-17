@@ -3023,106 +3023,57 @@ function onPhotoPicked(e){
   if(!file)return;
   if(file.size>20*1024*1024){alert('Le fichier est trop lourd (max 20 Mo).');e.target.value='';return;}
 
-  // ── Documents (PDF, doc, txt) : pas de compression, envoi direct en base64 ──
-  if(file.type!=='' && !file.type.startsWith('image/')){
+  // ── Documents (PDF, doc, txt) ──
+  if(file.type&&!file.type.startsWith('image/')){
     var docReader=new FileReader();
     docReader.onload=function(){
       var dataUrl=docReader.result;
       var comma=dataUrl.indexOf(',');
-      var mt=file.type||'application/pdf';
-      _attachedImage={
-        media_type:mt,
-        data:dataUrl.substring(comma+1),
-        dataUrl:dataUrl,
-        isDocument:true,
-        fileName:file.name
-      };
+      _attachedImage={media_type:file.type||'application/pdf',data:dataUrl.substring(comma+1),dataUrl:dataUrl,isDocument:true,fileName:file.name};
       document.getElementById('imgPreviewThumb').style.display='none';
       var ip=document.getElementById('imgPreview');
       var nameEl=ip.querySelector('.doc-filename');
-      if(!nameEl){
-        nameEl=document.createElement('div');
-        nameEl.className='doc-filename';
-        nameEl.style.cssText='font-size:.7rem;color:var(--text);padding:0 8px;display:flex;align-items:center;gap:4px;';
-        ip.insertBefore(nameEl,ip.firstChild);
-      }
-      nameEl.style.display='flex';
-      nameEl.textContent='📄 '+file.name;
+      if(!nameEl){nameEl=document.createElement('div');nameEl.className='doc-filename';nameEl.style.cssText='font-size:.7rem;color:var(--text);padding:0 8px;display:flex;align-items:center;gap:4px;';ip.insertBefore(nameEl,ip.firstChild);}
+      nameEl.style.display='flex';nameEl.textContent='📄 '+file.name;
       ip.style.display='flex';
     };
     docReader.readAsDataURL(file);
-    e.target.value='';
-    return;
+    e.target.value='';return;
   }
 
-  // ── Photos HEIC/HEIF (format par défaut des photos de la galerie iPhone) ──
-  // Ces fichiers ne sont pas décodables par <canvas>/<img> dans le navigateur,
-  // contrairement aux photos prises directement (converties en JPEG). On les
-  // convertit donc d'abord en JPEG via heic2any (chargé à la demande).
-  var isHeic=file.type==='image/heic'||file.type==='image/heif'||/\.(heic|heif)$/i.test(file.name||'');
-  if(isHeic){
-    loadHeic2Any(function(ok){
-      if(!ok){alert("Impossible de charger le convertisseur de photo. Vérifie ta connexion et réessaie.");return;}
-      window.heic2any({blob:file,toType:'image/jpeg',quality:0.85}).then(function(converted){
-        var jpegBlob=converted instanceof Blob?converted:converted[0];
-        processImageFile(jpegBlob);
-      }).catch(function(){
-        alert('Ce format de photo n\'est pas pris en charge. Essaie une autre photo, ou active "Le plus compatible" dans Réglages > Appareil photo > Formats sur ton iPhone.');
-      });
-    });
-    e.target.value='';
-    return;
-  }
-
-  processImageFile(file);
-  e.target.value='';
-}
-var _heic2anyState=0; // 0=non chargé, 1=en cours, 2=chargé
-var _heic2anyCallbacks=[];
-function loadHeic2Any(cb){
-  if(window.heic2any){cb(true);return;}
-  _heic2anyCallbacks.push(cb);
-  if(_heic2anyState!==0)return;
-  _heic2anyState=1;
-  var s=document.createElement('script');
-  s.src='https://cdn.jsdelivr.net/npm/heic2any@0.0.4/dist/heic2any.min.js';
-  s.onload=function(){_heic2anyState=2;_heic2anyCallbacks.forEach(function(f){f(true);});_heic2anyCallbacks=[];};
-  s.onerror=function(){_heic2anyState=0;_heic2anyCallbacks.forEach(function(f){f(false);});_heic2anyCallbacks=[];};
-  document.head.appendChild(s);
-}
-// ── Images : compression via canvas ──────────────────────────────────────
-function processImageFile(file){
-  var reader=new FileReader();
-  reader.onload=function(){
-    var dataUrl=reader.result;
-    var img=new Image();
-    img.onload=function(){
-      var canvas=document.createElement('canvas');
-      var maxSize=1024;
-      var w=img.width,h=img.height;
-      if(w>maxSize||h>maxSize){
-        if(w>h){h=Math.round(h*maxSize/w);w=maxSize;}
-        else{w=Math.round(w*maxSize/h);h=maxSize;}
-      }
-      canvas.width=w;canvas.height=h;
-      var ctx=canvas.getContext('2d');
-      ctx.drawImage(img,0,0,w,h);
-      var compressed=canvas.toDataURL('image/jpeg',0.85);
-      var comma=compressed.indexOf(',');
-      _attachedImage={media_type:'image/jpeg',data:compressed.substring(comma+1),dataUrl:compressed,isDocument:false};
-      document.getElementById('imgPreviewThumb').style.display='block';
-      document.getElementById('imgPreviewThumb').src=compressed;
-      var ip=document.getElementById('imgPreview');
-      var nameEl=ip.querySelector('.doc-filename');
-      if(nameEl)nameEl.style.display='none';
-      ip.style.display='flex';
-    };
-    img.onerror=function(){
-      alert("Impossible de lire cette photo. Essaie une autre photo, ou prends-en une nouvelle avec l'appareil photo.");
-    };
-    img.src=dataUrl;
+  // ── Images : toutes converties via canvas → JPEG (résout HEIC, HEIF, WebP, PNG...) ──
+  // createObjectURL + Image() gère automatiquement HEIC sur iOS Safari récent (iOS 16+)
+  var objectUrl=URL.createObjectURL(file);
+  var img=new Image();
+  img.onload=function(){
+    var canvas=document.createElement('canvas');
+    var maxSize=1024;
+    var w=img.naturalWidth||img.width;
+    var h=img.naturalHeight||img.height;
+    if(w>maxSize||h>maxSize){
+      if(w>h){h=Math.round(h*maxSize/w);w=maxSize;}
+      else{w=Math.round(w*maxSize/h);h=maxSize;}
+    }
+    canvas.width=w;canvas.height=h;
+    var ctx=canvas.getContext('2d');
+    ctx.drawImage(img,0,0,w,h);
+    URL.revokeObjectURL(objectUrl);
+    var compressed=canvas.toDataURL('image/jpeg',0.88);
+    var comma=compressed.indexOf(',');
+    _attachedImage={media_type:'image/jpeg',data:compressed.substring(comma+1),dataUrl:compressed,isDocument:false};
+    document.getElementById('imgPreviewThumb').style.display='block';
+    document.getElementById('imgPreviewThumb').src=compressed;
+    var ip=document.getElementById('imgPreview');
+    var nameEl=ip.querySelector('.doc-filename');
+    if(nameEl)nameEl.style.display='none';
+    ip.style.display='flex';
   };
-  reader.readAsDataURL(file);
+  img.onerror=function(){
+    URL.revokeObjectURL(objectUrl);
+    alert('Format non supporté. Essaie de convertir la photo en JPEG depuis tes réglages iPhone : Réglages → Appareil photo → Formats → "Le plus compatible".');
+  };
+  img.src=objectUrl;
+  e.target.value='';
 }
 function clearAttachedImage(){
   _attachedImage=null;
