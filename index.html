@@ -1943,13 +1943,13 @@ header{
 <!-- CHAT -->
 <div id="chat-view">
   <div class="chat-hdr">
-    <button class="back-btn" onclick="closeChat()">←</button>
+    <button class="back-btn" onclick="openSidebar()" title="Menu">☰</button>
     <div class="chat-avatar-mini" id="chatAvatarMini"></div>
     <div class="chat-hdr-info">
       <div class="chat-hdr-name" id="chatHdrName"></div>
       <div class="chat-hdr-status"><div class="status-icon"></div><span id="chatHdrStatus">En ligne</span></div>
     </div>
-    <button class="back-btn" onclick="openSidebar()" title="Historique" style="margin-left:auto;font-size:.85rem;">☰</button>
+    <button class="back-btn" onclick="closeChat()" title="Retour">←</button>
   </div>
   <div class="msgs" id="msgsArea"></div>
   <div class="sugg-area" id="suggArea"></div>
@@ -2668,11 +2668,12 @@ async function openChat(id){
     try{
       var r=await supaAuthFetch(SUPABASE_URL+'/rest/v1/messages?expert=eq.'+id+'&user_id=eq.'+currentUser.id+'&order=created_at.asc&limit=50',{});
       var hist=await r.json();
-      if(hist&&hist.length>0){convos[id]=hist.map(function(m){return{role:m.role,content:m.content};});convos[id].forEach(function(m){if(m.role==='user')appendUser(_ctText(m.content));else appendBot(_ctText(m.content),id);});}
-      else{addBotBubble(ex.welcome,id);showSuggs(id);}
-    }catch(e){addBotBubble(ex.welcome,id);showSuggs(id);}
-  }else{
-    addBotBubble(ex.welcome,id);showSuggs(id);
+      if(hist&&hist.length>0){
+        convos[id]=hist.map(function(m){return{role:m.role,content:m.content};});
+        convos[id].forEach(function(m){if(m.role==='user')appendUser(_ctText(m.content));else appendBot(_ctText(m.content),id);});
+      }
+      // Pas de message de bienvenue — l'utilisateur voit juste le chat vide et peut écrire
+    }catch(e){/* silencieux — on laisse le chat vide */}
   }
 }
 function closeChat(){document.getElementById('chat-view').style.display='none';document.getElementById('home').style.display='block';_genesisSessionFirstMsg=true;}
