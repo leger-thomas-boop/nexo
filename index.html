@@ -2177,7 +2177,8 @@ async function supabaseLogin(email,password){var r=await fetch(SUPABASE_URL+'/au
 
 var currentUser=null,userSession=null;
 var _genesisSessionFirstMsg=true;
-var _loadHistoryForId=null; // set to expert id when user wants to reload a past conversation
+var _loadHistoryForId=null;
+var _loadHistoryAfter=null; // ISO date string: load messages >= this timestamp
 function loadSession(){var s=localStorage.getItem('nexo_session');if(s){try{var p=JSON.parse(s);currentUser=p.user;userSession=p.session;return true;}catch(e){}}return false;}
 function saveSession(user,session){currentUser=user;userSession=session;localStorage.setItem('nexo_session',JSON.stringify({user:user,session:session}));}
 function clearSession(){currentUser=null;userSession=null;localStorage.removeItem('nexo_session');localStorage.removeItem('nexo_premium');}
@@ -2665,12 +2666,13 @@ async function openChat(id){
   // Toujours partir d'un chat vierge sauf si l'utilisateur rouvre explicitement une conversation
   convos[id]=[];
   if(userSession&&currentUser&&currentUser.id){
-    // Ne charge l'historique que si l'utilisateur a explicitement demandé à revoir une conversation
-    // (via le menu sidebar). Par défaut, chat vierge.
     if(_loadHistoryForId===id){
       _loadHistoryForId=null;
       try{
-        var r=await supaAuthFetch(SUPABASE_URL+'/rest/v1/messages?expert=eq.'+id+'&user_id=eq.'+currentUser.id+'&order=created_at.asc&limit=50',{});
+        // Charger seulement les messages du même jour que la conversation sélectionnée
+        var dateFilter=_loadHistoryAfter?'&created_at=gte.'+encodeURIComponent(_loadHistoryAfter):'';
+        _loadHistoryAfter=null;
+        var r=await supaAuthFetch(SUPABASE_URL+'/rest/v1/messages?expert=eq.'+id+'&user_id=eq.'+currentUser.id+dateFilter+'&order=created_at.asc&limit=100',{});
         var hist=await r.json();
         if(hist&&hist.length>0){
           convos[id]=hist.map(function(m){return{role:m.role,content:m.content};});
@@ -3792,24 +3794,30 @@ async function loadSidebarHistory(){
   if(!histEl||!userSession||!currentUser)return;
   histEl.innerHTML='<div style="font-size:.74rem;color:var(--muted);padding:8px 0;">Chargement...</div>';
   try{
-    var r=await supaAuthFetch(SUPABASE_URL+'/rest/v1/messages?user_id=eq.'+currentUser.id+'&order=created_at.desc&limit=200',{});
-    var msgs=await r.json();
-    console.log('[Sidebar] user_id:',currentUser.id,'HTTP:',r.status,'msgs count:',Array.isArray(msgs)?msgs.length:msgs);
+    var r=await supaAuthFetch(SUPABASE_URL+'/rest/v1/messages?user_id=eq.'+currentUser.id+'&order=created_at.desc&limit=300',{});
     var msgs=await r.json();
     if(!Array.isArray(msgs)||msgs.length===0){
       histEl.innerHTML='<div style="font-size:.74rem;color:var(--muted);padding:8px 0;">Aucune conversation pour le moment.</div>';
       return;
     }
-    msgs=msgs.filter(function(m){return m.role==="user";});
-    var seen=new Set();var items=[];
-    msgs.forEach(function(m){
-      if(!seen.has(m.expert)){seen.add(m.expert);items.push(m);}
+    // Garder uniquement les messages utilisateur
+    var userMsgs=msgs.filter(function(m){return m.role==='user';});
+    // Grouper par expert + jour (une entrée par session)
+    var sessions=[];
+    var seenKey=new Set();
+    userMsgs.forEach(function(m){
+      var d=new Date(m.created_at);
+      var dayKey=m.expert+'_'+d.toDateString();
+      if(!seenKey.has(dayKey)){
+        seenKey.add(dayKey);
+        sessions.push({expert:m.expert,content:m.content,created_at:m.created_at,dayStart:new Date(d.getFullYear(),d.getMonth(),d.getDate()).toISOString()});
+      }
     });
     histEl.innerHTML='';
-    items.forEach(function(m){
-      var ex=EXPERTS[m.expert]||{color:'#888',name:m.expert,role:''};
-      var preview=typeof m.content==='string'?m.content.replace(/\n/g,' ').slice(0,55):'';
-      var d=new Date(m.created_at);
+    sessions.forEach(function(s){
+      var ex=EXPERTS[s.expert]||{color:'#888',name:s.expert};
+      var preview=typeof s.content==='string'?s.content.replace(/\n/g,' ').slice(0,55):'';
+      var d=new Date(s.created_at);
       var now2=new Date();
       var isToday=d.toDateString()===now2.toDateString();
       var timeStr=isToday?d.toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'}):d.toLocaleDateString('fr-FR',{day:'2-digit',month:'2-digit'});
@@ -3822,13 +3830,17 @@ async function loadSidebarHistory(){
         '</div>'+
         '<div class="sidebar-hist-time">'+timeStr+'</div>';
       item.addEventListener('click',function(){
-        _loadHistoryForId=m.expert;
+        _loadHistoryForId=s.expert;
+        _loadHistoryAfter=s.dayStart;
         closeSidebar();
-        setTimeout(function(){openChat(m.expert);},300);
+        setTimeout(function(){openChat(s.expert);},300);
       });
       histEl.appendChild(item);
     });
-  }catch(e){histEl.innerHTML='<div style="font-size:.74rem;color:#f87171;">Erreur de chargement.</div>';}
+  }catch(e){
+    console.error('[Sidebar] error:',e);
+    histEl.innerHTML='<div style="font-size:.74rem;color:#f87171;">Erreur de chargement.</div>';
+  }
 }
 
 // ── END SIDEBAR ──
