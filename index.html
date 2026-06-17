@@ -2176,7 +2176,8 @@ async function supabaseSignup(email,password){var r=await fetch(SUPABASE_URL+'/a
 async function supabaseLogin(email,password){var r=await fetch(SUPABASE_URL+'/auth/v1/token?grant_type=password',{method:'POST',headers:{'Content-Type':'application/json','apikey':SUPABASE_ANON},body:JSON.stringify({email:email,password:password})});return r.json();}
 
 var currentUser=null,userSession=null;
-var _genesisSessionFirstMsg=true; // remis à true à chaque ouverture du chat Genesis
+var _genesisSessionFirstMsg=true;
+var _loadHistoryForId=null; // set to expert id when user wants to reload a past conversation
 function loadSession(){var s=localStorage.getItem('nexo_session');if(s){try{var p=JSON.parse(s);currentUser=p.user;userSession=p.session;return true;}catch(e){}}return false;}
 function saveSession(user,session){currentUser=user;userSession=session;localStorage.setItem('nexo_session',JSON.stringify({user:user,session:session}));}
 function clearSession(){currentUser=null;userSession=null;localStorage.removeItem('nexo_session');localStorage.removeItem('nexo_premium');}
@@ -2665,14 +2666,19 @@ async function openChat(id){
   // (évite que les messages de routage "redirect" bloquent le rechargement de l'historique)
   convos[id]=[];
   if(userSession&&currentUser&&currentUser.id){
-    try{
-      var r=await supaAuthFetch(SUPABASE_URL+'/rest/v1/messages?expert=eq.'+id+'&user_id=eq.'+currentUser.id+'&order=created_at.asc&limit=50',{});
-      var hist=await r.json();
-      if(hist&&hist.length>0){
-        convos[id]=hist.map(function(m){return{role:m.role,content:m.content};});
-        convos[id].forEach(function(m){if(m.role==='user')appendUser(_ctText(m.content));else appendBot(_ctText(m.content),id);});
-      }
-    }catch(e){/* silencieux */}
+    // Ne charge l'historique que si l'utilisateur a explicitement demandé à revoir une conversation
+    // (via le menu sidebar). Par défaut, chat vierge.
+    if(_loadHistoryForId===id){
+      _loadHistoryForId=null;
+      try{
+        var r=await supaAuthFetch(SUPABASE_URL+'/rest/v1/messages?expert=eq.'+id+'&user_id=eq.'+currentUser.id+'&order=created_at.asc&limit=50',{});
+        var hist=await r.json();
+        if(hist&&hist.length>0){
+          convos[id]=hist.map(function(m){return{role:m.role,content:m.content};});
+          convos[id].forEach(function(m){if(m.role==='user')appendUser(_ctText(m.content));else appendBot(_ctText(m.content),id);});
+        }
+      }catch(e){}
+    }
   }
 }
 function closeChat(){document.getElementById('chat-view').style.display='none';document.getElementById('home').style.display='block';_genesisSessionFirstMsg=true;}
@@ -3811,6 +3817,7 @@ async function loadSidebarHistory(){
         '</div>'+
         '<div class="sidebar-hist-time">'+timeStr+'</div>';
       item.addEventListener('click',function(){
+        _loadHistoryForId=m.expert;
         closeSidebar();
         setTimeout(function(){openChat(m.expert);},300);
       });      histEl.appendChild(item);
