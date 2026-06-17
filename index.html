@@ -3736,6 +3736,8 @@ function openSidebar(){
   setTimeout(function(){document.getElementById('sidebar-panel').style.transform='translateX(0)';},10);
   _sidebarOpen=true;
   buildSidebarExperts();
+  // Toujours recharger l'historique pour avoir les messages les plus récents
+  document.getElementById('sidebar-history').innerHTML='<div style="font-size:.74rem;color:var(--muted);padding:8px 0;">Chargement...</div>';
   loadSidebarHistory();
 }
 function closeSidebar(){
@@ -3790,12 +3792,15 @@ async function loadSidebarHistory(){
   if(!histEl||!userSession||!currentUser)return;
   histEl.innerHTML='<div style="font-size:.74rem;color:var(--muted);padding:8px 0;">Chargement...</div>';
   try{
-    var r=await supaAuthFetch(SUPABASE_URL+'/rest/v1/messages?role=eq.user&user_id=eq.'+currentUser.id+'&order=created_at.desc&limit=100',{});
+    var r=await supaAuthFetch(SUPABASE_URL+'/rest/v1/messages?user_id=eq.'+currentUser.id+'&order=created_at.desc&limit=200',{});
+    var msgs=await r.json();
+    console.log('[Sidebar] user_id:',currentUser.id,'HTTP:',r.status,'msgs count:',Array.isArray(msgs)?msgs.length:msgs);
     var msgs=await r.json();
     if(!Array.isArray(msgs)||msgs.length===0){
       histEl.innerHTML='<div style="font-size:.74rem;color:var(--muted);padding:8px 0;">Aucune conversation pour le moment.</div>';
       return;
     }
+    msgs=msgs.filter(function(m){return m.role==="user";});
     var seen=new Set();var items=[];
     msgs.forEach(function(m){
       if(!seen.has(m.expert)){seen.add(m.expert);items.push(m);}
