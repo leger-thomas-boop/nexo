@@ -3217,7 +3217,13 @@ async function sendText(txt){
       if(tyEl)tyEl.innerHTML=_genesisThinkingHTML();
       var isFirstMsg=_genesisSessionFirstMsg;
       _genesisSessionFirstMsg=false;
-      var gr2=await fetch('/api/genesis',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({system:_sysWithDate,messages:msgs,userEmail:currentUser&&currentUser.email,isFirstMessage:isFirstMsg})});
+      var userEmail=currentUser&&(currentUser.email||currentUser.user_metadata&&currentUser.user_metadata.email)||'';
+      if(!userEmail){
+        document.getElementById('typing')&&document.getElementById('typing').remove();
+        addBotBubble("❌ Session expirée. Déconnecte-toi et reconnecte-toi.",id);
+        return;
+      }
+      var gr2=await fetch('/api/genesis',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({system:_sysWithDate,messages:msgs,userEmail:userEmail,isFirstMessage:isFirstMsg})});
       var ctype=gr2.headers.get('content-type')||'';
       if(ctype.indexOf('application/json')===-1){
         // ── Réponse en streaming réel (cas le plus courant : un seul modèle) ──
@@ -3246,9 +3252,8 @@ async function sendText(txt){
       document.getElementById('typing')&&document.getElementById('typing').remove();
       if(gd2.redirect){appendGenesisRoute(gd2.redirect.reason,[gd2.redirect.expertId],txt,id);saveMessage(id,'assistant',gd2.redirect.reason);return;}
       if(gd2.ambiguous){appendGenesisRoute(gd2.ambiguous.reason,[gd2.ambiguous.expertId,gd2.ambiguous.expertId2],txt,id);saveMessage(id,'assistant',gd2.ambiguous.reason);return;}
-      if(!gr2.ok||!gd2.text){addBotBubble(gd2.error||"❌ Genesis n'a pas pu répondre, réessayez.",id);return;}
-      var modelsMeta=gd2.models;
-      var modelsMeta=(gd2.models||[modelsHdr2||'claude']);
+      if(!gr2.ok||!gd2.text){addBotBubble('❌ '+(gd2.error||"Genesis n'a pas pu répondre, réessayez."),id);return;}
+      var modelsMeta=(gd2.models||['gpt']);
       if(gd2.claude_score!=null||gd2.gpt_score!=null||gd2.gemini_score!=null){
         modelsMeta=(gd2.models||modelsMeta).map(function(m){
           if(m==='claude'&&gd2.claude_score!=null)return 'claude:'+gd2.claude_score;
