@@ -3438,7 +3438,12 @@ async function loadAdminStats(){
     document.getElementById('adm-total-users').textContent=profiles.length;
     document.getElementById('adm-premium-users').textContent=profiles.filter(function(p){return p.is_premium;}).length;
 
-    var errors=msgs.filter(function(m){return m.role==='assistant'&&typeof m.content==='string'&&(m.content.includes('❌')||m.content.includes('Connexion impossible')||m.content.includes('trop de temps'));});
+    // Vraies erreurs techniques uniquement (pas le contenu normal des réponses)
+    var errors=msgs.filter(function(m){
+      if(m.role!=='assistant')return false;
+      var c=typeof m.content==='string'?m.content:'';
+      return c.startsWith('❌')||c.startsWith('⏱️')||c==='Connexion impossible.'||c.includes('Aucune réponse disponible')||c.includes('n\'a pas pu répondre');
+    });
     var errEl=document.getElementById('adminErrors');
     if(errors.length===0){errEl.innerHTML='<span style="color:#34d399">✅ Aucune erreur détectée.</span>';}
     else{
@@ -3463,15 +3468,15 @@ async function runAdminAnalysis(){
     '- Messages analysés : '+data.msgs.length+'\n'+
     '- Utilisateurs : '+data.profiles.length+' ('+data.profiles.filter(function(p){return p.is_premium;}).length+' premium)\n'+
     '- Utilisation experts : '+expertSummary+'\n'+
-    '- Erreurs : '+errorSummary+'\n\n'+
+    '- Erreurs techniques : '+errorSummary+'\n\n'+
     'Génère un rapport concis (max 300 mots) en 3 sections :\n'+
     '🔴 PROBLÈMES DÉTECTÉS\n🟡 AMÉLIORATIONS SUGGÉRÉES\n✅ CE QUI FONCTIONNE BIEN\n\n'+
     'Sois précis et actionnable. Le développeur lira ce rapport pour coder des corrections.';
   try{
-    var r=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({model:'claude-sonnet-4-5-20250929',max_tokens:600,messages:[{role:'user',content:prompt}]})});
+    // On passe par /api/admin pour éviter le blocage CORS de l'API Anthropic
+    var r=await fetch('/api/admin',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({prompt:prompt})});
     var d=await r.json();
-    var text=(d.content?.[0]?.text)||'Impossible de générer le rapport.';
+    var text=d.text||d.error||'Impossible de générer le rapport.';
     reportEl.innerHTML=text.replace(/\n/g,'<br>').replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>');
     copyBtn.style.display='block';
     copyBtn.dataset.report=text;
