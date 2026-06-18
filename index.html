@@ -3170,12 +3170,40 @@ async function sendText(txt){
   var _sysWithDate=buildSystemWithMemory(ex.system)+" CONTEXTE TEMPOREL : nous sommes aujourd'hui le "+_dateStr+". Utilise systématiquement cette date comme référence pour toute question liée au temps (aujourd'hui, demain, ce week-end, cette semaine, etc.). Ne te base jamais sur une autre date. STYLE DE RÉPONSE : sois bref et direct par défaut — quelques phrases ou un court paragraphe suffisent pour la plupart des questions. N'utilise des titres, sections multiples ou longues listes à puces QUE si la question est complexe ET le justifie vraiment, ou si l'utilisateur demande explicitement plus de détails (\"explique en détail\", \"développe\", \"complet\", etc.). Évite les réponses qui ressemblent à un rapport quand une réponse simple suffit.";
   try{
     if(ex.isGenesis){
-      // Si une image est attachée → rediriger directement vers Nova (expert images)
+      // Si une IMAGE (pas un document) est attachée → rediriger vers Nova
       if(savedImg&&!savedImg.isDocument){
         document.getElementById('typing')&&document.getElementById('typing').remove();
         var redirectMsg='Cette demande concerne une image. Je t\'envoie vers Nova, notre experte en images IA ! 🎨';
         appendGenesisRoute(redirectMsg,['nova'],txt,id);
         saveMessage(id,'assistant',redirectMsg);
+        return;
+      }
+      // Détection d'une demande de génération d'image
+      var imageGenPattern=/g[eé]n[eè]re?|cr[eé]e?|dessine?|fais?(-moi)?|produis?|imagine|crée?|illustre?|montre?-moi|visualise?/i;
+      var imageObjPattern=/image|photo|illustration|dessin|portrait|tableau|logo|affiche|paysage|fond d'[eé]cran|wallpaper|avatar|icône|visuel|artwork/i;
+      var isImageRequest=imageGenPattern.test(txt)&&imageObjPattern.test(txt);
+      if(isImageRequest){
+        document.getElementById('typing')&&document.getElementById('typing').remove();
+        // Afficher un indicateur de génération
+        var tyImg=document.createElement('div');tyImg.className='msg bot typing';tyImg.id='typing';
+        tyImg.innerHTML='<div class="msg-mini-avatar">'+getAvatarMini(id)+'</div><div class="bubble genesis-thinking"><div class="gth-header"><span class="gth-icon">🎨</span><span class="gth-text">Genesis génère votre image</span><span class="gth-dots"><span></span><span></span><span></span></span></div></div>';
+        document.getElementById('msgsArea').appendChild(tyImg);
+        document.getElementById('msgsArea').scrollTop=document.getElementById('msgsArea').scrollHeight;
+        var userEmail2=currentUser&&(currentUser.email||currentUser.user_metadata&&currentUser.user_metadata.email)||'';
+        try{
+          var imgRes=await fetch('/api/image',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({prompt:txt,userEmail:userEmail2})});
+          var imgData=await imgRes.json();
+          document.getElementById('typing')&&document.getElementById('typing').remove();
+          if(!imgRes.ok||!imgData.image){
+            addBotBubble('❌ '+(imgData.error||'Génération échouée. Réessayez ou vérifiez votre abonnement Premium.'),id);
+          }else{
+            appendBotImage(imgData.image,txt,id);
+            saveMessage(id,'assistant','[Image générée : '+txt+']');
+          }
+        }catch(e){
+          document.getElementById('typing')&&document.getElementById('typing').remove();
+          addBotBubble('❌ Erreur lors de la génération. Réessayez.',id);
+        }
         return;
       }
       // Indicateur "réflexion/recherche" animé pour Genesis
