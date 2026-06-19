@@ -3404,11 +3404,11 @@ async function sendText(txt){
     return;
   }
   var msgs=convos[id].slice(-12).map(function(m){return{role:m.role,content:m.content};});
-  // après avoir préparé l'envoi, on remplace l'image stockée par son texte seul
-  // (évite de renvoyer la photo à chaque message suivant = économie + pas de limite)
-  if(img){
+  // après avoir préparé l'envoi, on remplace les fichiers stockés par le texte seul
+  // (évite de renvoyer les photos/documents à chaque message suivant = économie + pas de limite)
+  if(files.length>0){
     var last=convos[id][convos[id].length-1];
-    if(last&&last.role==='user')last.content=(txt||'(photo envoyée)');
+    if(last&&last.role==='user')last.content=(txt||displayTxt||'(fichier envoyé)');
   }
   var _now=new Date();
   var _dateStr=_now.toLocaleDateString('fr-FR',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
