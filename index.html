@@ -3404,11 +3404,11 @@ async function sendText(txt){
     return;
   }
   var msgs=convos[id].slice(-12).map(function(m){return{role:m.role,content:m.content};});
-  // après avoir préparé l'envoi, on remplace les fichiers stockés par le texte seul
-  // (évite de renvoyer les photos/documents à chaque message suivant = économie + pas de limite)
-  if(files.length>0){
+  // après avoir préparé l'envoi, on remplace l'image stockée par son texte seul
+  // (évite de renvoyer la photo à chaque message suivant = économie + pas de limite)
+  if(img){
     var last=convos[id][convos[id].length-1];
-    if(last&&last.role==='user')last.content=(txt||displayTxt||'(fichier envoyé)');
+    if(last&&last.role==='user')last.content=(txt||'(photo envoyée)');
   }
   var _now=new Date();
   var _dateStr=_now.toLocaleDateString('fr-FR',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
@@ -3814,7 +3814,6 @@ async function loadAdminStats(){
   try{
     var r=await fetch('/api/admin',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'stats'})});
     var d=await r.json();
-    if(d.error){console.error('[Admin] API error:',d.error);}
     var msgs=Array.isArray(d.messages)?d.messages:[];
     var profiles=Array.isArray(d.profiles)?d.profiles:[];
 
