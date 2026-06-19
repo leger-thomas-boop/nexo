@@ -1044,6 +1044,7 @@ header{
 .ba-label.before{left:8px;}
 .ba-label.after{right:8px;}
 
+@keyframes ld-pulse{0%,100%{opacity:1;}50%{opacity:.3;}}
 .admin-stat-card{background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:13px;padding:12px;text-align:center;}
 .admin-stat-val{font-family:'Syne',sans-serif;font-weight:800;font-size:1.3rem;color:var(--genesis);}
 .admin-stat-lbl{font-size:.58rem;color:var(--muted);margin-top:2px;}
@@ -1340,8 +1341,8 @@ header{
   <div style="padding:16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px;position:sticky;top:0;background:#080810;z-index:10;">
     <button onclick="closeAdmin()" style="width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,.08);border:1px solid var(--border);color:var(--text);font-size:1rem;cursor:pointer;">←</button>
     <div>
-      <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:1rem;color:var(--genesis);">⚙️ Admin Nexo</div>
-      <div style="font-size:.6rem;color:var(--muted);font-family:'JetBrains Mono',monospace;">Tableau de bord administrateur</div>
+      <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:1rem;color:var(--genesis);display:flex;align-items:center;gap:6px;">⚙️ Admin Nexo<span id="adminLiveDot" style="width:6px;height:6px;border-radius:50%;background:#34d399;animation:ld-pulse 1.6s ease-in-out infinite;"></span></div>
+      <div style="font-size:.6rem;color:var(--muted);font-family:'JetBrains Mono',monospace;">Mis à jour <span id="adminLastUpdate">—</span></div>
     </div>
     <button onclick="runAdminAnalysis()" style="margin-left:auto;padding:8px 16px;border-radius:11px;background:linear-gradient(135deg,var(--genesis),#f59e0b);color:#000;font-family:'Syne',sans-serif;font-weight:800;font-size:.75rem;border:none;cursor:pointer;">🔄 Analyser</button>
   </div>
@@ -1351,6 +1352,8 @@ header{
     <div class="admin-stat-card"><div class="admin-stat-val" id="adm-total-msgs">—</div><div class="admin-stat-lbl">Messages totaux</div></div>
     <div class="admin-stat-card"><div class="admin-stat-val" id="adm-total-users">—</div><div class="admin-stat-lbl">Utilisateurs</div></div>
     <div class="admin-stat-card"><div class="admin-stat-val" id="adm-premium-users">—</div><div class="admin-stat-lbl">Premium</div></div>
+    <div class="admin-stat-card"><div class="admin-stat-val" id="adm-new-subs">—</div><div class="admin-stat-lbl">Nouveaux abonnés (7j)</div></div>
+    <div class="admin-stat-card"><div class="admin-stat-val" id="adm-msgs-today">—</div><div class="admin-stat-lbl">Messages aujourd'hui</div></div>
     <div class="admin-stat-card"><div class="admin-stat-val" id="adm-top-expert">—</div><div class="admin-stat-lbl">Expert le + utilisé</div></div>
   </div>
 
@@ -1361,6 +1364,16 @@ header{
       <span style="color:var(--muted);">Clique sur "Analyser" pour générer un rapport.</span>
     </div>
     <button id="adminCopyBtn" onclick="copyAdminReport()" style="display:none;margin-top:8px;padding:8px 16px;border-radius:10px;background:rgba(255,255,255,.06);border:1px solid var(--border);color:var(--muted);font-size:.7rem;font-family:'JetBrains Mono',monospace;cursor:pointer;">⧉ Copier le rapport</button>
+  </div>
+
+  <!-- Chat avec l'IA admin -->
+  <div style="padding:0 16px 16px;">
+    <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:.85rem;color:var(--text);margin-bottom:10px;">💬 Poser une question sur l'app</div>
+    <div id="adminChatLog" style="display:flex;flex-direction:column;gap:8px;margin-bottom:10px;max-height:340px;overflow-y:auto;"></div>
+    <div style="display:flex;gap:8px;">
+      <input id="adminChatInput" type="text" placeholder="Ex: pourquoi Nova plante parfois ?" style="flex:1;padding:10px 14px;border-radius:12px;background:rgba(255,255,255,.04);border:1px solid var(--border);color:var(--text);font-size:.8rem;outline:none;" onkeydown="if(event.key==='Enter')askAdminAI()">
+      <button onclick="askAdminAI()" style="padding:10px 16px;border-radius:12px;background:linear-gradient(135deg,var(--genesis),#f59e0b);border:none;color:#000;font-weight:800;cursor:pointer;">➤</button>
+    </div>
   </div>
 
   <!-- Expert usage -->
@@ -3780,13 +3793,22 @@ async function checkAdminPwd(){
     document.getElementById('admin-login').style.display='none';
     document.getElementById('admin-panel').style.display='block';
     loadAdminStats();
+    startAdminAutoRefresh();
   }else{
     document.getElementById('adminPwdErr').style.display='block';
     document.getElementById('adminPwdInput').value='';
     document.getElementById('adminPwdInput').focus();
   }
 }
-function closeAdmin(){document.getElementById('admin-panel').style.display='none';}
+var _adminRefreshInterval=null;
+function startAdminAutoRefresh(){
+  if(_adminRefreshInterval)clearInterval(_adminRefreshInterval);
+  _adminRefreshInterval=setInterval(loadAdminStats,15000); // rafraîchit toutes les 15s
+}
+function stopAdminAutoRefresh(){
+  if(_adminRefreshInterval){clearInterval(_adminRefreshInterval);_adminRefreshInterval=null;}
+}
+function closeAdmin(){document.getElementById('admin-panel').style.display='none';stopAdminAutoRefresh();}
 
 async function loadAdminStats(){
   try{
@@ -3820,6 +3842,18 @@ async function loadAdminStats(){
     document.getElementById('adm-total-users').textContent=profiles.length;
     document.getElementById('adm-premium-users').textContent=profiles.filter(function(p){return p.is_premium;}).length;
 
+    // Nouveaux abonnés sur les 7 derniers jours (basé sur created_at du profil)
+    var weekAgo=new Date();weekAgo.setDate(weekAgo.getDate()-7);
+    var newSubs=profiles.filter(function(p){return p.created_at&&new Date(p.created_at)>=weekAgo;}).length;
+    document.getElementById('adm-new-subs').textContent=newSubs;
+
+    // Messages envoyés aujourd'hui
+    var todayStart=new Date();todayStart.setHours(0,0,0,0);
+    var msgsToday=msgs.filter(function(m){return m.created_at&&new Date(m.created_at)>=todayStart;}).length;
+    document.getElementById('adm-msgs-today').textContent=msgsToday;
+
+    document.getElementById('adminLastUpdate').textContent=new Date().toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit',second:'2-digit'});
+
     var errors=msgs.filter(function(m){
       if(m.role!=='assistant')return false;
       var c=typeof m.content==='string'?m.content:'';
@@ -3832,7 +3866,7 @@ async function loadAdminStats(){
         return '<div style="padding:6px 10px;background:rgba(248,113,113,.08);border:1px solid rgba(248,113,113,.2);border-radius:8px;margin-bottom:4px;">🔴 ['+e.expert+'] '+String(e.content).slice(0,120)+'</div>';
       }).join('');
     }
-    return {msgs:msgs,expertCount:expertCount,profiles:profiles,errors:errors};
+    return {msgs:msgs,expertCount:expertCount,profiles:profiles,errors:errors,newSubs:newSubs,msgsToday:msgsToday};
   }catch(e){console.error('Admin stats:',e);}
 }
 
@@ -3847,7 +3881,9 @@ async function runAdminAnalysis(){
   var errorSummary=data.errors.length===0?'Aucune':data.errors.slice(-3).map(function(e){return '['+e.expert+'] '+String(e.content).slice(0,80);}).join(' | ');
   var prompt='Tu es analyste SaaS. Voici les données de Nexo (app multi-IA française) :\n\n'+
     '- Messages analysés : '+data.msgs.length+'\n'+
+    '- Messages aujourd\'hui : '+data.msgsToday+'\n'+
     '- Utilisateurs : '+data.profiles.length+' ('+data.profiles.filter(function(p){return p.is_premium;}).length+' premium)\n'+
+    '- Nouveaux abonnés (7 derniers jours) : '+data.newSubs+'\n'+
     '- Utilisation experts : '+expertSummary+'\n'+
     '- Erreurs techniques : '+errorSummary+'\n\n'+
     'Génère un rapport concis (max 300 mots) en 3 sections :\n'+
@@ -3869,6 +3905,67 @@ function copyAdminReport(){
     document.getElementById('adminCopyBtn').textContent='✓ Copié !';
     setTimeout(function(){document.getElementById('adminCopyBtn').textContent='⧉ Copier le rapport';},2000);
   });
+}
+
+// ── CHAT ADMIN : poser des questions libres sur l'état de l'app ──
+var _adminChatHistory=[];
+function appendAdminChatMsg(role,text){
+  var log=document.getElementById('adminChatLog');
+  var div=document.createElement('div');
+  var isUser=role==='user';
+  div.style.cssText='align-self:'+(isUser?'flex-end':'flex-start')+';max-width:85%;padding:9px 13px;border-radius:13px;font-size:.78rem;line-height:1.5;'+
+    (isUser?'background:linear-gradient(135deg,var(--genesis),#f59e0b);color:#1c0a00;':'background:rgba(255,255,255,.04);border:1px solid var(--border);color:rgba(240,240,248,.85);');
+  div.innerHTML=esc(text).replace(/\n/g,'<br>').replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>');
+  log.appendChild(div);
+  log.scrollTop=log.scrollHeight;
+}
+async function askAdminAI(){
+  var input=document.getElementById('adminChatInput');
+  var question=input.value.trim();
+  if(!question)return;
+  input.value='';
+  appendAdminChatMsg('user',question);
+  _adminChatHistory.push({role:'user',text:question});
+
+  var thinkingDiv=document.createElement('div');
+  thinkingDiv.id='adminChatThinking';
+  thinkingDiv.style.cssText='align-self:flex-start;font-size:.74rem;color:var(--muted);padding:6px 0;';
+  thinkingDiv.textContent='✨ Analyse en cours...';
+  document.getElementById('adminChatLog').appendChild(thinkingDiv);
+  document.getElementById('adminChatLog').scrollTop=document.getElementById('adminChatLog').scrollHeight;
+
+  // Recharger les données fraîches pour répondre avec le contexte le plus à jour
+  var data=await loadAdminStats();
+  var contextStr='Aucune donnée disponible.';
+  if(data){
+    var expertSummary=Object.entries(data.expertCount).sort(function(a,b){return b[1]-a[1];}).map(function(e){return e[0]+':'+e[1];}).join(', ');
+    var errorSummary=data.errors.length===0?'Aucune erreur récente':data.errors.slice(-8).map(function(e){return '['+e.expert+'] '+String(e.content).slice(0,150);}).join('\n');
+    contextStr='DONNÉES EN TEMPS RÉEL DE NEXO :\n'+
+      '- Messages totaux : '+data.msgs.length+'\n'+
+      '- Messages aujourd\'hui : '+data.msgsToday+'\n'+
+      '- Utilisateurs : '+data.profiles.length+' (dont '+data.profiles.filter(function(p){return p.is_premium;}).length+' premium)\n'+
+      '- Nouveaux abonnés (7 derniers jours) : '+data.newSubs+'\n'+
+      '- Utilisation par expert : '+expertSummary+'\n'+
+      '- Erreurs techniques récentes :\n'+errorSummary;
+  }
+
+  var historyStr=_adminChatHistory.slice(-6).map(function(m){return (m.role==='user'?'Question admin':'Toi')+': '+m.text;}).join('\n');
+  var prompt='Tu es l\'assistant technique de Thomas, le développeur de Nexo (app SaaS multi-IA française). '+
+    'Tu as accès aux données ci-dessous pour répondre précisément à ses questions sur l\'état de l\'application, les bugs potentiels, les statistiques, et les abonnements.\n\n'+
+    contextStr+'\n\nHistorique récent de la conversation :\n'+historyStr+'\n\n'+
+    'Réponds de façon concise, précise et actionnable (max 150 mots), en français, en te basant uniquement sur les données fournies. Si l\'information n\'est pas dans les données, dis-le clairement plutôt que d\'inventer.';
+
+  try{
+    var r=await fetch('/api/admin',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({prompt:prompt})});
+    var d=await r.json();
+    document.getElementById('adminChatThinking')?.remove();
+    var answer=d.text||d.error||'Impossible de répondre pour le moment.';
+    appendAdminChatMsg('assistant',answer);
+    _adminChatHistory.push({role:'assistant',text:answer});
+  }catch(e){
+    document.getElementById('adminChatThinking')?.remove();
+    appendAdminChatMsg('assistant','❌ Erreur : '+e.message);
+  }
 }
 // ── END ADMIN ──
 
