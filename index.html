@@ -989,6 +989,38 @@ header{
 .disc-genesis-row{padding:6px 10px;background:rgba(255,255,255,.04);border-radius:9px;font-size:.74rem;color:rgba(240,240,248,.8);}
 .disc-genesis-row strong{color:var(--genesis);}
 
+/* ── NOVA TOGGLES & PROGRESS ── */
+.nova-toggle{
+  background:rgba(255,255,255,.04);border:1px solid var(--border);color:var(--muted);
+  font-size:.66rem;padding:5px 10px;border-radius:20px;cursor:pointer;transition:.15s;
+  font-family:'JetBrains Mono',monospace;
+}
+.nova-toggle.active{background:rgba(244,114,182,.12);border-color:rgba(244,114,182,.4);color:var(--nova);}
+.nova-progress-wrap{padding:8px 14px;}
+.nova-progress-bar{height:4px;border-radius:4px;background:rgba(255,255,255,.08);overflow:hidden;}
+.nova-progress-fill{height:100%;background:linear-gradient(90deg,var(--nova),#fbcfe8);border-radius:4px;width:0%;transition:width .4s ease;animation:nova-pulse 1.5s ease-in-out infinite;}
+@keyframes nova-pulse{0%,100%{opacity:1;}50%{opacity:.6;}}
+.nova-progress-label{font-size:.62rem;color:var(--muted);margin-top:4px;font-family:'JetBrains Mono',monospace;}
+
+/* ── BEFORE/AFTER SLIDER ── */
+.ba-slider{position:relative;border-radius:16px;overflow:hidden;max-width:280px;margin-top:6px;user-select:none;touch-action:none;}
+.ba-slider img{display:block;width:100%;height:auto;}
+.ba-after{position:relative;}
+.ba-before-wrap{position:absolute;inset:0;overflow:hidden;width:50%;}
+.ba-before-wrap img{width:280px;max-width:280px;}
+.ba-handle{
+  position:absolute;top:0;bottom:0;left:50%;width:3px;background:#fff;
+  cursor:ew-resize;transform:translateX(-50%);box-shadow:0 0 8px rgba(0,0,0,.4);
+}
+.ba-handle::after{
+  content:'⇔';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+  width:30px;height:30px;background:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  color:#000;font-size:.85rem;box-shadow:0 2px 8px rgba(0,0,0,.3);
+}
+.ba-label{position:absolute;bottom:8px;font-size:.6rem;color:#fff;background:rgba(0,0,0,.5);padding:2px 8px;border-radius:8px;font-family:'JetBrains Mono',monospace;}
+.ba-label.before{left:8px;}
+.ba-label.after{right:8px;}
+
 .admin-stat-card{background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:13px;padding:12px;text-align:center;}
 .admin-stat-val{font-family:'Syne',sans-serif;font-weight:800;font-size:1.3rem;color:var(--genesis);}
 .admin-stat-lbl{font-size:.58rem;color:var(--muted);margin-top:2px;}
@@ -1951,6 +1983,12 @@ header{
     </div>
     <button class="back-btn" onclick="closeChat()" title="Retour">←</button>
   </div>
+  <!-- Réglages Nova (visible uniquement pour l'expert images) -->
+  <div id="novaToggles" style="display:none;padding:8px 14px;border-bottom:1px solid var(--border);display:none;flex-wrap:wrap;gap:6px;">
+    <button class="nova-toggle active" id="toggleHD" onclick="toggleNovaSetting('hd')">⚡ HD</button>
+    <button class="nova-toggle active" id="toggleFace" onclick="toggleNovaSetting('face')">😊 Visage préservé</button>
+    <button class="nova-toggle active" id="toggleBg" onclick="toggleNovaSetting('bg')">🖼️ Fond préservé</button>
+  </div>
   <div class="msgs" id="msgsArea"></div>
   <div class="sugg-area" id="suggArea"></div>
   <div class="limit-bar" id="limitBar">
@@ -2639,6 +2677,7 @@ async function openChat(id){
     document.getElementById('home').style.display='none';
     document.getElementById('chat-view').style.display='flex';
     document.getElementById('chatHdrName').textContent=ex.name;
+  var novaTogglesEl=document.getElementById('novaToggles');if(novaTogglesEl)novaTogglesEl.style.display=(ex.imageGen?'flex':'none');
     document.getElementById('chatHdrStatus').textContent=ex.role;
     document.getElementById('chatAvatarMini').innerHTML=getAvatarMini(id);
     document.getElementById('sendBtn').style.background='linear-gradient(135deg,'+ex.color+','+ex.color+'cc)';
@@ -2651,6 +2690,7 @@ async function openChat(id){
   }
   if(!convos[id]) convos[id]=[];
   document.getElementById('chatHdrName').textContent=ex.name;
+  var novaTogglesEl=document.getElementById('novaToggles');if(novaTogglesEl)novaTogglesEl.style.display=(ex.imageGen?'flex':'none');
   document.getElementById('chatHdrStatus').textContent=ex.role;
   document.getElementById('chatAvatarMini').innerHTML=getAvatarMini(id);
   document.getElementById('sendBtn').style.background='linear-gradient(135deg,'+ex.color+','+ex.color+'cc)';
@@ -2922,12 +2962,72 @@ async function genesisAnswerDirectly(id){
     streamBotBubble(gd2.text,id,gd2.models);saveMessage(id,'assistant',gd2.text);
   }catch(e){document.getElementById('typing')&&document.getElementById('typing').remove();addBotBubble("❌ Connexion impossible.",id);}
 }
-function appendBotImage(imageUrl,prompt,id){
+function appendBotImage(imageUrl,prompt,id,originalImageUrl){
   var area=document.getElementById('msgsArea');
   var div=document.createElement('div');div.className='msg bot';
   var safePrompt=esc(prompt||'Image générée');
-  div.innerHTML='<div class="msg-mini-avatar">'+getAvatarMini(id)+'</div><div style="flex:1;min-width:0;"><div class="bubble"><img class="generated-image" src="'+imageUrl+'" alt="'+safePrompt+'"><div style="margin-top:6px;font-size:.82rem;"><strong>Image générée !</strong> Tu peux la télécharger ou me demander une variante.</div><a class="download-img-btn" href="'+imageUrl+'" download="nexo-nova.png" target="_blank">⬇ Télécharger</a></div><div class="msg-foot"><span class="msg-time">'+now()+'</span></div></div>';
+  var imgBlock;
+  if(originalImageUrl){
+    var sliderId='ba'+Date.now();
+    imgBlock='<div class="ba-slider" id="'+sliderId+'">'+
+      '<div class="ba-after"><img src="'+imageUrl+'" alt="'+safePrompt+'"></div>'+
+      '<div class="ba-before-wrap"><img src="'+originalImageUrl+'" alt="avant"></div>'+
+      '<div class="ba-handle"></div>'+
+      '<div class="ba-label before">Avant</div><div class="ba-label after">Après</div>'+
+      '</div>';
+  }else{
+    imgBlock='<img class="generated-image" src="'+imageUrl+'" alt="'+safePrompt+'">';
+  }
+  div.innerHTML='<div class="msg-mini-avatar">'+getAvatarMini(id)+'</div><div style="flex:1;min-width:0;"><div class="bubble">'+imgBlock+'<div style="margin-top:6px;font-size:.82rem;"><strong>Image '+(originalImageUrl?'modifiée':'générée')+' !</strong> Tu peux la télécharger ou me demander une variante.</div><a class="download-img-btn" href="'+imageUrl+'" download="nexo-nova.png" target="_blank">⬇ Télécharger</a></div><div class="msg-foot"><span class="msg-time">'+now()+'</span></div></div>';
   area.appendChild(div);area.scrollTop=area.scrollHeight;
+  if(originalImageUrl)initBeforeAfterSlider(div.querySelector('.ba-slider'));
+}
+function initBeforeAfterSlider(slider){
+  if(!slider)return;
+  var beforeWrap=slider.querySelector('.ba-before-wrap');
+  var handle=slider.querySelector('.ba-handle');
+  var dragging=false;
+  function setPos(clientX){
+    var rect=slider.getBoundingClientRect();
+    var pct=Math.max(0,Math.min(100,((clientX-rect.left)/rect.width)*100));
+    beforeWrap.style.width=pct+'%';
+    handle.style.left=pct+'%';
+  }
+  function onMove(e){if(!dragging)return;var x=e.touches?e.touches[0].clientX:e.clientX;setPos(x);}
+  function onUp(){dragging=false;}
+  handle.addEventListener('mousedown',function(){dragging=true;});
+  handle.addEventListener('touchstart',function(){dragging=true;},{passive:true});
+  slider.addEventListener('mousedown',function(e){dragging=true;setPos(e.clientX);});
+  document.addEventListener('mousemove',onMove);
+  document.addEventListener('touchmove',onMove,{passive:true});
+  document.addEventListener('mouseup',onUp);
+  document.addEventListener('touchend',onUp);
+}
+// ── NOVA : réglages (HD / préserver visage / préserver fond) ──
+var novaSettings={hd:true,face:true,bg:true};
+function toggleNovaSetting(key){
+  novaSettings[key]=!novaSettings[key];
+  var idMap={hd:'toggleHD',face:'toggleFace',bg:'toggleBg'};
+  var btn=document.getElementById(idMap[key]);
+  if(btn)btn.classList.toggle('active',novaSettings[key]);
+}
+function showNovaProgress(){
+  var area=document.getElementById('msgsArea');
+  var wrap=document.createElement('div');wrap.className='nova-progress-wrap';wrap.id='novaProgress';
+  wrap.innerHTML='<div class="nova-progress-bar"><div class="nova-progress-fill" id="novaProgressFill" style="width:30%"></div></div><div class="nova-progress-label">🎨 Nova travaille sur ton image...</div>';
+  area.appendChild(wrap);area.scrollTop=area.scrollHeight;
+  var pct=30;
+  var interval=setInterval(function(){
+    pct=Math.min(90,pct+Math.random()*15);
+    var fill=document.getElementById('novaProgressFill');
+    if(fill)fill.style.width=pct+'%';else clearInterval(interval);
+  },500);
+  return interval;
+}
+function hideNovaProgress(interval){
+  if(interval)clearInterval(interval);
+  var el=document.getElementById('novaProgress');
+  if(el)el.remove();
 }
 function copyMsg(btn,key){
   var txt=_copyStore[key]||'';
@@ -3131,15 +3231,19 @@ async function sendText(txt){
       return;
     }
     try{
-      var novaPayload={prompt:txt,userEmail:currentUser&&currentUser.email};
-      // Si une photo est jointe → mode édition avec Flux Kontext
+      var novaPayload={prompt:txt,userEmail:currentUser&&currentUser.email,hdQuality:novaSettings.hd,preserveFace:novaSettings.face,preserveBackground:novaSettings.bg};
+      var originalDataUrl=null;
+      // Si une photo est jointe → mode édition fidèle
       if(savedImg){
         novaPayload.imageBase64=savedImg.data;
         novaPayload.imageMediaType=savedImg.media_type;
+        originalDataUrl='data:'+savedImg.media_type+';base64,'+savedImg.data;
       }
+      document.getElementById('typing')&&document.getElementById('typing').remove();
+      var progressInterval=showNovaProgress();
       var gr=await fetch('/api/image',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(novaPayload)});
       var gd=await gr.json();
-      document.getElementById('typing')&&document.getElementById('typing').remove();
+      hideNovaProgress(progressInterval);
       if(!gr.ok||!gd.image){
         var errMsg=gd.error||"❌ Impossible de générer l'image pour le moment.";
         addBotBubble(errMsg,id);
@@ -3147,14 +3251,14 @@ async function sendText(txt){
       }
       var modeMsg=novaPayload.imageBase64?'Image modifiée : ':'Image générée : ';
       convos[id].push({role:'assistant',content:modeMsg+txt});
-      appendBotImage(gd.image,txt,id);
+      appendBotImage(gd.image,txt,id,originalDataUrl);
       saveMessage(id,'assistant',modeMsg+txt);
       // Affiche le compteur restant
       if(typeof gd.remaining!=='undefined'){
         var remTxt='_Il te reste **'+gd.remaining+' image'+(gd.remaining>1?'s':'')+' ce mois-ci**._';
         addBotBubble(remTxt,id);
       }
-    }catch(e){document.getElementById('typing')&&document.getElementById('typing').remove();addBotBubble('❌ Génération impossible pour le moment.',id);}
+    }catch(e){document.getElementById('typing')&&document.getElementById('typing').remove();hideNovaProgress();addBotBubble('❌ Génération impossible pour le moment.',id);}
     return;
   }
   var msgs=convos[id].slice(-12).map(function(m){return{role:m.role,content:m.content};});
@@ -3170,12 +3274,40 @@ async function sendText(txt){
   var _sysWithDate=buildSystemWithMemory(ex.system)+" CONTEXTE TEMPOREL : nous sommes aujourd'hui le "+_dateStr+". Utilise systématiquement cette date comme référence pour toute question liée au temps (aujourd'hui, demain, ce week-end, cette semaine, etc.). Ne te base jamais sur une autre date. STYLE DE RÉPONSE : sois bref et direct par défaut — quelques phrases ou un court paragraphe suffisent pour la plupart des questions. N'utilise des titres, sections multiples ou longues listes à puces QUE si la question est complexe ET le justifie vraiment, ou si l'utilisateur demande explicitement plus de détails (\"explique en détail\", \"développe\", \"complet\", etc.). Évite les réponses qui ressemblent à un rapport quand une réponse simple suffit.";
   try{
     if(ex.isGenesis){
-      // Si une image est attachée → rediriger directement vers Nova (expert images)
+      // Si une IMAGE (pas un document) est attachée → rediriger vers Nova
       if(savedImg&&!savedImg.isDocument){
         document.getElementById('typing')&&document.getElementById('typing').remove();
         var redirectMsg='Cette demande concerne une image. Je t\'envoie vers Nova, notre experte en images IA ! 🎨';
         appendGenesisRoute(redirectMsg,['nova'],txt,id);
         saveMessage(id,'assistant',redirectMsg);
+        return;
+      }
+      // Détection d'une demande de génération d'image
+      var imageGenPattern=/g[eé]n[eè]re?|cr[eé]e?|dessine?|fais?(-moi)?|produis?|imagine|crée?|illustre?|montre?-moi|visualise?/i;
+      var imageObjPattern=/image|photo|illustration|dessin|portrait|tableau|logo|affiche|paysage|fond d'[eé]cran|wallpaper|avatar|icône|visuel|artwork/i;
+      var isImageRequest=imageGenPattern.test(txt)&&imageObjPattern.test(txt);
+      if(isImageRequest){
+        document.getElementById('typing')&&document.getElementById('typing').remove();
+        // Afficher un indicateur de génération
+        var tyImg=document.createElement('div');tyImg.className='msg bot typing';tyImg.id='typing';
+        tyImg.innerHTML='<div class="msg-mini-avatar">'+getAvatarMini(id)+'</div><div class="bubble genesis-thinking"><div class="gth-header"><span class="gth-icon">🎨</span><span class="gth-text">Genesis génère votre image</span><span class="gth-dots"><span></span><span></span><span></span></span></div></div>';
+        document.getElementById('msgsArea').appendChild(tyImg);
+        document.getElementById('msgsArea').scrollTop=document.getElementById('msgsArea').scrollHeight;
+        var userEmail2=currentUser&&(currentUser.email||currentUser.user_metadata&&currentUser.user_metadata.email)||'';
+        try{
+          var imgRes=await fetch('/api/image',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({prompt:txt,userEmail:userEmail2})});
+          var imgData=await imgRes.json();
+          document.getElementById('typing')&&document.getElementById('typing').remove();
+          if(!imgRes.ok||!imgData.image){
+            addBotBubble('❌ '+(imgData.error||'Génération échouée. Réessayez ou vérifiez votre abonnement Premium.'),id);
+          }else{
+            appendBotImage(imgData.image,txt,id);
+            saveMessage(id,'assistant','[Image générée : '+txt+']');
+          }
+        }catch(e){
+          document.getElementById('typing')&&document.getElementById('typing').remove();
+          addBotBubble('❌ Erreur lors de la génération. Réessayez.',id);
+        }
         return;
       }
       // Indicateur "réflexion/recherche" animé pour Genesis
@@ -3713,6 +3845,7 @@ function newConversation(id){
     current=id;
     if(id==='genesis')_genesisSessionFirstMsg=true;
     document.getElementById('chatHdrName').textContent=ex.name;
+  var novaTogglesEl=document.getElementById('novaToggles');if(novaTogglesEl)novaTogglesEl.style.display=(ex.imageGen?'flex':'none');
     document.getElementById('chatHdrStatus').textContent=ex.role;
     document.getElementById('chatAvatarMini').innerHTML=getAvatarMini(id);
     document.getElementById('sendBtn').style.background='linear-gradient(135deg,'+ex.color+','+ex.color+'cc)';
