@@ -324,29 +324,6 @@ header{position:sticky;top:0;z-index:200;background:rgba(8,8,16,.88);backdrop-fi
 .img-remove{width:26px;height:26px;border-radius:8px;border:1px solid var(--border);background:rgba(255,255,255,.05);color:var(--muted);cursor:pointer;font-size:.7rem;flex-shrink:0;}
 .img-remove:hover{background:rgba(239,68,68,.12);color:#f87171;}
 .msg .bubble img{max-width:200px;border-radius:12px;margin-bottom:6px;display:block;}
-.msg .bubble img.generated-image,.msg .bubble .ba-slider{cursor:zoom-in;}
-
-/* ── PIÈCES JOINTES MULTIPLES ── */
-.attach-thumb{position:relative;flex-shrink:0;width:42px;height:42px;}
-.attach-thumb img{width:42px;height:42px;border-radius:10px;object-fit:cover;border:1px solid var(--border);display:block;}
-.attach-thumb.is-doc{width:42px;height:42px;border-radius:10px;background:rgba(255,255,255,.06);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:1.1rem;}
-.attach-thumb-remove{
-  position:absolute;top:-5px;right:-5px;width:16px;height:16px;border-radius:50%;
-  background:#f87171;color:#fff;font-size:.55rem;display:flex;align-items:center;justify-content:center;
-  border:none;cursor:pointer;line-height:1;
-}
-.attach-count-badge{font-size:.62rem;color:var(--muted);align-self:center;white-space:nowrap;padding:0 4px;}
-
-/* ── ZOOM IMAGE MODAL ── */
-#imgZoomOverlay{
-  position:fixed;inset:0;z-index:900;background:rgba(0,0,0,.92);display:none;
-  align-items:center;justify-content:center;max-width:600px;margin:0 auto;left:50%;transform:translateX(-50%);width:100%;
-  touch-action:none;
-}
-#imgZoomOverlay img{max-width:94%;max-height:80vh;border-radius:8px;object-fit:contain;transition:transform .15s ease;touch-action:none;}
-.img-zoom-close{position:absolute;top:18px;right:18px;width:38px;height:38px;border-radius:50%;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);color:#fff;font-size:1.1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;}
-.img-zoom-hint{position:absolute;bottom:24px;left:50%;transform:translateX(-50%);font-size:.65rem;color:rgba(255,255,255,.5);font-family:'JetBrains Mono',monospace;}
-
 .msg-inp{flex:1;border:1.5px solid var(--border);border-radius:18px;padding:10px 16px;font-family:'DM Sans',sans-serif;font-size:.84rem;resize:none;outline:none;max-height:100px;background:rgba(255,255,255,.05);color:var(--text);line-height:1.45;transition:.2s;}
 .msg-inp:focus{border-color:rgba(244,162,97,.3);}
 .msg-inp::placeholder{color:#2a2a3a;}
@@ -1012,39 +989,6 @@ header{
 .disc-genesis-row{padding:6px 10px;background:rgba(255,255,255,.04);border-radius:9px;font-size:.74rem;color:rgba(240,240,248,.8);}
 .disc-genesis-row strong{color:var(--genesis);}
 
-/* ── NOVA TOGGLES & PROGRESS ── */
-.nova-toggle{
-  background:rgba(255,255,255,.04);border:1px solid var(--border);color:var(--muted);
-  font-size:.66rem;padding:5px 10px;border-radius:20px;cursor:pointer;transition:.15s;
-  font-family:'JetBrains Mono',monospace;
-}
-.nova-toggle.active{background:rgba(244,114,182,.12);border-color:rgba(244,114,182,.4);color:var(--nova);}
-.nova-progress-wrap{padding:8px 14px;}
-.nova-progress-bar{height:4px;border-radius:4px;background:rgba(255,255,255,.08);overflow:hidden;}
-.nova-progress-fill{height:100%;background:linear-gradient(90deg,var(--nova),#fbcfe8);border-radius:4px;width:0%;transition:width .4s ease;animation:nova-pulse 1.5s ease-in-out infinite;}
-@keyframes nova-pulse{0%,100%{opacity:1;}50%{opacity:.6;}}
-.nova-progress-label{font-size:.62rem;color:var(--muted);margin-top:4px;font-family:'JetBrains Mono',monospace;}
-
-/* ── BEFORE/AFTER SLIDER ── */
-.ba-slider{position:relative;border-radius:16px;overflow:hidden;max-width:280px;margin-top:6px;user-select:none;touch-action:none;}
-.ba-slider img{display:block;width:100%;height:auto;}
-.ba-after{position:relative;}
-.ba-before-wrap{position:absolute;inset:0;overflow:hidden;width:50%;}
-.ba-before-wrap img{width:280px;max-width:280px;}
-.ba-handle{
-  position:absolute;top:0;bottom:0;left:50%;width:3px;background:#fff;
-  cursor:ew-resize;transform:translateX(-50%);box-shadow:0 0 8px rgba(0,0,0,.4);
-}
-.ba-handle::after{
-  content:'⇔';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
-  width:30px;height:30px;background:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;
-  color:#000;font-size:.85rem;box-shadow:0 2px 8px rgba(0,0,0,.3);
-}
-.ba-label{position:absolute;bottom:8px;font-size:.6rem;color:#fff;background:rgba(0,0,0,.5);padding:2px 8px;border-radius:8px;font-family:'JetBrains Mono',monospace;}
-.ba-label.before{left:8px;}
-.ba-label.after{right:8px;}
-
-@keyframes ld-pulse{0%,100%{opacity:1;}50%{opacity:.3;}}
 .admin-stat-card{background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:13px;padding:12px;text-align:center;}
 .admin-stat-val{font-family:'Syne',sans-serif;font-weight:800;font-size:1.3rem;color:var(--genesis);}
 .admin-stat-lbl{font-size:.58rem;color:var(--muted);margin-top:2px;}
@@ -1317,13 +1261,6 @@ header{
   <div class="menu-item danger" onclick="doLogout()">Se déconnecter</div>
 </div>
 
-<!-- ZOOM IMAGE -->
-<div id="imgZoomOverlay" onclick="if(event.target===this)closeImgZoom()">
-  <button class="img-zoom-close" onclick="closeImgZoom()">✕</button>
-  <img id="imgZoomTarget" src="" alt="">
-  <div class="img-zoom-hint">Pince pour zoomer</div>
-</div>
-
 <!-- ADMIN LOGIN -->
 <div id="admin-login" style="display:none;position:fixed;inset:0;z-index:700;background:rgba(8,8,16,.97);backdrop-filter:blur(20px);display:none;flex-direction:column;align-items:center;justify-content:center;gap:16px;max-width:600px;margin:0 auto;left:50%;transform:translateX(-50%);width:100%;">
   <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:1.3rem;color:var(--genesis);">⚙️ Admin Nexo</div>
@@ -1341,8 +1278,8 @@ header{
   <div style="padding:16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px;position:sticky;top:0;background:#080810;z-index:10;">
     <button onclick="closeAdmin()" style="width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,.08);border:1px solid var(--border);color:var(--text);font-size:1rem;cursor:pointer;">←</button>
     <div>
-      <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:1rem;color:var(--genesis);display:flex;align-items:center;gap:6px;">⚙️ Admin Nexo<span id="adminLiveDot" style="width:6px;height:6px;border-radius:50%;background:#34d399;animation:ld-pulse 1.6s ease-in-out infinite;"></span></div>
-      <div style="font-size:.6rem;color:var(--muted);font-family:'JetBrains Mono',monospace;">Mis à jour <span id="adminLastUpdate">—</span></div>
+      <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:1rem;color:var(--genesis);">⚙️ Admin Nexo</div>
+      <div style="font-size:.6rem;color:var(--muted);font-family:'JetBrains Mono',monospace;">Tableau de bord administrateur</div>
     </div>
     <button onclick="runAdminAnalysis()" style="margin-left:auto;padding:8px 16px;border-radius:11px;background:linear-gradient(135deg,var(--genesis),#f59e0b);color:#000;font-family:'Syne',sans-serif;font-weight:800;font-size:.75rem;border:none;cursor:pointer;">🔄 Analyser</button>
   </div>
@@ -1352,8 +1289,6 @@ header{
     <div class="admin-stat-card"><div class="admin-stat-val" id="adm-total-msgs">—</div><div class="admin-stat-lbl">Messages totaux</div></div>
     <div class="admin-stat-card"><div class="admin-stat-val" id="adm-total-users">—</div><div class="admin-stat-lbl">Utilisateurs</div></div>
     <div class="admin-stat-card"><div class="admin-stat-val" id="adm-premium-users">—</div><div class="admin-stat-lbl">Premium</div></div>
-    <div class="admin-stat-card"><div class="admin-stat-val" id="adm-new-subs">—</div><div class="admin-stat-lbl">Nouveaux abonnés (7j)</div></div>
-    <div class="admin-stat-card"><div class="admin-stat-val" id="adm-msgs-today">—</div><div class="admin-stat-lbl">Messages aujourd'hui</div></div>
     <div class="admin-stat-card"><div class="admin-stat-val" id="adm-top-expert">—</div><div class="admin-stat-lbl">Expert le + utilisé</div></div>
   </div>
 
@@ -1364,16 +1299,6 @@ header{
       <span style="color:var(--muted);">Clique sur "Analyser" pour générer un rapport.</span>
     </div>
     <button id="adminCopyBtn" onclick="copyAdminReport()" style="display:none;margin-top:8px;padding:8px 16px;border-radius:10px;background:rgba(255,255,255,.06);border:1px solid var(--border);color:var(--muted);font-size:.7rem;font-family:'JetBrains Mono',monospace;cursor:pointer;">⧉ Copier le rapport</button>
-  </div>
-
-  <!-- Chat avec l'IA admin -->
-  <div style="padding:0 16px 16px;">
-    <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:.85rem;color:var(--text);margin-bottom:10px;">💬 Poser une question sur l'app</div>
-    <div id="adminChatLog" style="display:flex;flex-direction:column;gap:8px;margin-bottom:10px;max-height:340px;overflow-y:auto;"></div>
-    <div style="display:flex;gap:8px;">
-      <input id="adminChatInput" type="text" placeholder="Ex: pourquoi Nova plante parfois ?" style="flex:1;padding:10px 14px;border-radius:12px;background:rgba(255,255,255,.04);border:1px solid var(--border);color:var(--text);font-size:.8rem;outline:none;" onkeydown="if(event.key==='Enter')askAdminAI()">
-      <button onclick="askAdminAI()" style="padding:10px 16px;border-radius:12px;background:linear-gradient(135deg,var(--genesis),#f59e0b);border:none;color:#000;font-weight:800;cursor:pointer;">➤</button>
-    </div>
   </div>
 
   <!-- Expert usage -->
@@ -2026,12 +1951,6 @@ header{
     </div>
     <button class="back-btn" onclick="closeChat()" title="Retour">←</button>
   </div>
-  <!-- Réglages Nova (visible uniquement pour l'expert images) -->
-  <div id="novaToggles" style="display:none;padding:8px 14px;border-bottom:1px solid var(--border);display:none;flex-wrap:wrap;gap:6px;">
-    <button class="nova-toggle active" id="toggleHD" onclick="toggleNovaSetting('hd')">⚡ HD</button>
-    <button class="nova-toggle active" id="toggleFace" onclick="toggleNovaSetting('face')">😊 Visage préservé</button>
-    <button class="nova-toggle active" id="toggleBg" onclick="toggleNovaSetting('bg')">🖼️ Fond préservé</button>
-  </div>
   <div class="msgs" id="msgsArea"></div>
   <div class="sugg-area" id="suggArea"></div>
   <div class="limit-bar" id="limitBar">
@@ -2039,12 +1958,13 @@ header{
     <span class="limit-upgrade" onclick="showPremium()">Passer Premium →</span>
   </div>
   <div id="imgPreview" class="img-preview" style="display:none">
-    <div id="imgPreviewList" style="display:flex;gap:6px;overflow-x:auto;flex:1;"></div>
-    <button class="img-remove" onclick="clearAttachedImage()" title="Tout retirer">✕</button>
+    <img id="imgPreviewThumb" src="" alt="">
+    <span id="imgPreviewName">Photo jointe</span>
+    <button class="img-remove" onclick="clearAttachedImage()">✕</button>
   </div>
   <div class="input-wrap">
-    <input type="file" id="photoInput" accept="image/*,application/pdf,.pdf,.doc,.docx,.txt" multiple style="display:none" onchange="onPhotoPicked(event)">
-    <button class="attach-btn" id="attachBtn" onclick="document.getElementById('photoInput').click()" title="Envoyer des photos ou documents" style="display:none">📎</button>
+    <input type="file" id="photoInput" accept="image/*,application/pdf,.pdf,.doc,.docx,.txt" style="display:none" onchange="onPhotoPicked(event)">
+    <button class="attach-btn" id="attachBtn" onclick="document.getElementById('photoInput').click()" title="Envoyer une photo ou un document" style="display:none">📎</button>
     <textarea class="msg-inp" id="msgInp" placeholder="Écrivez votre question..." rows="1" oninput="autoGrow(this)" onkeydown="onKey(event)"></textarea>
     <button class="send-btn" id="sendBtn" onclick="sendMsg()">➤</button>
   </div>
@@ -2719,7 +2639,6 @@ async function openChat(id){
     document.getElementById('home').style.display='none';
     document.getElementById('chat-view').style.display='flex';
     document.getElementById('chatHdrName').textContent=ex.name;
-  var novaTogglesEl=document.getElementById('novaToggles');if(novaTogglesEl)novaTogglesEl.style.display=(ex.imageGen?'flex':'none');
     document.getElementById('chatHdrStatus').textContent=ex.role;
     document.getElementById('chatAvatarMini').innerHTML=getAvatarMini(id);
     document.getElementById('sendBtn').style.background='linear-gradient(135deg,'+ex.color+','+ex.color+'cc)';
@@ -2732,7 +2651,6 @@ async function openChat(id){
   }
   if(!convos[id]) convos[id]=[];
   document.getElementById('chatHdrName').textContent=ex.name;
-  var novaTogglesEl=document.getElementById('novaToggles');if(novaTogglesEl)novaTogglesEl.style.display=(ex.imageGen?'flex':'none');
   document.getElementById('chatHdrStatus').textContent=ex.role;
   document.getElementById('chatAvatarMini').innerHTML=getAvatarMini(id);
   document.getElementById('sendBtn').style.background='linear-gradient(135deg,'+ex.color+','+ex.color+'cc)';
@@ -3004,86 +2922,12 @@ async function genesisAnswerDirectly(id){
     streamBotBubble(gd2.text,id,gd2.models);saveMessage(id,'assistant',gd2.text);
   }catch(e){document.getElementById('typing')&&document.getElementById('typing').remove();addBotBubble("❌ Connexion impossible.",id);}
 }
-function appendBotImage(imageUrl,prompt,id,originalImageUrl){
+function appendBotImage(imageUrl,prompt,id){
   var area=document.getElementById('msgsArea');
   var div=document.createElement('div');div.className='msg bot';
   var safePrompt=esc(prompt||'Image générée');
-  var imgBlock;
-  if(originalImageUrl){
-    var sliderId='ba'+Date.now();
-    imgBlock='<div class="ba-slider" id="'+sliderId+'">'+
-      '<div class="ba-after"><img src="'+imageUrl+'" alt="'+safePrompt+'"></div>'+
-      '<div class="ba-before-wrap"><img src="'+originalImageUrl+'" alt="avant"></div>'+
-      '<div class="ba-handle"></div>'+
-      '<div class="ba-label before">Avant</div><div class="ba-label after">Après</div>'+
-      '</div>';
-  }else{
-    imgBlock='<img class="generated-image" src="'+imageUrl+'" alt="'+safePrompt+'">';
-  }
-  div.innerHTML='<div class="msg-mini-avatar">'+getAvatarMini(id)+'</div><div style="flex:1;min-width:0;"><div class="bubble">'+imgBlock+'<div style="margin-top:6px;font-size:.82rem;"><strong>Image '+(originalImageUrl?'modifiée':'générée')+' !</strong> Tu peux la télécharger ou me demander une variante.</div><a class="download-img-btn" href="'+imageUrl+'" download="nexo-nova.png" target="_blank">⬇ Télécharger</a></div><div class="msg-foot"><span class="msg-time">'+now()+'</span></div></div>';
+  div.innerHTML='<div class="msg-mini-avatar">'+getAvatarMini(id)+'</div><div style="flex:1;min-width:0;"><div class="bubble"><img class="generated-image" src="'+imageUrl+'" alt="'+safePrompt+'"><div style="margin-top:6px;font-size:.82rem;"><strong>Image générée !</strong> Tu peux la télécharger ou me demander une variante.</div><a class="download-img-btn" href="'+imageUrl+'" download="nexo-nova.png" target="_blank">⬇ Télécharger</a></div><div class="msg-foot"><span class="msg-time">'+now()+'</span></div></div>';
   area.appendChild(div);area.scrollTop=area.scrollHeight;
-  if(originalImageUrl){
-    var sliderEl=div.querySelector('.ba-slider');
-    initBeforeAfterSlider(sliderEl);
-    // Tap (sans glisser) sur le slider → zoom sur l'image "après"
-    var downX=0,downY=0,moved=false;
-    sliderEl.addEventListener('mousedown',function(e){downX=e.clientX;downY=e.clientY;moved=false;});
-    sliderEl.addEventListener('mousemove',function(e){if(Math.abs(e.clientX-downX)>6||Math.abs(e.clientY-downY)>6)moved=true;});
-    sliderEl.addEventListener('mouseup',function(e){if(!moved&&e.target.tagName!=='BUTTON')openImgZoom(imageUrl);});
-    sliderEl.addEventListener('touchstart',function(e){var t=e.touches[0];downX=t.clientX;downY=t.clientY;moved=false;},{passive:true});
-    sliderEl.addEventListener('touchmove',function(e){var t=e.touches[0];if(Math.abs(t.clientX-downX)>6||Math.abs(t.clientY-downY)>6)moved=true;},{passive:true});
-    sliderEl.addEventListener('touchend',function(e){if(!moved)openImgZoom(imageUrl);});
-  }else{
-    var genImg=div.querySelector('.generated-image');
-    if(genImg)genImg.addEventListener('click',function(){openImgZoom(imageUrl);});
-  }
-}
-function initBeforeAfterSlider(slider){
-  if(!slider)return;
-  var beforeWrap=slider.querySelector('.ba-before-wrap');
-  var handle=slider.querySelector('.ba-handle');
-  var dragging=false;
-  function setPos(clientX){
-    var rect=slider.getBoundingClientRect();
-    var pct=Math.max(0,Math.min(100,((clientX-rect.left)/rect.width)*100));
-    beforeWrap.style.width=pct+'%';
-    handle.style.left=pct+'%';
-  }
-  function onMove(e){if(!dragging)return;var x=e.touches?e.touches[0].clientX:e.clientX;setPos(x);}
-  function onUp(){dragging=false;}
-  handle.addEventListener('mousedown',function(){dragging=true;});
-  handle.addEventListener('touchstart',function(){dragging=true;},{passive:true});
-  slider.addEventListener('mousedown',function(e){dragging=true;setPos(e.clientX);});
-  document.addEventListener('mousemove',onMove);
-  document.addEventListener('touchmove',onMove,{passive:true});
-  document.addEventListener('mouseup',onUp);
-  document.addEventListener('touchend',onUp);
-}
-// ── NOVA : réglages (HD / préserver visage / préserver fond) ──
-var novaSettings={hd:true,face:true,bg:true};
-function toggleNovaSetting(key){
-  novaSettings[key]=!novaSettings[key];
-  var idMap={hd:'toggleHD',face:'toggleFace',bg:'toggleBg'};
-  var btn=document.getElementById(idMap[key]);
-  if(btn)btn.classList.toggle('active',novaSettings[key]);
-}
-function showNovaProgress(){
-  var area=document.getElementById('msgsArea');
-  var wrap=document.createElement('div');wrap.className='nova-progress-wrap';wrap.id='novaProgress';
-  wrap.innerHTML='<div class="nova-progress-bar"><div class="nova-progress-fill" id="novaProgressFill" style="width:30%"></div></div><div class="nova-progress-label">🎨 Nova travaille sur ton image...</div>';
-  area.appendChild(wrap);area.scrollTop=area.scrollHeight;
-  var pct=30;
-  var interval=setInterval(function(){
-    pct=Math.min(90,pct+Math.random()*15);
-    var fill=document.getElementById('novaProgressFill');
-    if(fill)fill.style.width=pct+'%';else clearInterval(interval);
-  },500);
-  return interval;
-}
-function hideNovaProgress(interval){
-  if(interval)clearInterval(interval);
-  var el=document.getElementById('novaProgress');
-  if(el)el.remove();
 }
 function copyMsg(btn,key){
   var txt=_copyStore[key]||'';
@@ -3120,7 +2964,7 @@ function _ctImg(content){
 function appendUser(text,imgUrl){
   var area=document.getElementById('msgsArea');
   var div=document.createElement('div');div.className='msg user';
-  var imgHtml=imgUrl?'<img src="'+imgUrl+'" alt="photo" style="cursor:zoom-in;" onclick="openImgZoom(this.src)">':'';
+  var imgHtml=imgUrl?'<img src="'+imgUrl+'" alt="photo">':'';
   div.innerHTML='<div><div class="bubble">'+imgHtml+esc(text)+'</div><div class="msg-time">'+now()+'</div></div>';
   area.appendChild(div);area.scrollTop=area.scrollHeight;
 }
@@ -3172,144 +3016,77 @@ function updateLimitBar(id){
 }
 function onKey(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendMsg();}}
 
-// ── PIÈCES JOINTES (photos + documents, sélection multiple) ──
-var _attachedFiles=[]; // [{media_type, data(base64 no prefix), dataUrl, isDocument, fileName?}]
-var MAX_ATTACHMENTS=5;
-
+// ── PHOTO ATTACHMENT ──
+var _attachedImage=null; // {media_type, data(base64 no prefix), dataUrl}
 function onPhotoPicked(e){
-  var files=Array.prototype.slice.call(e.target.files||[]);
-  if(!files.length)return;
-  if(_attachedFiles.length+files.length>MAX_ATTACHMENTS){
-    alert('Maximum '+MAX_ATTACHMENTS+' fichiers à la fois.');
-    files=files.slice(0,MAX_ATTACHMENTS-_attachedFiles.length);
+  var file=e.target.files&&e.target.files[0];
+  if(!file)return;
+  if(file.size>20*1024*1024){alert('Le fichier est trop lourd (max 20 Mo).');e.target.value='';return;}
+
+  // ── Documents (PDF, doc, txt) ──
+  if(file.type&&!file.type.startsWith('image/')){
+    var docReader=new FileReader();
+    docReader.onload=function(){
+      var dataUrl=docReader.result;
+      var comma=dataUrl.indexOf(',');
+      _attachedImage={media_type:file.type||'application/pdf',data:dataUrl.substring(comma+1),dataUrl:dataUrl,isDocument:true,fileName:file.name};
+      document.getElementById('imgPreviewThumb').style.display='none';
+      var ip=document.getElementById('imgPreview');
+      var nameEl=ip.querySelector('.doc-filename');
+      if(!nameEl){nameEl=document.createElement('div');nameEl.className='doc-filename';nameEl.style.cssText='font-size:.7rem;color:var(--text);padding:0 8px;display:flex;align-items:center;gap:4px;';ip.insertBefore(nameEl,ip.firstChild);}
+      nameEl.style.display='flex';nameEl.textContent='📄 '+file.name;
+      ip.style.display='flex';
+    };
+    docReader.readAsDataURL(file);
+    e.target.value='';return;
   }
-  files.forEach(function(file){
-    if(file.size>20*1024*1024){alert(file.name+' est trop lourd (max 20 Mo).');return;}
 
-    // ── Documents (PDF, doc, txt) ──
-    if(file.type&&!file.type.startsWith('image/')){
-      var docReader=new FileReader();
-      docReader.onload=function(){
-        var dataUrl=docReader.result;
-        var comma=dataUrl.indexOf(',');
-        _attachedFiles.push({media_type:file.type||'application/pdf',data:dataUrl.substring(comma+1),dataUrl:dataUrl,isDocument:true,fileName:file.name});
-        renderAttachmentPreviews();
-      };
-      docReader.readAsDataURL(file);
-      return;
+  // ── Images : toutes converties via canvas → JPEG (résout HEIC, HEIF, WebP, PNG...) ──
+  // createObjectURL + Image() gère automatiquement HEIC sur iOS Safari récent (iOS 16+)
+  var objectUrl=URL.createObjectURL(file);
+  var img=new Image();
+  img.onload=function(){
+    var canvas=document.createElement('canvas');
+    var maxSize=1024;
+    var w=img.naturalWidth||img.width;
+    var h=img.naturalHeight||img.height;
+    if(w>maxSize||h>maxSize){
+      if(w>h){h=Math.round(h*maxSize/w);w=maxSize;}
+      else{w=Math.round(w*maxSize/h);h=maxSize;}
     }
-
-    // ── Images : conversion via canvas → JPEG (résout HEIC, HEIF, WebP...) ──
-    var objectUrl=URL.createObjectURL(file);
-    var img=new Image();
-    img.onload=function(){
-      var canvas=document.createElement('canvas');
-      var maxSize=1024;
-      var w=img.naturalWidth||img.width;
-      var h=img.naturalHeight||img.height;
-      if(w>maxSize||h>maxSize){
-        if(w>h){h=Math.round(h*maxSize/w);w=maxSize;}
-        else{w=Math.round(w*maxSize/h);h=maxSize;}
-      }
-      canvas.width=w;canvas.height=h;
-      var ctx=canvas.getContext('2d');
-      ctx.drawImage(img,0,0,w,h);
-      URL.revokeObjectURL(objectUrl);
-      var compressed=canvas.toDataURL('image/jpeg',0.88);
-      var comma=compressed.indexOf(',');
-      _attachedFiles.push({media_type:'image/jpeg',data:compressed.substring(comma+1),dataUrl:compressed,isDocument:false});
-      renderAttachmentPreviews();
-    };
-    img.onerror=function(){
-      URL.revokeObjectURL(objectUrl);
-      alert('Format non supporté pour '+file.name+'. Essaie de convertir la photo en JPEG depuis tes réglages iPhone : Réglages → Appareil photo → Formats → "Le plus compatible".');
-    };
-    img.src=objectUrl;
-  });
+    canvas.width=w;canvas.height=h;
+    var ctx=canvas.getContext('2d');
+    ctx.drawImage(img,0,0,w,h);
+    URL.revokeObjectURL(objectUrl);
+    var compressed=canvas.toDataURL('image/jpeg',0.88);
+    var comma=compressed.indexOf(',');
+    _attachedImage={media_type:'image/jpeg',data:compressed.substring(comma+1),dataUrl:compressed,isDocument:false};
+    document.getElementById('imgPreviewThumb').style.display='block';
+    document.getElementById('imgPreviewThumb').src=compressed;
+    var ip=document.getElementById('imgPreview');
+    var nameEl=ip.querySelector('.doc-filename');
+    if(nameEl)nameEl.style.display='none';
+    ip.style.display='flex';
+  };
+  img.onerror=function(){
+    URL.revokeObjectURL(objectUrl);
+    alert('Format non supporté. Essaie de convertir la photo en JPEG depuis tes réglages iPhone : Réglages → Appareil photo → Formats → "Le plus compatible".');
+  };
+  img.src=objectUrl;
   e.target.value='';
 }
-
-function renderAttachmentPreviews(){
-  var ip=document.getElementById('imgPreview');
-  var list=document.getElementById('imgPreviewList');
-  if(_attachedFiles.length===0){ip.style.display='none';list.innerHTML='';return;}
-  ip.style.display='flex';
-  list.innerHTML='';
-  _attachedFiles.forEach(function(f,idx){
-    var thumb=document.createElement('div');
-    thumb.className='attach-thumb'+(f.isDocument?' is-doc':'');
-    if(f.isDocument){
-      thumb.innerHTML='📄<button class="attach-thumb-remove" onclick="removeAttachment('+idx+')">✕</button>';
-    }else{
-      thumb.innerHTML='<img src="'+f.dataUrl+'" alt=""><button class="attach-thumb-remove" onclick="removeAttachment('+idx+')">✕</button>';
-    }
-    list.appendChild(thumb);
-  });
-  if(_attachedFiles.length>1){
-    var badge=document.createElement('div');
-    badge.className='attach-count-badge';
-    badge.textContent=_attachedFiles.length+' fichiers';
-    list.appendChild(badge);
-  }
-}
-
-function removeAttachment(idx){
-  _attachedFiles.splice(idx,1);
-  renderAttachmentPreviews();
-}
-
 function clearAttachedImage(){
-  _attachedFiles=[];
+  _attachedImage=null;
   document.getElementById('imgPreview').style.display='none';
-  document.getElementById('imgPreviewList').innerHTML='';
+  document.getElementById('imgPreviewThumb').src='';
+  document.getElementById('imgPreviewThumb').style.display='block';
+  var nameEl=document.querySelector('#imgPreview .doc-filename');
+  if(nameEl)nameEl.style.display='none';
 }
-
-// ── ZOOM IMAGE (pinch-to-zoom basique) ──
-function openImgZoom(src){
-  var overlay=document.getElementById('imgZoomOverlay');
-  var target=document.getElementById('imgZoomTarget');
-  target.src=src;
-  target.style.transform='scale(1)';
-  overlay.style.display='flex';
-  _zoomScale=1;
-}
-function closeImgZoom(){
-  document.getElementById('imgZoomOverlay').style.display='none';
-}
-var _zoomScale=1;
-(function initImgZoomGestures(){
-  var target,startDist=0,startScale=1;
-  function dist(touches){var dx=touches[0].clientX-touches[1].clientX;var dy=touches[0].clientY-touches[1].clientY;return Math.sqrt(dx*dx+dy*dy);}
-  document.addEventListener('touchstart',function(e){
-    if(e.target.id!=='imgZoomTarget')return;
-    target=e.target;
-    if(e.touches.length===2){startDist=dist(e.touches);startScale=_zoomScale;}
-  },{passive:true});
-  document.addEventListener('touchmove',function(e){
-    if(!target||e.touches.length!==2)return;
-    var newDist=dist(e.touches);
-    _zoomScale=Math.max(1,Math.min(4,startScale*(newDist/startDist)));
-    target.style.transform='scale('+_zoomScale+')';
-  },{passive:true});
-  document.addEventListener('touchend',function(e){
-    if(e.touches.length<2)startDist=0;
-  });
-  // Double-tap pour zoomer/dézoomer sur desktop+mobile
-  var lastTap=0;
-  document.addEventListener('click',function(e){
-    if(e.target.id!=='imgZoomTarget')return;
-    var now2=Date.now();
-    if(now2-lastTap<300){
-      _zoomScale=_zoomScale>1?1:2;
-      e.target.style.transform='scale('+_zoomScale+')';
-    }
-    lastTap=now2;
-  });
-})();
 
 function sendMsg(){
   var inp=document.getElementById('msgInp');var txt=inp.value.trim();
-  if(!txt && _attachedFiles.length===0)return;
+  if(!txt && !_attachedImage)return;
   inp.value='';autoGrow(inp);
   sendText(txt);
 }
@@ -3317,40 +3094,21 @@ async function sendText(txt){
   var id=current;var ex=EXPERTS[id];
   document.getElementById('suggArea').innerHTML='';
   if(!isPremium&&getUsage(id)>=ex.freeLimit){showLocked(id);return;}
-  // fichiers joints (uniquement pour experts avec vision)
-  var files=(ex.vision && _attachedFiles.length>0)?_attachedFiles.slice():[];
-  var displayTxt=txt;
-  if(!displayTxt&&files.length>0){
-    var docCount=files.filter(function(f){return f.isDocument;}).length;
-    var imgCount=files.length-docCount;
-    var parts=[];
-    if(imgCount>0)parts.push(imgCount+' photo'+(imgCount>1?'s':''));
-    if(docCount>0)parts.push(docCount+' document'+(docCount>1?'s':''));
-    displayTxt='('+parts.join(' + ')+' envoyé'+(files.length>1?'s':'')+')';
-  }
-  // Affiche la première image jointe en aperçu dans la bulle utilisateur (les autres sont listées dans le texte)
-  var firstImgPreview=files.find(function(f){return !f.isDocument;});
-  appendUser(displayTxt,firstImgPreview?firstImgPreview.dataUrl:null);
-  // contenu pour l'API : tableau multimodal si fichiers, sinon texte simple
+  // image jointe (uniquement pour experts avec vision)
+  var img=(ex.vision && _attachedImage)?_attachedImage:null;
+  var displayTxt=txt||(img?(img.isDocument?('(document envoyé : '+img.fileName+')'):'(photo envoyée)'):'');
+  appendUser(displayTxt,(img&&!img.isDocument)?img.dataUrl:null);
+  // contenu pour l'API : tableau multimodal si image, sinon texte simple
   var apiContent;
-  if(files.length>0){
-    apiContent=[];
-    files.forEach(function(f){
-      if(f.isDocument){
-        apiContent.push({type:'document',source:{type:'base64',media_type:f.media_type,data:f.data}});
-      }else{
-        apiContent.push({type:'image',source:{type:'base64',media_type:f.media_type,data:f.data}});
-      }
-    });
-    if(txt){
-      apiContent.push({type:'text',text:txt});
+  if(img){
+    if(img.isDocument){
+      apiContent=[{type:'document',source:{type:'base64',media_type:img.media_type,data:img.data}}];
+      if(txt)apiContent.push({type:'text',text:txt});
+      else apiContent.push({type:'text',text:'Analyse ce document et donne-moi un résumé clair ainsi que tes conseils.'});
     }else{
-      var hasDoc=files.some(function(f){return f.isDocument;});
-      var hasImg=files.some(function(f){return !f.isDocument;});
-      var defaultTxt=hasDoc&&hasImg?'Analyse ces documents et photos, donne-moi un résumé clair et tes conseils.':
-        hasDoc?'Analyse ce'+(files.length>1?'s documents':' document')+' et donne-moi un résumé clair ainsi que tes conseils.':
-        'Analyse cette'+(files.length>1?'s photos':' photo')+' et donne-moi ton diagnostic et tes conseils.';
-      apiContent.push({type:'text',text:defaultTxt});
+      apiContent=[{type:'image',source:{type:'base64',media_type:img.media_type,data:img.data}}];
+      if(txt)apiContent.push({type:'text',text:txt});
+      else apiContent.push({type:'text',text:'Analyse cette photo liée à l\'impression 3D et donne-moi ton diagnostic et tes conseils.'});
     }
   }else{
     apiContent=txt;
@@ -3359,8 +3117,8 @@ async function sendText(txt){
   convos[id].push({role:'user',content:apiContent});
   saveMessage(id,'user',displayTxt);
   incUsage(id);updateLimitBar(id);
-  // Sauvegarde le premier fichier image AVANT de vider (Nova en a besoin après)
-  var savedImg=firstImgPreview?{data:firstImgPreview.data,media_type:firstImgPreview.media_type}:null;
+  // Sauvegarde l'image AVANT de vider (Nova en a besoin après)
+  var savedImg=_attachedImage?{data:_attachedImage.data,media_type:_attachedImage.media_type}:null;
   clearAttachedImage();
   var area=document.getElementById('msgsArea');
   var ty=document.createElement('div');ty.className='msg bot typing';ty.id='typing';
@@ -3373,19 +3131,15 @@ async function sendText(txt){
       return;
     }
     try{
-      var novaPayload={prompt:txt,userEmail:currentUser&&currentUser.email,hdQuality:novaSettings.hd,preserveFace:novaSettings.face,preserveBackground:novaSettings.bg};
-      var originalDataUrl=null;
-      // Si une photo est jointe → mode édition fidèle
+      var novaPayload={prompt:txt,userEmail:currentUser&&currentUser.email};
+      // Si une photo est jointe → mode édition avec Flux Kontext
       if(savedImg){
         novaPayload.imageBase64=savedImg.data;
         novaPayload.imageMediaType=savedImg.media_type;
-        originalDataUrl='data:'+savedImg.media_type+';base64,'+savedImg.data;
       }
-      document.getElementById('typing')&&document.getElementById('typing').remove();
-      var progressInterval=showNovaProgress();
       var gr=await fetch('/api/image',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(novaPayload)});
       var gd=await gr.json();
-      hideNovaProgress(progressInterval);
+      document.getElementById('typing')&&document.getElementById('typing').remove();
       if(!gr.ok||!gd.image){
         var errMsg=gd.error||"❌ Impossible de générer l'image pour le moment.";
         addBotBubble(errMsg,id);
@@ -3393,14 +3147,14 @@ async function sendText(txt){
       }
       var modeMsg=novaPayload.imageBase64?'Image modifiée : ':'Image générée : ';
       convos[id].push({role:'assistant',content:modeMsg+txt});
-      appendBotImage(gd.image,txt,id,originalDataUrl);
+      appendBotImage(gd.image,txt,id);
       saveMessage(id,'assistant',modeMsg+txt);
       // Affiche le compteur restant
       if(typeof gd.remaining!=='undefined'){
         var remTxt='_Il te reste **'+gd.remaining+' image'+(gd.remaining>1?'s':'')+' ce mois-ci**._';
         addBotBubble(remTxt,id);
       }
-    }catch(e){document.getElementById('typing')&&document.getElementById('typing').remove();hideNovaProgress();addBotBubble('❌ Génération impossible pour le moment.',id);}
+    }catch(e){document.getElementById('typing')&&document.getElementById('typing').remove();addBotBubble('❌ Génération impossible pour le moment.',id);}
     return;
   }
   var msgs=convos[id].slice(-12).map(function(m){return{role:m.role,content:m.content};});
@@ -3793,22 +3547,13 @@ async function checkAdminPwd(){
     document.getElementById('admin-login').style.display='none';
     document.getElementById('admin-panel').style.display='block';
     loadAdminStats();
-    startAdminAutoRefresh();
   }else{
     document.getElementById('adminPwdErr').style.display='block';
     document.getElementById('adminPwdInput').value='';
     document.getElementById('adminPwdInput').focus();
   }
 }
-var _adminRefreshInterval=null;
-function startAdminAutoRefresh(){
-  if(_adminRefreshInterval)clearInterval(_adminRefreshInterval);
-  _adminRefreshInterval=setInterval(loadAdminStats,15000); // rafraîchit toutes les 15s
-}
-function stopAdminAutoRefresh(){
-  if(_adminRefreshInterval){clearInterval(_adminRefreshInterval);_adminRefreshInterval=null;}
-}
-function closeAdmin(){document.getElementById('admin-panel').style.display='none';stopAdminAutoRefresh();}
+function closeAdmin(){document.getElementById('admin-panel').style.display='none';}
 
 async function loadAdminStats(){
   try{
@@ -3842,18 +3587,6 @@ async function loadAdminStats(){
     document.getElementById('adm-total-users').textContent=profiles.length;
     document.getElementById('adm-premium-users').textContent=profiles.filter(function(p){return p.is_premium;}).length;
 
-    // Nouveaux abonnés sur les 7 derniers jours (basé sur created_at du profil)
-    var weekAgo=new Date();weekAgo.setDate(weekAgo.getDate()-7);
-    var newSubs=profiles.filter(function(p){return p.created_at&&new Date(p.created_at)>=weekAgo;}).length;
-    document.getElementById('adm-new-subs').textContent=newSubs;
-
-    // Messages envoyés aujourd'hui
-    var todayStart=new Date();todayStart.setHours(0,0,0,0);
-    var msgsToday=msgs.filter(function(m){return m.created_at&&new Date(m.created_at)>=todayStart;}).length;
-    document.getElementById('adm-msgs-today').textContent=msgsToday;
-
-    document.getElementById('adminLastUpdate').textContent=new Date().toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit',second:'2-digit'});
-
     var errors=msgs.filter(function(m){
       if(m.role!=='assistant')return false;
       var c=typeof m.content==='string'?m.content:'';
@@ -3866,7 +3599,7 @@ async function loadAdminStats(){
         return '<div style="padding:6px 10px;background:rgba(248,113,113,.08);border:1px solid rgba(248,113,113,.2);border-radius:8px;margin-bottom:4px;">🔴 ['+e.expert+'] '+String(e.content).slice(0,120)+'</div>';
       }).join('');
     }
-    return {msgs:msgs,expertCount:expertCount,profiles:profiles,errors:errors,newSubs:newSubs,msgsToday:msgsToday};
+    return {msgs:msgs,expertCount:expertCount,profiles:profiles,errors:errors};
   }catch(e){console.error('Admin stats:',e);}
 }
 
@@ -3881,9 +3614,7 @@ async function runAdminAnalysis(){
   var errorSummary=data.errors.length===0?'Aucune':data.errors.slice(-3).map(function(e){return '['+e.expert+'] '+String(e.content).slice(0,80);}).join(' | ');
   var prompt='Tu es analyste SaaS. Voici les données de Nexo (app multi-IA française) :\n\n'+
     '- Messages analysés : '+data.msgs.length+'\n'+
-    '- Messages aujourd\'hui : '+data.msgsToday+'\n'+
     '- Utilisateurs : '+data.profiles.length+' ('+data.profiles.filter(function(p){return p.is_premium;}).length+' premium)\n'+
-    '- Nouveaux abonnés (7 derniers jours) : '+data.newSubs+'\n'+
     '- Utilisation experts : '+expertSummary+'\n'+
     '- Erreurs techniques : '+errorSummary+'\n\n'+
     'Génère un rapport concis (max 300 mots) en 3 sections :\n'+
@@ -3905,67 +3636,6 @@ function copyAdminReport(){
     document.getElementById('adminCopyBtn').textContent='✓ Copié !';
     setTimeout(function(){document.getElementById('adminCopyBtn').textContent='⧉ Copier le rapport';},2000);
   });
-}
-
-// ── CHAT ADMIN : poser des questions libres sur l'état de l'app ──
-var _adminChatHistory=[];
-function appendAdminChatMsg(role,text){
-  var log=document.getElementById('adminChatLog');
-  var div=document.createElement('div');
-  var isUser=role==='user';
-  div.style.cssText='align-self:'+(isUser?'flex-end':'flex-start')+';max-width:85%;padding:9px 13px;border-radius:13px;font-size:.78rem;line-height:1.5;'+
-    (isUser?'background:linear-gradient(135deg,var(--genesis),#f59e0b);color:#1c0a00;':'background:rgba(255,255,255,.04);border:1px solid var(--border);color:rgba(240,240,248,.85);');
-  div.innerHTML=esc(text).replace(/\n/g,'<br>').replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>');
-  log.appendChild(div);
-  log.scrollTop=log.scrollHeight;
-}
-async function askAdminAI(){
-  var input=document.getElementById('adminChatInput');
-  var question=input.value.trim();
-  if(!question)return;
-  input.value='';
-  appendAdminChatMsg('user',question);
-  _adminChatHistory.push({role:'user',text:question});
-
-  var thinkingDiv=document.createElement('div');
-  thinkingDiv.id='adminChatThinking';
-  thinkingDiv.style.cssText='align-self:flex-start;font-size:.74rem;color:var(--muted);padding:6px 0;';
-  thinkingDiv.textContent='✨ Analyse en cours...';
-  document.getElementById('adminChatLog').appendChild(thinkingDiv);
-  document.getElementById('adminChatLog').scrollTop=document.getElementById('adminChatLog').scrollHeight;
-
-  // Recharger les données fraîches pour répondre avec le contexte le plus à jour
-  var data=await loadAdminStats();
-  var contextStr='Aucune donnée disponible.';
-  if(data){
-    var expertSummary=Object.entries(data.expertCount).sort(function(a,b){return b[1]-a[1];}).map(function(e){return e[0]+':'+e[1];}).join(', ');
-    var errorSummary=data.errors.length===0?'Aucune erreur récente':data.errors.slice(-8).map(function(e){return '['+e.expert+'] '+String(e.content).slice(0,150);}).join('\n');
-    contextStr='DONNÉES EN TEMPS RÉEL DE NEXO :\n'+
-      '- Messages totaux : '+data.msgs.length+'\n'+
-      '- Messages aujourd\'hui : '+data.msgsToday+'\n'+
-      '- Utilisateurs : '+data.profiles.length+' (dont '+data.profiles.filter(function(p){return p.is_premium;}).length+' premium)\n'+
-      '- Nouveaux abonnés (7 derniers jours) : '+data.newSubs+'\n'+
-      '- Utilisation par expert : '+expertSummary+'\n'+
-      '- Erreurs techniques récentes :\n'+errorSummary;
-  }
-
-  var historyStr=_adminChatHistory.slice(-6).map(function(m){return (m.role==='user'?'Question admin':'Toi')+': '+m.text;}).join('\n');
-  var prompt='Tu es l\'assistant technique de Thomas, le développeur de Nexo (app SaaS multi-IA française). '+
-    'Tu as accès aux données ci-dessous pour répondre précisément à ses questions sur l\'état de l\'application, les bugs potentiels, les statistiques, et les abonnements.\n\n'+
-    contextStr+'\n\nHistorique récent de la conversation :\n'+historyStr+'\n\n'+
-    'Réponds de façon concise, précise et actionnable (max 150 mots), en français, en te basant uniquement sur les données fournies. Si l\'information n\'est pas dans les données, dis-le clairement plutôt que d\'inventer.';
-
-  try{
-    var r=await fetch('/api/admin',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({prompt:prompt})});
-    var d=await r.json();
-    document.getElementById('adminChatThinking')?.remove();
-    var answer=d.text||d.error||'Impossible de répondre pour le moment.';
-    appendAdminChatMsg('assistant',answer);
-    _adminChatHistory.push({role:'assistant',text:answer});
-  }catch(e){
-    document.getElementById('adminChatThinking')?.remove();
-    appendAdminChatMsg('assistant','❌ Erreur : '+e.message);
-  }
 }
 // ── END ADMIN ──
 
@@ -4071,7 +3741,6 @@ function newConversation(id){
     current=id;
     if(id==='genesis')_genesisSessionFirstMsg=true;
     document.getElementById('chatHdrName').textContent=ex.name;
-  var novaTogglesEl=document.getElementById('novaToggles');if(novaTogglesEl)novaTogglesEl.style.display=(ex.imageGen?'flex':'none');
     document.getElementById('chatHdrStatus').textContent=ex.role;
     document.getElementById('chatAvatarMini').innerHTML=getAvatarMini(id);
     document.getElementById('sendBtn').style.background='linear-gradient(135deg,'+ex.color+','+ex.color+'cc)';
