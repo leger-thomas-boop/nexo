@@ -3814,6 +3814,7 @@ async function loadAdminStats(){
   try{
     var r=await fetch('/api/admin',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'stats'})});
     var d=await r.json();
+    if(d.error){console.error('[Admin] API error:',d.error);}
     var msgs=Array.isArray(d.messages)?d.messages:[];
     var profiles=Array.isArray(d.profiles)?d.profiles:[];
 
