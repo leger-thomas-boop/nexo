@@ -1,8 +1,8 @@
 [{
-      "relation": ["delegate_permission/common.handle_all_urls"],
-      "target": {
-        "namespace": "android_app",
-        "package_name": "app.vercel.nexo_eight_theta.twa",
-        "sha256_cert_fingerprints": ["DE:42:61:FF:2E:91:E8:69:B6:08:D0:46:7A:9F:F1:69:A9:36:59:28:6F:4A:0E:27:49:5C:0D:2F:5E:89:DB:1A"]
-      }
-    }]
+  "relation": ["delegate_permission/common.handle_all_urls"],
+  "target": {
+    "namespace": "android_app",
+    "package_name": "app.vercel.nexo_eight_theta.twa",
+    "sha256_cert_fingerprints": ["DE:42:61:FF:2E:91:E8:69:B6:08:D0:46:7A:9F:F1:69:A9:36:59:28:6F:4A:0E:27:49:5C:0D:2F:5E:89:DB:1A"]
+  }
+}]
