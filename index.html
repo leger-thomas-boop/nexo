@@ -2503,7 +2503,8 @@ function extractMemory(text){
 // Injecte la mémoire dans le system prompt
 function buildSystemWithMemory(baseSystem){
   var mem = [];
-  if(getMemory('prenom')) mem.push('Le prénom de l\'utilisateur est ' + getMemory('prenom') + '.');
+  var prenom = _userFirstName || getMemory('prenom');
+  if(prenom) mem.push('Le prénom de l\'utilisateur est ' + prenom + '.');
   if(getMemory('profession')) mem.push('Il/elle est ' + getMemory('profession') + '.');
   if(mem.length === 0) return baseSystem;
   return baseSystem + ' MÉMOIRE UTILISATEUR : ' + mem.join(' ') + ' Utilise naturellement ces informations sans les répéter systématiquement.';
@@ -3884,6 +3885,7 @@ async function loadUserFirstName(){
     var r=await supaAuthFetch(SUPABASE_URL+'/rest/v1/profiles?email=ilike.'+encodeURIComponent(currentUser.email)+'&select=first_name',{});
     var d=await r.json();
     _userFirstName=d[0]&&d[0].first_name?d[0].first_name:null;
+    if(_userFirstName) saveMemory('prenom', _userFirstName);
     return _userFirstName;
   }catch(e){return null;}
 }
