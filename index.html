@@ -1376,6 +1376,18 @@ header{
     </div>
   </div>
 
+  <!-- Envoi de notification push -->
+  <div style="padding:0 16px 16px;">
+    <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:.85rem;color:var(--text);margin-bottom:10px;">🔔 Envoyer une notification push</div>
+    <div style="background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:14px;padding:14px;display:flex;flex-direction:column;gap:8px;">
+      <input id="pushTitleInput" type="text" placeholder="Titre (ex: Nouveauté Nexo !)" style="padding:10px 14px;border-radius:11px;background:rgba(255,255,255,.04);border:1px solid var(--border);color:var(--text);font-size:.8rem;outline:none;">
+      <textarea id="pushBodyInput" placeholder="Message..." rows="2" style="padding:10px 14px;border-radius:11px;background:rgba(255,255,255,.04);border:1px solid var(--border);color:var(--text);font-size:.8rem;outline:none;resize:none;font-family:inherit;"></textarea>
+      <input id="pushTargetInput" type="text" placeholder="Email précis (laisser vide = tout le monde)" style="padding:10px 14px;border-radius:11px;background:rgba(255,255,255,.04);border:1px solid var(--border);color:var(--text);font-size:.74rem;outline:none;">
+      <button onclick="sendPushNotification()" style="padding:11px;border:none;border-radius:11px;background:linear-gradient(135deg,#fb923c,#ec4899);color:#fff;font-family:'Syne',sans-serif;font-weight:800;font-size:.8rem;cursor:pointer;">🔔 Envoyer la notification</button>
+      <div id="pushSendResult" style="font-size:.7rem;color:var(--muted);text-align:center;"></div>
+    </div>
+  </div>
+
   <!-- Expert usage -->
   <div style="padding:0 16px 16px;">
     <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:.85rem;color:var(--text);margin-bottom:10px;">📊 Utilisation par expert</div>
@@ -1398,6 +1410,7 @@ header{
       <div class="ob-dot active" id="ob-dot-0"></div>
       <div class="ob-dot" id="ob-dot-1"></div>
       <div class="ob-dot" id="ob-dot-2"></div>
+      <div class="ob-dot" id="ob-dot-3"></div>
     </div>
     <div class="ob-slide active" id="ob-slide-0">
       <div class="ob-emoji">✨</div>
@@ -1417,7 +1430,16 @@ header{
       <div class="ob-emoji">⚖️💰🎨</div>
       <div class="ob-title">7 experts à votre service</div>
       <div class="ob-desc">Marcus (droit du travail), Sofia (finance), Alex (entreprise), Max (impression 3D), Koda (dev), Nova (images IA) — chacun ultra-spécialisé dans son domaine.</div>
-      <button class="ob-btn" onclick="obClose()">Commencer avec Genesis ✨</button>
+      <button class="ob-btn" onclick="obNext()">Suivant →</button>
+      <div class="ob-skip" onclick="obClose()">Passer</div>
+    </div>
+    <div class="ob-slide" id="ob-slide-3">
+      <div class="ob-emoji">👋</div>
+      <div class="ob-title">Comment tu t'appelles ?</div>
+      <div class="ob-desc">Genesis se souviendra de ton prénom et du contexte de vos conversations pour des réponses plus personnalisées.</div>
+      <input id="obNameInput" type="text" placeholder="Ton prénom" maxlength="30" style="margin-top:10px;width:100%;padding:12px 16px;border-radius:13px;background:rgba(255,255,255,.06);border:1px solid var(--border);color:var(--text);font-size:.9rem;text-align:center;outline:none;">
+      <button class="ob-btn" onclick="obSaveName()">Terminer ✨</button>
+      <div class="ob-skip" onclick="obClose()">Passer</div>
     </div>
   </div>
 </div>
@@ -2598,6 +2620,8 @@ async function enterApp(){
     initExpCarousel();
     initStatsCounter();
     checkOnboarding();
+    initPushNotifications();
+    loadUserFirstName();
     var letter=(currentUser&&currentUser.email?currentUser.email[0]:'U').toUpperCase();
     document.getElementById('avatarHdr').textContent=letter;
     document.getElementById('userEmailDisplay').textContent=currentUser&&currentUser.email?currentUser.email:'';
@@ -2672,7 +2696,18 @@ var usage=JSON.parse(localStorage.getItem('nx_usage')||'{}');
 var todayKey=new Date().toDateString();
 if(!usage[todayKey]) usage[todayKey]={};
 function getUsage(id){return usage[todayKey][id]||0;}
-function incUsage(id){usage[todayKey][id]=(getUsage(id)+1);localStorage.setItem('nx_usage',JSON.stringify(usage));}
+function incUsage(id){usage[todayKey][id]=(getUsage(id)+1);localStorage.setItem('nx_usage',JSON.stringify(usage));maybeUpdateMemory();}
+var _totalMsgsSinceMemoryUpdate=parseInt(localStorage.getItem('nx_msgs_since_memory')||'0',10);
+function maybeUpdateMemory(){
+  _totalMsgsSinceMemoryUpdate++;
+  localStorage.setItem('nx_msgs_since_memory',_totalMsgsSinceMemoryUpdate);
+  if(_totalMsgsSinceMemoryUpdate>=10&&currentUser&&currentUser.id&&currentUser.email){
+    _totalMsgsSinceMemoryUpdate=0;
+    localStorage.setItem('nx_msgs_since_memory','0');
+    // Appel non-bloquant, en arrière-plan, ne ralentit jamais l'envoi du message
+    fetch('/api/memory',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({userEmail:currentUser.email,userId:currentUser.id})}).catch(function(){});
+  }
+}
 
 function goSection(name,el){
   document.getElementById('sec-home').style.display=name==='home'?'block':'none';
@@ -3769,7 +3804,91 @@ if(window.speechSynthesis&&window.speechSynthesis.onvoiceschanged!==undefined){
   window.speechSynthesis.onvoiceschanged=function(){window.speechSynthesis.getVoices();};
 }
 
-// ── ADMIN ──────────────────────────────────────────────────────────────────
+// ── NOTIFICATIONS PUSH ───────────────────────────────────────────────────
+var VAPID_PUBLIC_KEY='BECE3eNzFNB1bx8_aYPnCy4ucSfuq9adCIcQ0msHOGBvFddBYHdiXqtb2Acn-xLsOrJqyHWsfEOzgOTINyc8zTc';
+function urlBase64ToUint8Array(base64String){
+  var padding='='.repeat((4-base64String.length%4)%4);
+  var base64=(base64String+padding).replace(/-/g,'+').replace(/_/g,'/');
+  var rawData=atob(base64);
+  var outputArray=new Uint8Array(rawData.length);
+  for(var i=0;i<rawData.length;++i)outputArray[i]=rawData.charCodeAt(i);
+  return outputArray;
+}
+async function initPushNotifications(){
+  if(!('serviceWorker' in navigator)||!('PushManager' in window))return;
+  // Ne propose pas si déjà refusé ou déjà accepté/traité
+  if(Notification.permission==='denied')return;
+  if(localStorage.getItem('nexo_push_prompted'))return;
+  // Laisse l'utilisateur s'installer dans l'app avant de demander
+  setTimeout(async function(){
+    if(Notification.permission==='granted'){subscribeToPush();return;}
+    if(Notification.permission==='default'){
+      // Petit délai pour ne pas être intrusif dès l'arrivée
+      showPushPrompt();
+    }
+  },4000);
+}
+function showPushPrompt(){
+  if(document.getElementById('push-prompt'))return;
+  var div=document.createElement('div');
+  div.id='push-prompt';
+  div.style.cssText='position:fixed;bottom:90px;left:50%;transform:translateX(-50%);z-index:850;max-width:340px;width:88%;background:rgba(18,18,30,.97);border:1px solid var(--border);border-radius:16px;padding:14px 16px;box-shadow:0 16px 48px rgba(0,0,0,.5);';
+  div.innerHTML='<div style="font-size:.82rem;font-weight:700;margin-bottom:4px;">🔔 Activer les notifications</div>'+
+    '<div style="font-size:.72rem;color:var(--muted);margin-bottom:10px;">Reçois les nouveautés et infos importantes de Nexo.</div>'+
+    '<div style="display:flex;gap:8px;">'+
+    '<button onclick="acceptPushPrompt()" style="flex:1;padding:8px;border:none;border-radius:10px;background:linear-gradient(135deg,var(--genesis),#f59e0b);color:#1c0a00;font-weight:800;font-size:.75rem;cursor:pointer;">Activer</button>'+
+    '<button onclick="dismissPushPrompt()" style="padding:8px 14px;border-radius:10px;background:rgba(255,255,255,.06);border:1px solid var(--border);color:var(--muted);font-size:.75rem;cursor:pointer;">Plus tard</button>'+
+    '</div>';
+  document.body.appendChild(div);
+}
+function dismissPushPrompt(){
+  localStorage.setItem('nexo_push_prompted','1');
+  var el=document.getElementById('push-prompt');if(el)el.remove();
+}
+async function acceptPushPrompt(){
+  dismissPushPrompt();
+  var permission=await Notification.requestPermission();
+  if(permission==='granted')subscribeToPush();
+}
+async function subscribeToPush(){
+  try{
+    var reg=await navigator.serviceWorker.ready;
+    var sub=await reg.pushManager.getSubscription();
+    if(!sub){
+      sub=await reg.pushManager.subscribe({
+        userVisibleOnly:true,
+        applicationServerKey:urlBase64ToUint8Array(VAPID_PUBLIC_KEY)
+      });
+    }
+    await fetch('/api/push',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({
+      action:'subscribe',subscription:sub,userEmail:currentUser&&currentUser.email
+    })});
+  }catch(e){console.warn('Push subscription failed:',e);}
+}
+
+// ── MÉMOIRE UTILISATEUR (prénom + résumé des conversations passées) ───────
+var _userFirstName=null;
+async function saveUserFirstName(name){
+  try{
+    await supaAuthFetch(SUPABASE_URL+'/rest/v1/profiles?email=ilike.'+encodeURIComponent(currentUser.email),{
+      method:'PATCH',
+      headers:{'Content-Type':'application/json','Prefer':'return=minimal'},
+      body:JSON.stringify({first_name:name})
+    });
+    _userFirstName=name;
+  }catch(e){console.warn('Erreur sauvegarde prénom:',e);}
+}
+async function loadUserFirstName(){
+  if(!userSession||!currentUser||!currentUser.email)return null;
+  try{
+    var r=await supaAuthFetch(SUPABASE_URL+'/rest/v1/profiles?email=ilike.'+encodeURIComponent(currentUser.email)+'&select=first_name',{});
+    var d=await r.json();
+    _userFirstName=d[0]&&d[0].first_name?d[0].first_name:null;
+    return _userFirstName;
+  }catch(e){return null;}
+}
+
+
 var ADMIN_HASH='442cf2699d5ceb9fd5256fe1482e8ed4638b2df5c181a9558fbaa5614f5c3a55';
 var ADMIN_EMAILS=['leger-thomas@outlook.com','legerthomas893@gmail.com'];
 
@@ -3900,6 +4019,29 @@ async function runAdminAnalysis(){
     copyBtn.dataset.report=text;
   }catch(e){reportEl.innerHTML='<span style="color:#f87171">Erreur : '+e.message+'</span>';}
 }
+// ── ENVOI DE NOTIFICATION PUSH DEPUIS L'ADMIN ──────────────────────────────
+async function sendPushNotification(){
+  var title=document.getElementById('pushTitleInput').value.trim();
+  var body=document.getElementById('pushBodyInput').value.trim();
+  var target=document.getElementById('pushTargetInput').value.trim();
+  var resultEl=document.getElementById('pushSendResult');
+  if(!title||!body){resultEl.textContent='Titre et message requis.';resultEl.style.color='#f87171';return;}
+  resultEl.textContent='Envoi en cours...';resultEl.style.color='var(--muted)';
+  try{
+    var r=await fetch('/api/push',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({
+      action:'send',title:title,body:body,targetEmail:target||null
+    })});
+    var d=await r.json();
+    if(!r.ok){resultEl.textContent='❌ '+(d.error||'Erreur');resultEl.style.color='#f87171';return;}
+    if(d.message){resultEl.textContent=d.message;resultEl.style.color='var(--muted)';return;}
+    resultEl.textContent='✅ Envoyée à '+d.sent+' appareil(s)'+(d.failed?(' ('+d.failed+' échec(s))'):'')+'.';
+    resultEl.style.color='#34d399';
+    document.getElementById('pushTitleInput').value='';
+    document.getElementById('pushBodyInput').value='';
+    document.getElementById('pushTargetInput').value='';
+  }catch(e){resultEl.textContent='❌ Erreur réseau.';resultEl.style.color='#f87171';}
+}
+
 function copyAdminReport(){
   var text=document.getElementById('adminCopyBtn').dataset.report||'';
   navigator.clipboard.writeText(text).then(function(){
@@ -4000,14 +4142,21 @@ function showOnboarding(){
 }
 function obNext(){
   _obSlide++;
-  if(_obSlide>=3){obClose();return;}
+  if(_obSlide>=4){obClose();return;}
   obUpdateSlide();
+  if(_obSlide===3)setTimeout(function(){document.getElementById('obNameInput')&&document.getElementById('obNameInput').focus();},300);
 }
 function obUpdateSlide(){
-  for(var i=0;i<3;i++){
+  for(var i=0;i<4;i++){
     document.getElementById('ob-slide-'+i).classList.toggle('active',i===_obSlide);
     document.getElementById('ob-dot-'+i).classList.toggle('active',i===_obSlide);
   }
+}
+async function obSaveName(){
+  var input=document.getElementById('obNameInput');
+  var name=input?input.value.trim():'';
+  if(name)await saveUserFirstName(name);
+  obClose();
 }
 function obClose(){
   var el=document.getElementById('onboarding-overlay');
