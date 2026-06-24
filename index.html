@@ -2503,8 +2503,7 @@ function extractMemory(text){
 // Injecte la mémoire dans le system prompt
 function buildSystemWithMemory(baseSystem){
   var mem = [];
-  var prenom = _userFirstName || getMemory('prenom');
-  if(prenom) mem.push('Le prénom de l\'utilisateur est ' + prenom + '.');
+  if(getMemory('prenom')) mem.push('Le prénom de l\'utilisateur est ' + getMemory('prenom') + '.');
   if(getMemory('profession')) mem.push('Il/elle est ' + getMemory('profession') + '.');
   if(mem.length === 0) return baseSystem;
   return baseSystem + ' MÉMOIRE UTILISATEUR : ' + mem.join(' ') + ' Utilise naturellement ces informations sans les répéter systématiquement.';
@@ -3452,14 +3451,7 @@ async function sendText(txt){
   var _sysWithDate=buildSystemWithMemory(ex.system)+" CONTEXTE TEMPOREL : nous sommes aujourd'hui le "+_dateStr+". Utilise systématiquement cette date comme référence pour toute question liée au temps (aujourd'hui, demain, ce week-end, cette semaine, etc.). Ne te base jamais sur une autre date. STYLE DE RÉPONSE : sois bref et direct par défaut — quelques phrases ou un court paragraphe suffisent pour la plupart des questions. N'utilise des titres, sections multiples ou longues listes à puces QUE si la question est complexe ET le justifie vraiment, ou si l'utilisateur demande explicitement plus de détails (\"explique en détail\", \"développe\", \"complet\", etc.). Évite les réponses qui ressemblent à un rapport quand une réponse simple suffit.";
   try{
     if(ex.isGenesis){
-      // Si une IMAGE (pas un document) est attachée → rediriger vers Nova
-      if(savedImg&&!savedImg.isDocument){
-        document.getElementById('typing')&&document.getElementById('typing').remove();
-        var redirectMsg='Cette demande concerne une image. Je t\'envoie vers Nova, notre experte en images IA ! 🎨';
-        appendGenesisRoute(redirectMsg,['nova'],txt,id);
-        saveMessage(id,'assistant',redirectMsg);
-        return;
-      }
+      // Si une IMAGE est attachée → Genesis l'analyse directement, ne redirige PAS vers Nova
       // Détection d'une demande de génération d'image
       var imageGenPattern=/g[eé]n[eè]re?|cr[eé]e?|dessine?|fais?(-moi)?|produis?|imagine|crée?|illustre?|montre?-moi|visualise?/i;
       var imageObjPattern=/image|photo|illustration|dessin|portrait|tableau|logo|affiche|paysage|fond d'[eé]cran|wallpaper|avatar|icône|visuel|artwork/i;
@@ -3885,7 +3877,6 @@ async function loadUserFirstName(){
     var r=await supaAuthFetch(SUPABASE_URL+'/rest/v1/profiles?email=ilike.'+encodeURIComponent(currentUser.email)+'&select=first_name',{});
     var d=await r.json();
     _userFirstName=d[0]&&d[0].first_name?d[0].first_name:null;
-    if(_userFirstName) saveMemory('prenom', _userFirstName);
     return _userFirstName;
   }catch(e){return null;}
 }
